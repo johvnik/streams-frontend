@@ -10,7 +10,8 @@ export default createPlugin({
 
 			await next()
 
-			// this happens after virtual dom rendering, but before the response is sent to the browser
+			// this happens after virtual dom rendering, but
+			// before the response is sent to the browser
 			console.log(
 				`${new Date() - start} ms `.padEnd(8, ' '),
 				`${ctx.method}`.padEnd(8, ' '),
