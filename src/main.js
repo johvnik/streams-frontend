@@ -28,12 +28,10 @@ export default () => {
 	if (__NODE__) {
 		const handlers = require('./rpc/index').default
 		const LoggerPlugin = require('./plugins/logger').default
-		const LoginPlugin = require('./plugins/login').default
 		const AuthPlugin = require('./plugins/auth').default
 
 		app.register(RPCHandlersToken, handlers)
 		app.register(LoggerPlugin)
-		app.register(LoginPlugin)
 		app.register(AuthPlugin)
 
 		app.register(SessionToken, JWTSession)

@@ -1,12 +1,19 @@
 // @flow
 import React, { useState } from 'react'
+import { compose } from 'redux'
+import { withRPCRedux } from 'fusion-plugin-rpc-redux-react'
 
-const LoginForm = () => {
+const LoginForm = ({ login }) => {
 	const [handle, setHandle] = useState('')
 	const [password, setPassword] = useState('')
 
+	const handleLogin = event => {
+		event.preventDefault()
+		login({ handle, password })
+	}
+
 	return (
-		<form action="/login" method="post">
+		<form onSubmit={handleLogin}>
 			<label>{'handle: '}</label>
 			<input
 				value={handle}
@@ -32,4 +39,6 @@ const LoginForm = () => {
 	)
 }
 
-export default LoginForm
+const hoc = compose(withRPCRedux('login'))
+
+export default hoc(LoginForm)

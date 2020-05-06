@@ -1,8 +1,15 @@
 import request from 'request'
 
-const PASSALONG_HEADERS = ['cookie', 'authorization']
+const PASSALONG_HEADERS = ['cookie', 'content-type']
 
-export const fireBackendCall = (backend, endpoint, data, ctx, delay) => {
+export const fireBackendCall = async (
+	backend,
+	endpoint,
+	data = {},
+	ctx,
+	delay,
+	refreshRetryCount = 1,
+) => {
 	const url = `${backend.basePath}/${endpoint}`
 	const headers = {}
 
@@ -10,43 +17,97 @@ export const fireBackendCall = (backend, endpoint, data, ctx, delay) => {
 		headers[header] = ctx.request.header[header]
 	})
 
-	const apiPromise = new Promise((resolve, reject) => {
-		console.log(`Firing api call to ${backend.basePath}/${endpoint}`)
-		// console.log(`with headers: `)
-		// const headerKeys = Object.keys(headers).reduce((acc, header) => {
-		// 	acc.push(header)
-		// 	return acc
-		// }, [])
-		// headerKeys.forEach(header => {
-		// 	console.log(''.padEnd(14, ' '), `${header}: ${headers[header]}`)
-		// })
-		// console.log(`token: ${headers.cookie}`)
+	headers['authorization'] = `Bearer ${ctx['access_token']}`
 
-		let body = data || {}
+	if (endpoint === backend['refreshLoginEndpoint']) {
+		data = { refresh: ctx['refresh_token'] }
+	}
+
+	const apiPromise = new Promise(async (resolve, reject) => {
+		console.log(`Firing api call to ${backend.basePath}/${endpoint}`)
 
 		request.post(
 			url,
 			{
-				body,
+				body: data,
 				headers,
 				json: true,
 			},
-			(err, res, body) => {
+			async (err, res, body) => {
 				setTimeout(
-					() => {
+					async () => {
 						if (err) {
+							if (endpoint === backend['loginEndpoint']) {
+								ctx['redirectLogin'] = true
+							}
 							return reject({
 								code: err.errno,
 								message: err,
 								data,
 							})
 						}
-						if (res.statusCode != 200) {
+						if (res.statusCode !== 200) {
+							if (res.statusCode === 401) {
+								if (
+									refreshRetryCount > 0 &&
+									endpoint !== backend['loginEndpoint']
+								) {
+									console.log('access token may have expired.')
+									await fireBackendCall(
+										backend,
+										backend['refreshLoginEndpoint'],
+										data,
+										ctx,
+										delay,
+										refreshRetryCount - 1,
+									)
+										.then(async () => {
+											const result = await fireBackendCall(
+												backend,
+												endpoint,
+												data,
+												ctx,
+												delay,
+												refreshRetryCount - 1,
+											)
+											resolve(result)
+										})
+										.catch(({ code, message, data }) => {
+											reject({
+												code,
+												message,
+												data,
+											})
+										})
+								} else {
+									console.log('access and refresh tokens may be expired.')
+									ctx.redirectLogin = true
+								}
+							}
+
+							if (endpoint === backend['loginEndpoint']) {
+								console.log('failed to login.')
+								ctx['redirectLogin'] = true
+							}
+
 							return reject({
 								code: res.statusCode,
 								message: body.detail,
 								data,
 							})
+						}
+
+						if (
+							endpoint === backend['refreshLoginEndpoint'] ||
+							endpoint === backend['loginEndpoint']
+						) {
+							ctx['access_token'] = body.access
+							ctx['refresh_token'] = body.refresh
+						}
+
+						if (endpoint === backend['loginEndpoint']) {
+							console.log('logged in!')
+							ctx['redirectHome'] = true
 						}
 
 						return resolve(body)
