@@ -1,7 +1,19 @@
 // @flow
 import React from 'react'
 import LoginForm from '../components/LoginForm'
+import { connect } from 'react-redux'
 
-const Login = () => <LoginForm />
+import Navbar from '../components/Navbar'
 
-export default Login
+const Login = ({ auth }) => (
+	<>
+		<Navbar />
+		<LoginForm />
+	</>
+)
+
+const mapStateToProps = state => ({
+	auth: state.auth,
+})
+
+export default connect(mapStateToProps)(Login)

@@ -1,6 +1,6 @@
 // @flow
 import App from 'fusion-react'
-import Router from 'fusion-plugin-react-router'
+import Router, { RouterToken } from 'fusion-plugin-react-router'
 import Styletron from 'fusion-plugin-styletron-react'
 import UniversalEvents, {
 	UniversalEventsToken,
@@ -23,7 +23,7 @@ export default () => {
 	const app = new App(root)
 
 	app.register(Styletron)
-	app.register(Router)
+	app.register(RouterToken, Router)
 
 	if (__NODE__) {
 		const handlers = require('./rpc/index').default
@@ -41,6 +41,9 @@ export default () => {
 	}
 
 	if (__BROWSER__) {
+		const redirectsPlugin = require('./plugins/redirects').default
+		app.register(redirectsPlugin)
+
 		app.register(FetchToken, fetch)
 	}
 

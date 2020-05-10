@@ -14,17 +14,6 @@ export default createPlugin({
 
 			await next()
 
-			if (ctx.redirectHome) {
-				console.log('redirecting to home')
-				// ctx.redirect('/')
-			}
-
-			if (ctx.redirectLogin) {
-				console.log('redirecting to login')
-				// ctx.method = 'GET'
-				// ctx.redirect('/')
-			}
-
 			session.set('access_token', ctx['access_token'])
 			session.set('refresh_token', ctx['refresh_token'])
 		}

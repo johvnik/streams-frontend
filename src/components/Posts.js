@@ -49,7 +49,7 @@ const Posts = ({ posts, getPosts }) => {
 							<button onClick={() => getPosts()}>get posts</button>
 						</PostDiv>
 					)}
-					{posts.error ? <PostDiv>{posts.error.message}</PostDiv> : <></>}
+					{posts.error ? <PostDiv>{posts.error.message}</PostDiv> : null}
 					{posts.data.map(post => (
 						<PostDiv key={post.id}>
 							{post.handle} posted {post.caption}

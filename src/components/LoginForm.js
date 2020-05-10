@@ -3,6 +3,8 @@ import React, { useState } from 'react'
 import { compose } from 'redux'
 import { withRPCRedux } from 'fusion-plugin-rpc-redux-react'
 
+import { RPC_IDS } from '../constants/rpc'
+
 const LoginForm = ({ login }) => {
 	const [handle, setHandle] = useState('')
 	const [password, setPassword] = useState('')
@@ -39,6 +41,6 @@ const LoginForm = ({ login }) => {
 	)
 }
 
-const hoc = compose(withRPCRedux('login'))
+const hoc = compose(withRPCRedux(RPC_IDS.login))
 
 export default hoc(LoginForm)

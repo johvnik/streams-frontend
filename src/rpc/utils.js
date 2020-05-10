@@ -19,6 +19,10 @@ export const fireBackendCall = async (
 
 	headers['authorization'] = `Bearer ${ctx['access_token']}`
 
+	/*
+		if calling the backend's refresh endpoint,
+		replace the body with the refresh token.
+	*/
 	if (endpoint === backend['refreshLoginEndpoint']) {
 		data = { refresh: ctx['refresh_token'] }
 	}
@@ -37,22 +41,24 @@ export const fireBackendCall = async (
 				setTimeout(
 					async () => {
 						if (err) {
-							if (endpoint === backend['loginEndpoint']) {
-								ctx['redirectLogin'] = true
-							}
 							return reject({
 								code: err.errno,
 								message: err,
 								data,
 							})
 						}
-						if (res.statusCode !== 200) {
-							if (res.statusCode === 401) {
+						if (res.statusCode > 300 || res.statusCode < 200) {
+							/* 
+								if 401 unauthorized and a refresh token is available, 
+								attempt to refresh the access token, then refire the 
+								original API call.
+							*/
+							if (res.statusCode === 401 && data.refresh) {
 								if (
 									refreshRetryCount > 0 &&
 									endpoint !== backend['loginEndpoint']
 								) {
-									console.log('access token may have expired.')
+									console.log('attempting refresh...')
 									await fireBackendCall(
 										backend,
 										backend['refreshLoginEndpoint'],
@@ -62,7 +68,7 @@ export const fireBackendCall = async (
 										refreshRetryCount - 1,
 									)
 										.then(async () => {
-											const result = await fireBackendCall(
+											const res = await fireBackendCall(
 												backend,
 												endpoint,
 												data,
@@ -70,24 +76,15 @@ export const fireBackendCall = async (
 												delay,
 												refreshRetryCount - 1,
 											)
-											resolve(result)
+											resolve(res)
 										})
-										.catch(({ code, message, data }) => {
-											reject({
-												code,
-												message,
-												data,
-											})
+										.catch(err => {
+											reject(err)
 										})
 								} else {
-									console.log('access and refresh tokens may be expired.')
+									console.log('refresh unsuccessful.')
 									ctx.redirectLogin = true
 								}
-							}
-
-							if (endpoint === backend['loginEndpoint']) {
-								console.log('failed to login.')
-								ctx['redirectLogin'] = true
 							}
 
 							return reject({
@@ -97,17 +94,16 @@ export const fireBackendCall = async (
 							})
 						}
 
+						/* 
+							for login or refresh endpoints, save the tokens to ctx
+							to be added to the sessin by auth middleware. 
+						*/
 						if (
 							endpoint === backend['refreshLoginEndpoint'] ||
 							endpoint === backend['loginEndpoint']
 						) {
 							ctx['access_token'] = body.access
 							ctx['refresh_token'] = body.refresh
-						}
-
-						if (endpoint === backend['loginEndpoint']) {
-							console.log('logged in!')
-							ctx['redirectHome'] = true
 						}
 
 						return resolve(body)
