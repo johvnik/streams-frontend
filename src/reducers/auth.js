@@ -5,7 +5,7 @@ import { RPC_IDS } from '../constants/rpc'
 
 const DEFAULT_STATE = {
 	loading: false,
-	isAuthenticated: true,
+	isAuthenticated: false,
 	error: '',
 }
 
