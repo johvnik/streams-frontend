@@ -27,6 +27,10 @@ export const fireBackendCall = async (
 		data = { refresh: ctx['refresh_token'] }
 	}
 
+	if (endpoint === backend['verifyLoginEndpoint']) {
+		data = { token: ctx['access_token'] }
+	}
+
 	const apiPromise = new Promise(async (resolve, reject) => {
 		console.log(`Firing api call to ${backend.basePath}/${endpoint}`)
 
@@ -53,7 +57,7 @@ export const fireBackendCall = async (
 								attempt to refresh the access token, then refire the 
 								original API call.
 							*/
-							if (res.statusCode === 401 && data.refresh) {
+							if (res.statusCode === 401) {
 								if (
 									refreshRetryCount > 0 &&
 									endpoint !== backend['loginEndpoint']

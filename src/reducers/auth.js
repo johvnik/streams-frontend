@@ -4,43 +4,52 @@ import reduceReducers from 'reduce-reducers'
 import { RPC_IDS } from '../constants/rpc'
 
 const DEFAULT_STATE = {
-	loading: false,
+	isLoading: false,
 	isAuthenticated: false,
+	didAttempt: false,
 	error: '',
 }
 
-const { login, ...endpoints } = RPC_IDS
+const { login, refreshLogin, verifyLogin, ...endpoints } = RPC_IDS
+const specialEndpoints = [login, refreshLogin, verifyLogin]
 
-const loginReducer = createRPCReducer(login, {
-	start: (state, action) => ({
-		...state,
-		loading: true,
-		isAuthenticated: false,
-	}),
-	success: (state, action) => ({
-		...state,
-		loading: false,
-		isAuthenticated: true,
-		error: '',
-	}),
-	failure: (state, { payload }) => ({
-		...state,
-		loading: false,
-		isAuthenticated: false,
-		error: payload.message,
-	}),
-})
+const specialReducers = specialEndpoints.reduce((acc, endpoint) => {
+	acc.push(
+		createRPCReducer(endpoint, {
+			start: state => ({
+				...state,
+				isLoading: true,
+			}),
+			success: state => ({
+				...state,
+				isLoading: false,
+				isAuthenticated: true,
+				didAttempt: true,
+				error: '',
+			}),
+			failure: (state, { payload }) => ({
+				...state,
+				isLoading: false,
+				isAuthenticated: false,
+				didAttempt: true,
+				error: payload.message,
+			}),
+		}),
+	)
+	return acc
+}, [])
 
 const reducers = Object.keys(endpoints).reduce(
-	(acc, RPC_ID) => {
+	(acc, endpoint) => {
 		acc.push(
-			createRPCReducer(RPC_ID, {
+			createRPCReducer(endpoint, {
 				failure: (state, { payload }) => {
 					if (payload.code === 401) {
 						return {
 							...state,
-							loading: false,
+							isLoading: false,
 							isAuthenticated: false,
+							didAttempt: true,
 							error: payload.message,
 						}
 					} else {
@@ -51,7 +60,7 @@ const reducers = Object.keys(endpoints).reduce(
 		)
 		return acc
 	},
-	[loginReducer],
+	[...specialReducers],
 )
 
 export default reduceReducers(state => state || DEFAULT_STATE, ...reducers)

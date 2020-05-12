@@ -7,14 +7,15 @@ import paths from './constants/paths'
 import Home from './pages/home'
 import FourOFour from './pages/fourofour'
 
-import Login from './pages/login'
+import Root from './common-root'
 
 const root = (
-	<Switch>
-		<Route exact path={paths.home} component={Home} />
-		<Route exact path={paths.login} component={Login} />
-		<Route component={FourOFour} />
-	</Switch>
+	<Root>
+		<Switch>
+			<Route exact path={paths.home} component={Home} />
+			<Route component={FourOFour} />
+		</Switch>
+	</Root>
 )
 
 export default root

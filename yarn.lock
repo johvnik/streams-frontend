@@ -3918,10 +3918,10 @@ fusion-plugin-jwt@^2.1.1:
     just-safe-get "^1.3.0"
     just-safe-set "^2.1.0"
 
-fusion-plugin-react-helmet-async@^2.1.5:
-  version "2.1.5"
-  resolved "https://registry.npmjs.org/fusion-plugin-react-helmet-async/-/fusion-plugin-react-helmet-async-2.1.5.tgz#feb7342fe3e7b0bb3e9393a707d0eff850f8a23f"
-  integrity sha512-okh4g2120EI7ZU0BPCw25Uq7Pw6WLbDI1Fbwjaz1iJ8V2wXBZcFz2v1JznpE4Bl3/z+5/t+wC+R9tEiZTlxGAA==
+fusion-plugin-react-helmet-async@^2.2.3:
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/fusion-plugin-react-helmet-async/-/fusion-plugin-react-helmet-async-2.2.3.tgz#5b8efdbfb027882e0b23d938cf70753aa3b32c04"
+  integrity sha512-6nl6RQifWd8tgTWqPK05lIsVK7tL8oHj4jcHVNNYuSnEsL166HXnNvCdwXkq9HgxHVB+w0SsEQMlJel2oWvRQw==
   dependencies:
     react-helmet-async "^1.0.2"
 

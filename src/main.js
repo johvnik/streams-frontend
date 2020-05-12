@@ -2,6 +2,7 @@
 import App from 'fusion-react'
 import Router, { RouterToken } from 'fusion-plugin-react-router'
 import Styletron from 'fusion-plugin-styletron-react'
+import HelmetPlugin from 'fusion-plugin-react-helmet-async'
 import UniversalEvents, {
 	UniversalEventsToken,
 } from 'fusion-plugin-universal-events'
@@ -23,6 +24,7 @@ export default () => {
 	const app = new App(root)
 
 	app.register(Styletron)
+	app.register(HelmetPlugin)
 	app.register(RouterToken, Router)
 
 	if (__NODE__) {
@@ -41,9 +43,6 @@ export default () => {
 	}
 
 	if (__BROWSER__) {
-		const redirectsPlugin = require('./plugins/redirects').default
-		app.register(redirectsPlugin)
-
 		app.register(FetchToken, fetch)
 	}
 

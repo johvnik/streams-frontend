@@ -1,16 +1,39 @@
 // @flow
-import React from 'react'
+import React, { useEffect } from 'react'
+import { Redirect } from 'fusion-plugin-react-router'
+import { connect } from 'react-redux'
+import { compose } from 'redux'
+import { withRPCRedux } from 'fusion-plugin-rpc-redux-react'
 
-import PostsTitle from '../components/PostsTitle'
-import Posts from '../components/Posts'
-import Navbar from '../components/Navbar'
+import Login from './login'
+import Dashboard from './dashboard'
 
-const Home = () => (
-	<>
-		<Navbar />
-		<PostsTitle />
-		<Posts />
-	</>
+import paths from '../constants/paths'
+import { RPC_IDS } from '../constants/rpc'
+
+const Home = ({ auth, verifyLogin }) => {
+	useEffect(() => {
+		verifyLogin()
+	}, [])
+
+	if (!auth.didAttempt || auth.isLoading) {
+		return <p>loading...</p>
+	} else {
+		if (auth.isAuthenticated) {
+			return <Dashboard />
+		} else {
+			return <Login />
+		}
+	}
+}
+
+const mapStateToProps = state => ({
+	auth: state.auth,
+})
+
+const hoc = compose(
+	withRPCRedux(RPC_IDS.verifyLogin),
+	connect(mapStateToProps),
 )
 
-export default Home
+export default hoc(Home)
