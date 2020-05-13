@@ -1,19 +1,22 @@
 // @flow
 import React from 'react'
+import { styled } from 'fusion-plugin-styletron-react'
+
 import LoginForm from '../components/LoginForm'
-import { connect } from 'react-redux'
-import { Redirect } from 'fusion-plugin-react-router'
 
-import paths from '../constants/paths'
-
-const Login = ({ auth }) => (
-	<>
-		<LoginForm />
-	</>
-)
-
-const mapStateToProps = state => ({
-	auth: state.auth,
+const LoginPageDiv = styled('div', {
+	display: 'grid',
+	height: '100vh',
+	width: '100vw',
+	justifyContent: 'center',
+	alignItems: 'center',
+	// border: '4px dashed red',
 })
 
-export default connect(mapStateToProps)(Login)
+const Login = () => (
+	<LoginPageDiv>
+		<LoginForm />
+	</LoginPageDiv>
+)
+
+export default Login

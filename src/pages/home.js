@@ -1,15 +1,14 @@
 // @flow
 import React, { useEffect } from 'react'
-import { Redirect } from 'fusion-plugin-react-router'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 import { withRPCRedux } from 'fusion-plugin-rpc-redux-react'
 
-import Login from './login'
-import Dashboard from './dashboard'
-
-import paths from '../constants/paths'
 import { RPC_IDS } from '../constants/rpc'
+
+import LoginPage from './login'
+import DashboardPage from './dashboard'
+import LoadingPage from './loading'
 
 const Home = ({ auth, verifyLogin }) => {
 	useEffect(() => {
@@ -17,12 +16,12 @@ const Home = ({ auth, verifyLogin }) => {
 	}, [])
 
 	if (!auth.didAttempt || auth.isLoading) {
-		return <p>loading...</p>
+		return <LoadingPage />
 	} else {
 		if (auth.isAuthenticated) {
-			return <Dashboard />
+			return <DashboardPage />
 		} else {
-			return <Login />
+			return <LoginPage />
 		}
 	}
 }
