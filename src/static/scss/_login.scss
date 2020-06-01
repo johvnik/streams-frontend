@@ -1,0 +1,53 @@
+.loginPage {
+	display: grid;
+	height: 100vh;
+	width: 100vw;
+
+	justify-content: center;
+	align-items: center;
+	// border: 4px dashed white;
+}
+
+.login-form {
+	width: 90vw;
+	max-width: 300px;
+
+	.form {
+		display: grid;
+		grid-template-rows: 3fr 3fr 1fr 3fr 3fr;
+		grid-row-gap: 1rem;
+
+		input {
+			padding: 0.8rem;
+			border-radius: 100vh;
+			border: 0;
+			background-color: #222;
+			color: #eee;
+		}
+
+		.login-button {
+			padding: 0.8rem;
+			border-radius: 100vh;
+			border: 0px solid #444;
+			background-color: var(--accent-color);
+			color: #eee;
+		}
+
+		.forgot-password {
+			display: grid;
+			align-self: start;
+			justify-self: end;
+			font-size: 0.5rem;
+			color: var(--accent-color);
+			user-select: none;
+			font-weight: bold;
+		}
+
+		.sign-up {
+			display: grid;
+			align-self: center;
+			justify-self: center;
+			font-size: 0.8rem;
+		}
+	}
+}

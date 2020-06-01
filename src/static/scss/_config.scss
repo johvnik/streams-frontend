@@ -1,0 +1,32 @@
+*,
+*::after,
+*::before {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+*:focus {
+	outline: none;
+}
+
+:root {
+	// variables
+
+	// colors
+	--color-mode: dark;
+	--background-color: #111;
+	--accent-color: #8367ff;
+
+	// root styles
+
+	background-color: var(--background-color);
+	font-family: Verdana, Geneva, sans-serif;
+	color: #eee;
+}
+
+@mixin for-desktop-up {
+	@media (min-width: 900px) {
+		@content;
+	}
+}

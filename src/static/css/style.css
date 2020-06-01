@@ -1,0 +1,179 @@
+*,
+*::after,
+*::before {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+*:focus {
+  outline: none;
+}
+
+:root {
+  --color-mode: dark;
+  --background-color: #111;
+  --accent-color: #8367ff;
+  background-color: var(--background-color);
+  font-family: Verdana, Geneva, sans-serif;
+  color: #eee;
+}
+
+.loginPage {
+  display: -ms-grid;
+  display: grid;
+  height: 100vh;
+  width: 100vw;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.login-form {
+  width: 90vw;
+  max-width: 300px;
+}
+
+.login-form .form {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-rows: 3fr 3fr 1fr 3fr 3fr;
+      grid-template-rows: 3fr 3fr 1fr 3fr 3fr;
+  grid-row-gap: 1rem;
+}
+
+.login-form .form input {
+  padding: 0.8rem;
+  border-radius: 100vh;
+  border: 0;
+  background-color: #222;
+  color: #eee;
+}
+
+.login-form .form .login-button {
+  padding: 0.8rem;
+  border-radius: 100vh;
+  border: 0px solid #444;
+  background-color: var(--accent-color);
+  color: #eee;
+}
+
+.login-form .form .forgot-password {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-row-align: start;
+      align-self: start;
+  -ms-grid-column-align: end;
+      justify-self: end;
+  font-size: 0.5rem;
+  color: var(--accent-color);
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  font-weight: bold;
+}
+
+.login-form .form .sign-up {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-row-align: center;
+      align-self: center;
+  -ms-grid-column-align: center;
+      justify-self: center;
+  font-size: 0.8rem;
+}
+
+.loadingPage {
+  display: -ms-grid;
+  display: grid;
+  height: 100vh;
+  width: 100vw;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.dashboardPage {
+  display: -ms-grid;
+  display: grid;
+  height: 100vh;
+  width: 100vw;
+  -ms-grid-rows: 50px auto;
+      grid-template-rows: 50px auto;
+}
+
+.dashboardPage .bar {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr 4fr 1fr;
+      grid-template-columns: 1fr 4fr 1fr;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background-color: black;
+}
+
+.dashboardPage .bar button {
+  -ms-grid-column-align: center;
+      justify-self: center;
+  height: 100%;
+  width: 60px;
+  background-color: var(--accent-color);
+}
+
+.dashboardPage .bar .title {
+  text-align: center;
+}
+
+.dashboardPage .infiniteScroll {
+  display: -ms-grid;
+  display: grid;
+  overflow-y: scroll;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  text-align: center;
+}
+
+.dashboardPage .infiniteScroll .post {
+  display: -ms-grid;
+  display: grid;
+  height: 88vh;
+  width: 100vw;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border: 4px dashed white;
+}
+
+.dashboardPage .streamsList {
+  display: -ms-grid;
+  display: grid;
+  grid-auto-rows: 60px;
+  overflow-y: scroll;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  text-align: center;
+}
+
+.dashboardPage .streamsList h1 {
+  font-size: 20px;
+}

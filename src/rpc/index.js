@@ -3,7 +3,7 @@ import { ResponseError } from 'fusion-plugin-rpc'
 import { endpointToBackendLookups } from './services/index'
 import { fireBackendCall } from './utils'
 
-const SIMULATED_DELAY = 500
+const SIMULATED_DELAY = 2000
 
 export default Object.keys(endpointToBackendLookups).reduce((acc, endpoint) => {
 	const backend = endpointToBackendLookups[endpoint]

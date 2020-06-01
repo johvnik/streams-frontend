@@ -5,7 +5,7 @@ const PASSALONG_HEADERS = ['cookie', 'content-type']
 export const fireBackendCall = async (
 	backend,
 	endpoint,
-	data = {},
+	args = {},
 	ctx,
 	delay,
 	refreshRetryCount = 1,
@@ -16,6 +16,14 @@ export const fireBackendCall = async (
 	PASSALONG_HEADERS.forEach(header => {
 		headers[header] = ctx.request.header[header]
 	})
+
+	/*
+		grab query params (qs) and post body data from rpc call args.
+	*/
+	console.log(args)
+	let { qs, ...data } = args
+	console.log('qs: ', qs)
+	console.log('data: ', data)
 
 	headers['authorization'] = `Bearer ${ctx['access_token']}`
 
@@ -39,81 +47,79 @@ export const fireBackendCall = async (
 			{
 				body: data,
 				headers,
+				qs,
 				json: true,
 			},
 			async (err, res, body) => {
-				setTimeout(
-					async () => {
-						if (err) {
-							return reject({
-								code: err.errno,
-								message: err,
-								data,
-							})
-						}
-						if (res.statusCode > 300 || res.statusCode < 200) {
-							/* 
+				setTimeout(async () => {
+					if (err) {
+						return reject({
+							code: err.errno,
+							message: err,
+							data,
+						})
+					}
+					if (res.statusCode > 300 || res.statusCode < 200) {
+						/* 
 								if 401 unauthorized and a refresh token is available, 
 								attempt to refresh the access token, then refire the 
 								original API call.
 							*/
-							if (res.statusCode === 401) {
-								if (
-									refreshRetryCount > 0 &&
-									endpoint !== backend['loginEndpoint']
-								) {
-									console.log('attempting refresh...')
-									await fireBackendCall(
-										backend,
-										backend['refreshLoginEndpoint'],
-										data,
-										ctx,
-										delay,
-										refreshRetryCount - 1,
-									)
-										.then(async () => {
-											const res = await fireBackendCall(
-												backend,
-												endpoint,
-												data,
-												ctx,
-												delay,
-												refreshRetryCount - 1,
-											)
-											resolve(res)
-										})
-										.catch(err => {
-											reject(err)
-										})
-								} else {
-									console.log('refresh unsuccessful.')
-									ctx.redirectLogin = true
-								}
+						if (res.statusCode === 401) {
+							if (
+								refreshRetryCount > 0 &&
+								endpoint !== backend['loginEndpoint']
+							) {
+								console.log('attempting refresh...')
+								await fireBackendCall(
+									backend,
+									backend['refreshLoginEndpoint'],
+									data,
+									ctx,
+									delay,
+									refreshRetryCount - 1,
+								)
+									.then(async () => {
+										const res = await fireBackendCall(
+											backend,
+											endpoint,
+											data,
+											ctx,
+											delay,
+											refreshRetryCount - 1,
+										)
+										resolve(res)
+									})
+									.catch(err => {
+										reject(err)
+									})
+							} else {
+								console.log('refresh unsuccessful.')
+								ctx.redirectLogin = true
 							}
-
-							return reject({
-								code: res.statusCode,
-								message: body.detail,
-								data,
-							})
 						}
 
-						/* 
+						return reject({
+							code: res.statusCode,
+							message: body.detail,
+							data,
+						})
+					}
+
+					/* 
 							for login or refresh endpoints, save the tokens to ctx
 							to be added to the sessin by auth middleware. 
 						*/
-						if (
-							endpoint === backend['refreshLoginEndpoint'] ||
-							endpoint === backend['loginEndpoint']
-						) {
-							ctx['access_token'] = body.access
-							ctx['refresh_token'] = body.refresh
-						}
+					if (
+						endpoint === backend['refreshLoginEndpoint'] ||
+						endpoint === backend['loginEndpoint']
+					) {
+						ctx['access_token'] = body.access
+						ctx['refresh_token'] = body.refresh
+					}
 
-						return resolve(body)
-					},
-					delay ? delay : 0,
-				)
+					return resolve({ body, args })
+				}, delay || 0)
 			},
 		)
 	})
