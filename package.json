@@ -3,6 +3,11 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.28",
+    "@fortawesome/free-regular-svg-icons": "^5.13.0",
+    "@fortawesome/free-solid-svg-icons": "^5.13.0",
+    "@fortawesome/react-fontawesome": "^0.1.10",
+    "awesome-debounce-promise": "^2.1.0",
     "axios": "^0.19.2",
     "fusion-cli": "^2.6.0",
     "fusion-core": "^2.0.9",
@@ -19,12 +24,14 @@
     "isomorphic-unfetch": "^3.0.0",
     "prop-types": "^15.7.2",
     "react": "^16.10.2",
+    "react-async-hook": "^3.6.1",
     "react-dom": "^16.10.2",
     "react-infinite-scroll-component": "^5.0.4",
     "react-redux": "^7.2.0",
     "reduce-reducers": "^1.0.4",
     "redux": "^4.0.5",
-    "unfetch": "^4.1.0"
+    "unfetch": "^4.1.0",
+    "use-constant": "^1.0.0"
   },
   "scripts": {
     "dev": "fusion dev",

@@ -7,9 +7,10 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import { RPC_IDS } from '../constants/rpc'
 
 import Post from './Post'
-import LoadingIcon from './LoadingIcon'
+import LoadingIcon from './icons/LoadingIcon'
+// import PostList from './PostList'
 
-const Stream = ({ streams, posts, getPostsForStream }) => {
+const Stream = ({ streams, posts, getPostsForStream, myId }) => {
 	const fetchPosts = () => {
 		let params = new URLSearchParams(
 			posts.byStreamId[streams.currentStream.id].next.split('?')[1],
@@ -38,17 +39,10 @@ const Stream = ({ streams, posts, getPostsForStream }) => {
 				loader={<LoadingIcon />}
 				endMessage={<p>end of the road.</p>}
 			>
-				{/* <div className="stream"> */}
 				{posts.byStreamId[streams.currentStream.id].postIds.map(postId => {
-					return <Post key={postId} postId={postId} />
+					return <Post key={postId} postId={postId} myId={myId} />
 				})}
-				{/* </div> */}
 			</InfiniteScroll>
-			// 	<div className="stream">
-			// 	{posts.byStreamId[streams.currentStream.id].postIds.map(postId => {
-			// 		return <Post key={postId} postId={postId} />
-			// 	})}
-			// </div>
 		)
 	} else {
 		return (
@@ -64,6 +58,7 @@ const rpcs = [withRPCRedux(RPC_IDS.getPostsForStream)]
 const mapStateToProps = state => ({
 	streams: state.streams,
 	posts: state.posts,
+	myId: state.profiles.myId,
 })
 
 const hoc = compose(

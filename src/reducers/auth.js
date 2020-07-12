@@ -7,7 +7,7 @@ const DEFAULT_STATE = {
 	isLoading: false,
 	isAuthenticated: false,
 	didAttempt: false,
-	error: '',
+	error: null,
 }
 
 const { login, refreshLogin, verifyLogin, ...endpoints } = RPC_IDS
@@ -25,14 +25,14 @@ const specialReducers = specialEndpoints.reduce((acc, endpoint) => {
 				isLoading: false,
 				isAuthenticated: true,
 				didAttempt: true,
-				error: '',
+				error: null,
 			}),
 			failure: (state, { payload }) => ({
 				...state,
 				isLoading: false,
 				isAuthenticated: false,
 				didAttempt: true,
-				error: payload.message,
+				error: payload,
 			}),
 		}),
 	)
@@ -50,7 +50,7 @@ const reducers = Object.keys(endpoints).reduce(
 							isLoading: false,
 							isAuthenticated: false,
 							didAttempt: true,
-							error: payload.message,
+							error: payload,
 						}
 					} else {
 						return state

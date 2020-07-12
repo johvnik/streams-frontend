@@ -20,10 +20,7 @@ export const fireBackendCall = async (
 	/*
 		grab query params (qs) and post body data from rpc call args.
 	*/
-	console.log(args)
 	let { qs, ...data } = args
-	console.log('qs: ', qs)
-	console.log('data: ', data)
 
 	headers['authorization'] = `Bearer ${ctx['access_token']}`
 
@@ -53,11 +50,9 @@ export const fireBackendCall = async (
 			async (err, res, body) => {
 				setTimeout(async () => {
 					if (err) {
-						return reject({
-							code: err.errno,
-							message: err,
-							data,
-						})
+						// console.log('here is an error')
+						// console.log(err)
+						reject({ code: err.errno, err, args })
 					}
 					if (res.statusCode > 300 || res.statusCode < 200) {
 						/* 
@@ -91,19 +86,20 @@ export const fireBackendCall = async (
 										resolve(res)
 									})
 									.catch(err => {
+										console.log('refresh unsuccessful.')
+										// console.log(err)
 										reject(err)
 									})
-							} else {
-								console.log('refresh unsuccessful.')
-								ctx.redirectLogin = true
 							}
+							// else {
+							// 	console.log('refresh unsuccessful.')
+							// 	// ctx.redirectLogin = true
+							// }
 						}
-
-						return reject({
-							code: res.statusCode,
-							message: body.detail,
-							data,
-						})
+						// console.log('rejecting an error down here')
+						// console.log(body)
+						// console.log(res.statusCode)
+						return reject({ code: res.statusCode, err: body, args })
 					}
 
 					/* 

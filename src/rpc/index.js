@@ -3,7 +3,7 @@ import { ResponseError } from 'fusion-plugin-rpc'
 import { endpointToBackendLookups } from './services/index'
 import { fireBackendCall } from './utils'
 
-const SIMULATED_DELAY = 2000
+const SIMULATED_DELAY = 1000
 
 export default Object.keys(endpointToBackendLookups).reduce((acc, endpoint) => {
 	const backend = endpointToBackendLookups[endpoint]
@@ -15,15 +15,19 @@ export default Object.keys(endpointToBackendLookups).reduce((acc, endpoint) => {
 			args,
 			ctx,
 			SIMULATED_DELAY,
-		).catch(({ code, message, data }) => {
+		).catch(({ code, err, args }) => {
 			console.error(
 				`Failure calling ${endpoint} with args ${JSON.stringify(args)} from ${
 					backend.name
 				}`,
 			)
-			const respError = new ResponseError(message)
+			console.log(err)
+			const respError = new ResponseError(err)
 			respError.code = code
-			respError.meta = data
+			if (err.detail) {
+				respError.message = err.detail
+			}
+			respError.meta = err
 			throw respError
 		})
 		return result

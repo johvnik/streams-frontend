@@ -1,0 +1,12 @@
+.listPageWrapper {
+	max-width: var(--max-width);
+	margin: 0 auto;
+}
+
+.listPage {
+	color: var(--light-text-color);
+	background-color: gray;
+
+	display: flex;
+	justify-content: center;
+}

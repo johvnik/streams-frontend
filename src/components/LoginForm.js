@@ -35,7 +35,9 @@ const LoginForm = ({ login }) => {
 				/>
 				<div className="forgot-password">forgot password?</div>
 				<input className="login-button" type="submit" value="sign in" />
-				<div className="sign-up">need an account? sign up.</div>
+				<div className="sign-up">
+					need an account?<div className="button">sign up.</div>
+				</div>
 			</form>
 		</div>
 	)

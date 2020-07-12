@@ -6,20 +6,60 @@ import { RPC_IDS } from '../constants/rpc'
 import ACTION_IDS from '../constants/actions'
 
 const DEFAULT_STATE = {
+	loading: false,
+	error: null,
 	currentStream: {},
 	ownStreams: {
-		loading: false,
 		byId: {},
 		allIds: [],
-		error: {},
 	},
 	followedStreams: {
-		loading: false,
 		byId: {},
 		allIds: [],
-		error: {},
 	},
 }
+
+const getStreams = createRPCReducer(RPC_IDS.getStreams, {
+	start: state => ({
+		...state,
+		loading: true,
+	}),
+	success: (state, { payload }) => {
+		console.log(payload)
+		return {
+			...state,
+			loading: false,
+			error: null,
+			ownStreams: {
+				...state.ownStreams,
+				byId: {
+					...state.ownStreams.byId,
+					...mapKeys(payload.body.ownStreams, 'id'),
+				},
+				allIds: [
+					...state.ownStreams.allIds,
+					...payload.body.ownStreams.map(stream => stream.id),
+				],
+			},
+			followedStreams: {
+				...state.followedStreams,
+				byId: {
+					...state.followedStreams.byId,
+					...mapKeys(payload.body.followedStreams, 'id'),
+				},
+				allIds: [
+					...state.followedStreams.allIds,
+					...payload.body.followedStreams.map(stream => stream.id),
+				],
+			},
+		}
+	},
+	failure: (state, { payload }) => ({
+		...state,
+		loading: false,
+		error: payload,
+	}),
+})
 
 const getMyOwnStreams = createRPCReducer(RPC_IDS.getMyOwnStreams, {
 	start: state => ({
@@ -99,6 +139,7 @@ const setCurrentStream = (state, action) => {
 
 export default reduceReducers(
 	state => state || DEFAULT_STATE,
+	getStreams,
 	getMyOwnStreams,
 	getStreamsIFollow,
 	setCurrentStream,

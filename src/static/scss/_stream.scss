@@ -1,0 +1,14 @@
+.streamPageWrapper {
+	display: grid;
+	justify-content: center;
+}
+
+.streamPage {
+	width: 100vw;
+	max-width: var(--max-width);
+	padding-left: var(--edge-padding);
+	padding-right: var(--edge-padding);
+	color: var(--light-text-color);
+
+	background-color: gray;
+}

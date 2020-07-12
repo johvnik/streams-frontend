@@ -10,19 +10,36 @@
 	outline: none;
 }
 
+html,
+body,
+#root,
+.App {
+	height: 100%;
+	// width: 100%;
+	overflow: auto;
+}
+
 :root {
 	// variables
-
-	// colors
 	--color-mode: dark;
-	--background-color: #111;
-	--accent-color: #8367ff;
+	--nav-color: rgb(18, 18, 18);
+	--dark-border-color: rgb(28, 28, 28);
+	--background-color: rgb(6, 6, 6);
+	// --color-lightgray: #ccc;
+	--light-text-color: #ddd;
+	--accent-color: #1baafd;
+
+	--nav-height: 42px;
+	--max-width: 1000px;
+	--edge-padding: 10px;
+	--button-scale-factor: 0.96;
 
 	// root styles
-
 	background-color: var(--background-color);
 	font-family: Verdana, Geneva, sans-serif;
 	color: #eee;
+	height: 100%;
+	width: 100%;
 }
 
 @mixin for-desktop-up {

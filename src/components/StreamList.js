@@ -1,15 +1,21 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { compose } from 'redux'
 import { connect, useDispatch } from 'react-redux'
+import { withRPCRedux } from 'fusion-plugin-rpc-redux-react'
 
+import { RPC_IDS } from '../constants/rpc'
 import { setCurrentStream } from '../actions/actions'
 
-const StreamList = ({ ownStreams, followedStreams, setBody }) => {
+const StreamList = ({ getStreams, ownStreams, followedStreams, setBody }) => {
 	const dispatch = useDispatch()
 
+	useEffect(() => {
+		// getStreams()
+	}, [])
+
 	const handleStreamClick = stream => {
-		setBody('stream')
 		dispatch(setCurrentStream({ stream }))
+		setBody('stream')
 	}
 
 	return (
@@ -38,6 +44,8 @@ const StreamList = ({ ownStreams, followedStreams, setBody }) => {
 	)
 }
 
+const rpcs = [withRPCRedux(RPC_IDS.getStreams)]
+
 const mapStateToProps = state => ({
 	ownStreams: Object.keys(state.streams.ownStreams.byId).map(
 		key => state.streams.ownStreams.byId[key],
@@ -47,6 +55,9 @@ const mapStateToProps = state => ({
 	),
 })
 
-const hoc = compose(connect(mapStateToProps))
+const hoc = compose(
+	...rpcs,
+	connect(mapStateToProps),
+)
 
 export default hoc(StreamList)

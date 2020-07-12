@@ -1,7 +1,6 @@
 .loginPage {
 	display: grid;
-	height: 100vh;
-	width: 100vw;
+	height: 100%;
 
 	justify-content: center;
 	align-items: center;
@@ -9,8 +8,10 @@
 }
 
 .login-form {
-	width: 90vw;
-	max-width: 300px;
+	width: 400px;
+	max-width: 90vw;
+	margin: 0 auto;
+	// background-color: gray;
 
 	.form {
 		display: grid;
@@ -22,7 +23,7 @@
 			border-radius: 100vh;
 			border: 0;
 			background-color: #222;
-			color: #eee;
+			color: var(--light-text-color);
 		}
 
 		.login-button {
@@ -30,7 +31,8 @@
 			border-radius: 100vh;
 			border: 0px solid #444;
 			background-color: var(--accent-color);
-			color: #eee;
+			color: var(--light-text-color);
+			cursor: pointer;
 		}
 
 		.forgot-password {
@@ -41,13 +43,19 @@
 			color: var(--accent-color);
 			user-select: none;
 			font-weight: bold;
+			cursor: pointer;
 		}
 
 		.sign-up {
-			display: grid;
+			display: flex;
 			align-self: center;
 			justify-self: center;
 			font-size: 0.8rem;
+			// cursor: pointer;
+			.button {
+				padding-left: 6px;
+				cursor: pointer;
+			}
 		}
 	}
 }

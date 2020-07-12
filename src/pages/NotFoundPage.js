@@ -2,10 +2,10 @@
 import React from 'react'
 import { NotFound } from 'fusion-plugin-react-router'
 
-const FourOFour = () => (
+const NotFoundPage = () => (
 	<NotFound>
 		<div>404</div>
 	</NotFound>
 )
 
-export default FourOFour
+export default NotFoundPage

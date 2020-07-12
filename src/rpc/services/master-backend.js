@@ -14,9 +14,18 @@ const masterBackend = {
 		LOGIN_ENDPOINT,
 		REFRESH_LOGIN_ENDPOINT,
 		VERIFY_LOGIN_ENDPOINT,
+		'getStreams',
 		'getMyOwnStreams',
 		'getStreamsIFollow',
 		'getPostsForStream',
+		'getPostsForAccount',
+		'getMyProfile',
+		'getProfile',
+		'getPostLikesForAccount',
+		'getCommentLikesForAccount',
+		'likePost',
+		'unlikePost',
+		'searchProfiles',
 	],
 }
 

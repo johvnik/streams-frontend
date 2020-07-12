@@ -1,0 +1,118 @@
+.profilePageWrapper {
+	display: grid;
+	justify-content: center;
+}
+
+.profilePage {
+	width: 100vw;
+	max-width: var(--max-width);
+	padding-left: var(--edge-padding);
+	padding-right: var(--edge-padding);
+	color: var(--light-text-color);
+
+	.profileTop {
+		justify-content: center;
+		margin-top: 20px;
+		margin-bottom: 10px;
+
+		.profileInfoTop {
+			display: grid;
+			grid-template-columns: 200px auto;
+
+			.profilePhoto {
+				height: 200px;
+				width: 200px;
+				border-radius: 50%;
+				overflow: hidden;
+				user-select: none;
+
+				img {
+					object-fit: cover;
+					height: 200px;
+					width: 200px;
+				}
+			}
+		}
+
+		.profileTopRight {
+			position: relative;
+			text-align: center;
+			display: grid;
+			grid-template-rows: auto auto auto;
+			cursor: default;
+
+			.fullName {
+				align-self: end;
+				padding-bottom: 4px;
+				font-size: 28px;
+			}
+
+			.handle {
+				// color: var(--accent-color);
+			}
+
+			.noName {
+				align-self: center;
+				font-size: 20px;
+			}
+
+			.profileNumbers {
+				display: grid;
+				grid-template-columns: auto auto auto;
+				justify-content: space-evenly;
+				user-select: none;
+				align-content: start;
+				// background-color: blue;
+
+				.profileNumber {
+					width: 88px;
+					cursor: pointer;
+
+					&:hover {
+						transform: scale(var(--button-scale-factor));
+					}
+				}
+			}
+
+			.centered {
+				align-content: center;
+				// align-self: center;
+			}
+
+			.editButton {
+				position: absolute;
+				display: grid;
+				justify-content: center;
+				align-content: center;
+				top: 0;
+				right: 0;
+				color: #888;
+				width: 36px;
+				height: 36px;
+				// background-color: var(--background-color);
+				// border-radius: 50%;
+				cursor: pointer;
+				overflow: hidden;
+				user-select: none;
+
+				.icon {
+					width: 24px;
+					height: 24px;
+				}
+
+				&:hover {
+					transform: scale(var(--button-scale-factor));
+				}
+			}
+		}
+
+		.profileInfoBio {
+			margin-top: 10px;
+			// background-color: gray;
+		}
+	}
+
+	.profileButtons {
+		// background-color: gray;
+	}
+}
