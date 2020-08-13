@@ -40,10 +40,15 @@
 			align-self: start;
 			justify-self: end;
 			font-size: 0.5rem;
-			color: var(--accent-color);
+			padding-right: 12px;
+			// color: var(--accent-color);
 			user-select: none;
 			font-weight: bold;
 			cursor: pointer;
+
+			&:hover {
+				color: var(--accent-color);
+			}
 		}
 
 		.sign-up {
@@ -51,10 +56,12 @@
 			align-self: center;
 			justify-self: center;
 			font-size: 0.8rem;
-			// cursor: pointer;
+			cursor: pointer;
 			.button {
 				padding-left: 6px;
-				cursor: pointer;
+			}
+			&:hover {
+				color: var(--accent-color);
 			}
 		}
 	}

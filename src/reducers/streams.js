@@ -7,122 +7,141 @@ import ACTION_IDS from '../constants/actions'
 
 const DEFAULT_STATE = {
 	loading: false,
+	hasLoaded: false,
 	error: null,
-	currentStream: {},
-	ownStreams: {
-		byId: {},
-		allIds: [],
-	},
-	followedStreams: {
-		byId: {},
-		allIds: [],
-	},
+	currentStream: null,
+	byProfileId: {},
+	byId: {},
 }
 
-const getStreams = createRPCReducer(RPC_IDS.getStreams, {
+const resetStore = (state, action) => {
+	switch (action.type) {
+		case ACTION_IDS.resetStore:
+			return { ...DEFAULT_STATE }
+		default:
+			return state
+	}
+}
+
+const getStreamsForProfile = createRPCReducer(RPC_IDS.getStreamsForProfile, {
 	start: state => ({
 		...state,
 		loading: true,
 	}),
 	success: (state, { payload }) => {
-		console.log(payload)
 		return {
 			...state,
 			loading: false,
+			hasLoaded: true,
 			error: null,
-			ownStreams: {
-				...state.ownStreams,
-				byId: {
-					...state.ownStreams.byId,
-					...mapKeys(payload.body.ownStreams, 'id'),
+			byProfileId: {
+				...state.byProfileId,
+				[payload.body.profileId]: {
+					following: {
+						...payload.body.streams.reduce((acc, stream) => {
+							if (stream.owner != payload.body.profileId) {
+								acc[stream.id] = true
+							}
+							return acc
+						}, {}),
+					},
+					all: {
+						...payload.body.streams.reduce((acc, stream) => {
+							acc[stream.id] = true
+							return acc
+						}, {}),
+					},
 				},
-				allIds: [
-					...state.ownStreams.allIds,
-					...payload.body.ownStreams.map(stream => stream.id),
-				],
 			},
-			followedStreams: {
-				...state.followedStreams,
-				byId: {
-					...state.followedStreams.byId,
-					...mapKeys(payload.body.followedStreams, 'id'),
-				},
-				allIds: [
-					...state.followedStreams.allIds,
-					...payload.body.followedStreams.map(stream => stream.id),
-				],
+			byId: {
+				...state.byId,
+				...mapKeys(payload.body.streams, 'id'),
 			},
 		}
 	},
 	failure: (state, { payload }) => ({
 		...state,
 		loading: false,
+		hasLoaded: true,
 		error: payload,
 	}),
 })
 
-const getMyOwnStreams = createRPCReducer(RPC_IDS.getMyOwnStreams, {
-	start: state => ({
-		...state,
-		ownStreams: {
-			...state.ownStreams,
-			loading: true,
-		},
-	}),
-	success: (state, { payload }) => {
+const unfollowStream = createRPCReducer(RPC_IDS.unfollowStream, {
+	start: (state, { payload }) => {
 		return {
 			...state,
-			ownStreams: {
-				...state.ownStreams,
-				loading: false,
-				byId: { ...state.ownStreams.byId, ...mapKeys(payload.body, 'id') },
-				allIds: [
-					...state.ownStreams.allIds,
-					...payload.body.map(stream => stream.id),
-				],
-				error: {},
+			byProfileId: {
+				...state.byProfileId,
+				[payload.profileId]: {
+					...state.byProfileId[payload.profileId],
+					following: {
+						...(state.byProfileId[payload.profileId]
+							? state.byProfileId[payload.profileId].following
+							: {}),
+						[payload.streamId]: false,
+					},
+				},
 			},
 		}
 	},
-	failure: (state, { payload }) => ({
-		...state,
-		ownStreams: {
-			...state.ownStreams,
-			loading: false,
-			error: payload.body,
-		},
-	}),
+	success: (state, { payload }) => state,
+	failure: (state, { payload }) => {
+		return {
+			...state,
+			byProfileId: {
+				...state.byProfileId,
+				[payload.initialArgs.profileId]: {
+					...state.byProfileId[payload.initialArgs.profileId],
+					following: {
+						...(state.byProfileId[payload.initialArgs.profileId]
+							? state.byProfileId[payload.initialArgs.profileId].following
+							: {}),
+						[payload.initialArgs.streamId]: true,
+					},
+				},
+			},
+		}
+	},
 })
 
-const getStreamsIFollow = createRPCReducer(RPC_IDS.getStreamsIFollow, {
-	start: state => ({
-		...state,
-		followedStreams: {
-			...state.followedStreams,
-			loading: true,
-		},
-	}),
-	success: (state, { payload }) => ({
-		...state,
-		followedStreams: {
-			...state.followedStreams,
-			loading: false,
-			byId: { ...state.followedStreams.byId, ...mapKeys(payload.body, 'id') },
-			allIds: [
-				...state.followedStreams.allIds,
-				...payload.body.map(stream => stream.id),
-			],
-			error: {},
-		},
-	}),
-	failure: (state, { payload }) => ({
-		...state,
-		followedStreams: {
-			...state.followedStreams,
-			loading: false,
-			error: payload.body,
-		},
-	}),
+const followStream = createRPCReducer(RPC_IDS.followStream, {
+	start: (state, { payload }) => {
+		// console.log(payload)
+		return {
+			...state,
+			byProfileId: {
+				...state.byProfileId,
+				[payload.profileId]: {
+					...state.byProfileId[payload.profileId],
+					following: {
+						...(state.byProfileId[payload.profileId]
+							? state.byProfileId[payload.profileId].following
+							: {}),
+						[payload.streamId]: true,
+					},
+				},
+			},
+		}
+	},
+	success: (state, { payload }) => state,
+	failure: (state, { payload }) => {
+		return {
+			...state,
+			byProfileId: {
+				...state.byProfileId,
+				[payload.initialArgs.profileId]: {
+					...state.byProfileId[payload.initialArgs.profileId],
+					following: {
+						...(state.byProfileId[payload.initialArgs.profileId]
+							? state.byProfileId[payload.initialArgs.profileId].following
+							: {}),
+						[payload.initialArgs.streamId]: false,
+					},
+				},
+			},
+		}
+	},
 })
 
 const setCurrentStream = (state, action) => {
@@ -139,8 +158,9 @@ const setCurrentStream = (state, action) => {
 
 export default reduceReducers(
 	state => state || DEFAULT_STATE,
-	getStreams,
-	getMyOwnStreams,
-	getStreamsIFollow,
+	getStreamsForProfile,
 	setCurrentStream,
+	resetStore,
+	unfollowStream,
+	followStream,
 )

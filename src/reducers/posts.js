@@ -3,6 +3,7 @@ import reduceReducers from 'reduce-reducers'
 import mapKeys from 'lodash/mapKeys'
 
 import { RPC_IDS } from '../constants/rpc'
+import ACTION_IDS from '../constants/actions'
 
 const DEFAULT_STATE = {
 	loading: false,
@@ -10,6 +11,15 @@ const DEFAULT_STATE = {
 	byAccountId: {},
 	byId: {},
 	error: null,
+}
+
+const resetStore = (state, action) => {
+	switch (action.type) {
+		case ACTION_IDS.resetStore:
+			return { ...DEFAULT_STATE }
+		default:
+			return state
+	}
 }
 
 const getPostsForStream = createRPCReducer(RPC_IDS.getPostsForStream, {
@@ -28,7 +38,8 @@ const getPostsForStream = createRPCReducer(RPC_IDS.getPostsForStream, {
 				next: payload.body.next,
 				previous: payload.body.previous,
 				postIds: [
-					...(state.byStreamId[payload.args.stream_id]
+					...(state.byStreamId[payload.args.stream_id] &&
+					state.byStreamId[payload.args.stream_id].postIds
 						? state.byStreamId[payload.args.stream_id].postIds
 						: []),
 					...payload.body.results.map(post => post.id),
@@ -44,7 +55,7 @@ const getPostsForStream = createRPCReducer(RPC_IDS.getPostsForStream, {
 	}),
 })
 
-const getPostsForAccount = createRPCReducer(RPC_IDS.getPostsForAccount, {
+const getPostsForProfile = createRPCReducer(RPC_IDS.getPostsForProfile, {
 	start: state => ({
 		...state,
 		loading: true,
@@ -55,16 +66,20 @@ const getPostsForAccount = createRPCReducer(RPC_IDS.getPostsForAccount, {
 		byId: { ...state.byId, ...mapKeys(payload.body.results, 'id') },
 		byAccountId: {
 			...state.byAccountId,
-			[payload.args.account_id]: {
+			[payload.args.profileId]: {
 				count: payload.body.count,
 				next: payload.body.next,
 				previous: payload.body.previous,
-				postIds: [
-					...(state.byAccountId[payload.args.account_id]
-						? state.byAccountId[payload.args.account_id].postIds
-						: []),
-					...payload.body.results.map(post => post.id),
-				],
+				postIds: {
+					...(state.byAccountId[payload.args.profileId] &&
+					state.byAccountId[payload.args.profileId].postIds
+						? state.byAccountId[payload.args.profileId].postIds
+						: {}),
+					...payload.body.results.reduce((acc, post) => {
+						acc[post.id] = true
+						return acc
+					}, {}),
+				},
 			},
 		},
 		error: null,
@@ -76,8 +91,57 @@ const getPostsForAccount = createRPCReducer(RPC_IDS.getPostsForAccount, {
 	}),
 })
 
+const getStreamsForProfile = createRPCReducer(RPC_IDS.getStreamsForProfile, {
+	start: (state, { payload }) => {
+		return {
+			...state,
+			loading: true,
+		}
+	},
+	success: (state, { payload }) => {
+		return {
+			...state,
+			loading: false,
+			error: null,
+			byId: {
+				...state.byId,
+				...mapKeys(
+					Object.values(payload.body.posts).reduce((acc, posts) => {
+						acc = [...acc, ...posts]
+						return acc
+					}, []),
+					'id',
+				),
+			},
+			byStreamId: {
+				...state.byStreamId,
+				...Object.keys(payload.body.posts).reduce((acc, streamId) => {
+					acc[streamId] = {
+						postIds: {
+							...payload.body.posts[streamId].reduce((accu, post) => {
+								accu[post.id] = true
+								return accu
+							}, {}),
+						},
+					}
+					return acc
+				}, {}),
+			},
+		}
+	},
+	failure: (state, { payload }) => {
+		return {
+			...state,
+			loading: false,
+			error: payload,
+		}
+	},
+})
+
 export default reduceReducers(
 	state => state || DEFAULT_STATE,
 	getPostsForStream,
-	getPostsForAccount,
+	getPostsForProfile,
+	resetStore,
+	getStreamsForProfile,
 )

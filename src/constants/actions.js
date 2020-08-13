@@ -1,6 +1,8 @@
 import { watchedEnum } from './util'
 
 const _ACTION_IDS = {
+	resetStore: 'resetStore',
+	didPerformInitialLoad: 'didPerformInitialLoad',
 	setCurrentStream: 'setCurrentStream',
 	setCurrentProfile: 'setCurrentProfile',
 }

@@ -1,6 +1,4 @@
 .searchPageWrapper {
-	// display: grid;
-	// justify-content: center;
 	max-width: var(--max-width);
 	margin: 0 auto;
 }
@@ -8,21 +6,26 @@
 .searchPage {
 	display: grid;
 	grid-template-rows: auto auto;
+	grid-template-columns: 1fr;
 	justify-content: center;
+	padding-left: var(--edge-padding);
+	padding-right: var(--edge-padding);
 	color: var(--light-text-color);
 	margin-top: 20px;
 	margin-bottom: 20px;
 
 	.searchBar {
 		position: sticky;
-		align-self: center;
+		justify-self: center;
+		width: 100%;
+		max-width: 400px;
 		// background-color: purple;
 
 		.searchField {
 			position: relative;
 
 			input {
-				width: 400px;
+				width: 100%;
 				padding: 0.8rem;
 				padding-left: 38px;
 				border-radius: 100vh;
@@ -45,8 +48,10 @@
 	}
 
 	.searchResults {
-		// display: grid;
 		margin-top: 10px;
+		width: 100%;
+		max-width: 400px;
+		justify-self: center;
 
 		.loading {
 			transform: scale(0.6);

@@ -3,21 +3,12 @@ import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { withRPCRedux } from 'fusion-plugin-rpc-redux-react'
 import debounce from 'lodash/debounce'
-import {
-	Route,
-	Switch,
-	useParams,
-	Redirect,
-	useHistory,
-} from 'fusion-plugin-react-router'
-import InfiniteScroll from 'react-infinite-scroll-component'
-
 import { RPC_IDS } from '../constants/rpc'
 
-import paths from '../constants/paths'
 import SearchIcon from '../components/icons/SearchIcon'
 import Loading from '../components/utils/Loading'
-import Modal from './modal'
+import FollowModal from '../components/modals/FollowModal'
+import ProfileList from '../components/ProfileList'
 
 const SearchBar = ({ onChange, inputText }) => {
 	return (
@@ -30,32 +21,48 @@ const SearchBar = ({ onChange, inputText }) => {
 	)
 }
 
-const SearchPage = ({ profiles, searchProfiles }) => {
-	const [inputText, setInputText] = useState('')
-
-	const history = useHistory()
+const SearchPage = ({
+	authProfileId,
+	profiles,
+	searchProfiles,
+	followProfile,
+}) => {
+	const [followModal, setFollowModal] = useState(0)
 
 	const delayedQuery = useCallback(
 		debounce(query => {
 			if (query) {
-				console.log(`firing: ${query}`)
 				searchProfiles({ query })
 			}
 		}, 500),
-		[],
 	)
 
 	const onChange = e => {
 		delayedQuery(e.target.value)
 	}
 
-	const handleProfileClick = id => {
-		history.push(`${paths.profile}/${id}`)
+	const openFollowModal = (e, profileId) => {
+		e.stopPropagation()
+		setFollowModal(profileId)
+	}
+
+	const closeFollowModal = () => {
+		setFollowModal(0)
 	}
 
 	return (
 		<div className="searchPageWrapper">
 			<div className="searchPage">
+				{followModal ? (
+					<FollowModal
+						myProfileId={authProfileId}
+						cancelFn={closeFollowModal}
+						profileId={followModal}
+						followProfile={followProfile}
+					/>
+				) : (
+					<></>
+				)}
 				<SearchBar onChange={onChange} />
 				<div className="searchResults">
 					{profiles.search.loading && (
@@ -63,37 +70,28 @@ const SearchPage = ({ profiles, searchProfiles }) => {
 							<Loading />
 						</div>
 					)}
-					{profiles.search.results.map(id => {
-						return (
-							<div
-								key={id}
-								className="result"
-								onClick={() => handleProfileClick(id)}
-							>
-								<div className="resultProfileImage">
-									<img src={profiles.byId[id].image} />
-								</div>
-								{profiles.byId[id].full_name && (
-									<div className="resultName">
-										{profiles.byId[id].full_name}
-									</div>
-								)}
-								<div className="resultHandle">{profiles.byId[id].handle}</div>
-							</div>
-						)
-					})}
+					{profiles.search.results && profiles.search.results.profileIds && (
+						<ProfileList
+							authProfileId={authProfileId}
+							profiles={profiles}
+							paginationObject={profiles.search.results}
+							openFollowModalFn={openFollowModal}
+							emptyListMessage=""
+						/>
+					)}
 				</div>
 			</div>
-			<Modal>
-				<div className="modalTestDiv"></div>
-			</Modal>
 		</div>
 	)
 }
 
-const rpcs = [withRPCRedux(RPC_IDS.searchProfiles)]
+const rpcs = [
+	withRPCRedux(RPC_IDS.searchProfiles),
+	withRPCRedux(RPC_IDS.followProfile),
+]
 
 const mapStateToProps = state => ({
+	authProfileId: state.auth.authProfileId,
 	profiles: state.profiles,
 })
 

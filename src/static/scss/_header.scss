@@ -14,7 +14,7 @@
 		padding-right: var(--edge-padding);
 
 		display: grid;
-		grid-template-columns: auto 160px;
+		grid-template-columns: auto 100px;
 		align-content: center;
 		user-select: none;
 
@@ -70,7 +70,7 @@
 
 		ul {
 			display: flex;
-			justify-content: space-between;
+			justify-content: space-around;
 		}
 	}
 }
@@ -80,7 +80,7 @@
 	top: 0;
 	width: 100%;
 	background-color: var(--nav-color);
-	border-bottom: 0.1px solid var(--dark-border-color);
+	border-bottom: 1px solid var(--dark-border-color);
 	z-index: 1;
 	// background-color: gray;
 

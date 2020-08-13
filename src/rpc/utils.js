@@ -1,4 +1,5 @@
 import request from 'request'
+import jwt_decode from 'jwt-decode'
 
 const PASSALONG_HEADERS = ['cookie', 'content-type']
 
@@ -22,7 +23,11 @@ export const fireBackendCall = async (
 	*/
 	let { qs, ...data } = args
 
-	headers['authorization'] = `Bearer ${ctx['access_token']}`
+	if (!backend.safeEndpoints.includes(endpoint)) {
+		headers['authorization'] = `Bearer ${ctx['access_token']}`
+	}
+
+	// headers['SESSION_COOKIE_SECURE'] = false
 
 	/*
 		if calling the backend's refresh endpoint,
@@ -108,10 +113,12 @@ export const fireBackendCall = async (
 						*/
 					if (
 						endpoint === backend['refreshLoginEndpoint'] ||
-						endpoint === backend['loginEndpoint']
+						endpoint === backend['loginEndpoint'] ||
+						endpoint === backend['createAccountEndpoint']
 					) {
 						ctx['access_token'] = body.access
 						ctx['refresh_token'] = body.refresh
+						body['authProfileId'] = jwt_decode(body.refresh).authProfileId
 					}
 
 					return resolve({ body, args })

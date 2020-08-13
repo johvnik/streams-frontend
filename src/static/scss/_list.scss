@@ -5,8 +5,130 @@
 
 .listPage {
 	color: var(--light-text-color);
-	background-color: gray;
+	// margin-top: 20px;
+	margin-bottom: 20px;
+	padding-top: 8px;
 
-	display: flex;
+	.add {
+		display: grid;
+		justify-content: center;
+		align-items: center;
+		height: 90px;
+
+		.addButton {
+			display: grid;
+			justify-content: center;
+			align-items: center;
+			height: 50px;
+			width: 50px;
+			border-radius: 100vh;
+			border: 1px solid var(--dark-border-color);
+			overflow: hidden;
+			font-size: 26px;
+			cursor: pointer;
+
+			&:hover {
+				// transform: scale(var(--button-scale-factor));
+				background-color: var(--accent-color);
+			}
+		}
+	}
+}
+
+.streamList {
+	display: grid;
 	justify-content: center;
+	grid-template-columns: repeat(auto-fit, 280px);
+	// grid-template-columns: repeat(auto-fit, auto);
+	// grid-auto-rows: 320px;
+	// grid-auto-columns: auto;
+	grid-auto-rows: auto;
+	// grid-auto-flow: auto;
+	gap: 20px;
+
+	.stream {
+		// background-color: gray;
+		border: 1px solid var(--dark-border-color);
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		grid-template-rows: 60px 1fr 1fr;
+		height: 340px;
+		width: 280px;
+		cursor: pointer;
+		// background-color: rgb(7, 7, 17);
+		border-radius: 3px;
+		gap: 1px;
+		user-select: none;
+
+		.streamHeader {
+			grid-column: 1 / -1;
+			display: grid;
+			text-align: center;
+			position: relative;
+			// grid-template-rows: 1fr 1fr;
+			border-bottom: 1px solid var(--dark-border-color);
+
+			.headerText {
+				display: grid;
+				align-content: center;
+				// gap: 6px;
+
+				.name {
+					font-size: 16px;
+				}
+
+				.handle {
+					color: #bbb;
+					font-size: 12px;
+					// background-color: green;
+					justify-self: center;
+					padding: 6px;
+				}
+			}
+
+			.headerButton {
+				display: grid;
+				justify-content: center;
+				align-content: center;
+			}
+
+			.streamDetailsBtn {
+				position: absolute;
+				display: grid;
+				justify-content: center;
+				align-content: center;
+				text-align: center;
+				top: 0;
+				right: 0;
+				width: 30px;
+				height: 30px;
+				// font-weight: 1000;
+				// background-color: gray;
+
+				&:hover {
+					color: var(--accent-color);
+				}
+			}
+		}
+
+		.photo {
+			height: 100%;
+			width: 100%;
+			overflow: hidden;
+			user-select: none;
+			// border: 1px solid var(--dark-border-color);
+
+			img {
+				object-fit: cover;
+				height: 100%;
+				width: 100%;
+				background-color: var(--background-color);
+			}
+		}
+
+		// &:hover {
+		// 	transform: scale(0.992);
+		// 	// background-color: var(--accent-color);
+		// }
+	}
 }

@@ -25,6 +25,7 @@ body,
 	--nav-color: rgb(18, 18, 18);
 	--dark-border-color: rgb(28, 28, 28);
 	--background-color: rgb(6, 6, 6);
+	--dark-btn-color: #222;
 	// --color-lightgray: #ccc;
 	--light-text-color: #ddd;
 	--accent-color: #1baafd;
@@ -46,4 +47,13 @@ body,
 	@media (min-width: 900px) {
 		@content;
 	}
+}
+
+.hidden {
+	display: none;
+}
+
+.centeredWrapper {
+	display: grid;
+	justify-content: center;
 }

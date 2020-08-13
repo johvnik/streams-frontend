@@ -4,20 +4,27 @@
 }
 
 .profilePage {
+	--top-bottom-margins: 16px;
+
 	width: 100vw;
 	max-width: var(--max-width);
-	padding-left: var(--edge-padding);
-	padding-right: var(--edge-padding);
+	// padding-left: var(--edge-padding);
+	// padding-right: var(--edge-padding);
 	color: var(--light-text-color);
+	padding-bottom: var(--top-bottom-margins);
 
 	.profileTop {
 		justify-content: center;
-		margin-top: 20px;
-		margin-bottom: 10px;
+		margin-top: var(--top-bottom-margins);
+		margin-bottom: var(--top-bottom-margins);
+		padding-left: var(--edge-padding);
+		padding-right: var(--edge-padding);
 
 		.profileInfoTop {
 			display: grid;
 			grid-template-columns: 200px auto;
+			// justify-content: center;
+			// background-color: gray;
 
 			.profilePhoto {
 				height: 200px;
@@ -25,6 +32,8 @@
 				border-radius: 50%;
 				overflow: hidden;
 				user-select: none;
+				// justify-self: center;
+				// background-color: gray;
 
 				img {
 					object-fit: cover;
@@ -40,6 +49,7 @@
 			display: grid;
 			grid-template-rows: auto auto auto;
 			cursor: default;
+			// justify-self: start;
 
 			.fullName {
 				align-self: end;
@@ -56,17 +66,28 @@
 				font-size: 20px;
 			}
 
+			.profileNumbersWrapper {
+				display: flex;
+				justify-content: center;
+				width: 100%;
+				// background-color: green;
+			}
+
 			.profileNumbers {
+				width: 100%;
+				max-width: 560px;
 				display: grid;
-				grid-template-columns: auto auto auto;
+				grid-template-columns: 1fr 1fr 1fr;
 				justify-content: space-evenly;
-				user-select: none;
 				align-content: start;
+				user-select: none;
 				// background-color: blue;
 
 				.profileNumber {
 					width: 88px;
 					cursor: pointer;
+					// background-color: purple;
+					justify-self: center;
 
 					&:hover {
 						transform: scale(var(--button-scale-factor));
@@ -107,12 +128,179 @@
 		}
 
 		.profileInfoBio {
-			margin-top: 10px;
+			margin-top: var(--top-bottom-margins);
+			margin-bottom: var(--top-bottom-margins);
 			// background-color: gray;
 		}
 	}
 
 	.profileButtons {
-		// background-color: gray;
+		height: 40px;
+		display: flex;
+		justify-content: center;
+		align-content: center;
+		gap: 8px;
+		// background-color: red;
+
+		// .button {
+		// 	// transform: scale(1.3);
+		// 	width: 100px;
+		// 	height: 30px;
+
+		// 	&:hover {
+		// 		// transform: scale(1.26);
+		// 	}
+		// }
+
+		.edit {
+			background-color: transparent;
+			color: var(--text-color);
+			width: 120px;
+			height: 40px;
+			border-radius: 100vw;
+			border: 1px solid var(--dark-border-color);
+			cursor: pointer;
+			user-select: none;
+
+			.icon {
+				font-size: 16px;
+				padding-right: 3px;
+			}
+
+			&:hover {
+				transform: scale(0.98);
+			}
+		}
+	}
+
+	.profileBottom {
+		display: grid;
+		grid-template-rows: 50px auto;
+		user-select: none;
+		text-align: center;
+
+		.loading {
+			transform: scale(0.5);
+			height: 50px;
+			// background-color: blue;
+			padding: 0;
+			margin-bottom: 6px;
+		}
+
+		.profileNav {
+			display: grid;
+			width: 100%;
+			grid-template-columns: 1fr 1fr;
+			justify-self: center;
+
+			.navItem {
+				display: grid;
+				justify-content: center;
+				align-content: center;
+				text-align: center;
+				cursor: pointer;
+
+				font-size: 24px;
+
+				&:hover {
+					.icon {
+						// transform: scale(var(--button-scale-factor));
+					}
+				}
+			}
+
+			.active {
+				color: var(--accent-color);
+				// background-color: gray;
+				border-bottom: 1px solid var(--dark-border-color);
+			}
+		}
+
+		.profileBody {
+			padding-top: 8px;
+			margin-left: var(--edge-padding);
+			margin-right: var(--edge-padding);
+			// background-color: blue;
+			// height: 300vh;
+			// display: grid;
+			// grid-template-columns: 1fr;
+		}
+
+		.myProfileBody {
+			display: grid;
+			grid-template-rows: 60px auto;
+
+			.addHeader {
+				display: grid;
+				justify-content: center;
+				align-items: center;
+				// height: 90px;
+				// background-color: green;
+
+				.addButton {
+					display: grid;
+					justify-content: center;
+					align-items: center;
+					text-align: center;
+					grid-template-columns: auto auto;
+					height: 40px;
+					width: 100px;
+					border-radius: 100vh;
+					border: 1px solid var(--dark-border-color);
+					overflow: hidden;
+					font-size: 16px;
+					cursor: pointer;
+
+					.addButtonText {
+						padding-bottom: 2px;
+					}
+
+					.icon {
+						justify-self: center;
+						font-size: 18px;
+						padding-right: 4px;
+					}
+
+					&:hover {
+						// transform: scale(var(--button-scale-factor));
+						background-color: var(--accent-color);
+					}
+				}
+			}
+		}
+
+		.infiniteScroll {
+			display: grid;
+			grid-template-columns: 1fr 1fr 1fr;
+			grid-auto-rows: auto;
+			gap: 1px;
+
+			.tile {
+				position: relative;
+				width: 100%;
+
+				&::before {
+					content: '';
+					display: block;
+					padding-top: 100%;
+					// background-color: transparent;
+				}
+
+				.content {
+					position: absolute;
+					top: 0;
+					left: 0;
+					bottom: 0;
+					right: 0;
+					overflow: hidden;
+				}
+
+				img {
+					object-fit: cover;
+					height: 100%;
+					width: 100%;
+				}
+			}
+		}
 	}
 }

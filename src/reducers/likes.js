@@ -19,8 +19,8 @@ const DEFAULT_STATE = {
 	},
 }
 
-const getPostLikesForAccount = createRPCReducer(
-	RPC_IDS.getPostLikesForAccount,
+const getPostLikesForProfile = createRPCReducer(
+	RPC_IDS.getPostLikesForProfile,
 	{
 		start: state => ({
 			...state,
@@ -68,8 +68,8 @@ const getPostLikesForAccount = createRPCReducer(
 	},
 )
 
-const getCommentLikesForAccount = createRPCReducer(
-	RPC_IDS.getCommentLikesForAccount,
+const getCommentLikesForProfile = createRPCReducer(
+	RPC_IDS.getCommentLikesForProfile,
 	{
 		start: state => ({
 			...state,
@@ -257,8 +257,8 @@ const unlikePost = createRPCReducer(RPC_IDS.unlikePost, {
 
 export default reduceReducers(
 	state => state || DEFAULT_STATE,
-	getPostLikesForAccount,
-	getCommentLikesForAccount,
+	getPostLikesForProfile,
+	getCommentLikesForProfile,
 	likePost,
 	unlikePost,
 )

@@ -1,0 +1,143 @@
+.profileList {
+	width: 100vw;
+	max-width: 400px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	text-align: center;
+}
+
+.profileListItem {
+	display: grid;
+	grid-template-columns: auto 36px;
+	align-items: center;
+	height: 50px;
+	padding-right: 10px;
+	padding-left: 10px;
+	border-radius: 100vw;
+	overflow: hidden;
+	cursor: pointer;
+
+	&:hover {
+		background-color: #111;
+	}
+
+	.info {
+		display: flex;
+		justify-content: start;
+		align-items: center;
+
+		.profileImage {
+			height: 30px;
+			width: 30px;
+			border-radius: 50%;
+			overflow: hidden;
+			user-select: none;
+
+			img {
+				object-fit: cover;
+				height: 30px;
+				width: 30px;
+			}
+		}
+
+		.profileName {
+			padding-left: 12px;
+		}
+
+		.profileHandle {
+			padding-left: 10px;
+			color: #999;
+		}
+	}
+}
+
+// .followPageWrapper {
+// 	display: grid;
+// 	justify-content: center;
+// }
+
+// .followPage {
+// 	--top-bottom-margins: 16px;
+
+// 	width: 100vw;
+// 	max-width: var(--max-width);
+// 	padding-left: var(--edge-padding);
+// 	padding-right: var(--edge-padding);
+// 	color: var(--light-text-color);
+// 	// background-color: gray;
+// 	text-align: center;
+
+// 	.resultsWrapper {
+// 		display: grid;
+// 		justify-content: center;
+// 	}
+
+// 	.results {
+// 		margin-top: 10px;
+// 		width: 100vw;
+// 		max-width: 400px;
+// 		justify-self: center;
+// 		justify-content: center;
+
+// 		.loading {
+// 			transform: scale(0.6);
+// 			height: 30px;
+// 			// background-color: blue;
+// 			padding: 0;
+// 			margin-bottom: 6px;
+// 		}
+
+// 		// .slideAnim {
+// 		// 	animation-name: slide;
+// 		// 	animation-duration: 2s;
+// 		// }
+
+// 		// @keyframes slide {
+// 		// 	from {
+// 		// 		margin-top: -50px;
+// 		// 	}
+// 		// 	to {
+// 		// 		margin-top: 0px;
+// 		// 	}
+// 		// }
+// 	}
+// }
+
+// 	.resultButton {
+// 		display: grid;
+// 		width: 100px;
+// 		height: 30px;
+// 		border-radius: 100vh;
+// 		overflow: hidden;
+// 		font-size: 12px;
+// 		justify-self: end;
+// 		align-content: center;
+// 		background-color: transparent;
+
+// 		.text {
+// 			height: 100%;
+// 		}
+// 	}
+
+// 	.button {
+// 		width: 100px;
+// 	}
+
+// 	.followButton {
+// 		background-color: var(--accent-color);
+
+// 		&:hover {
+// 			// background-color: transparent;
+// 			transform: scale(var(--button-scale-factor));
+// 		}
+// 	}
+
+// 	.unfollowButton {
+// 		border: 1px solid var(--dark-border-color);
+
+// 		// &:hover {
+// 		// 	// background-color: var(--accent-color);
+// 		// 	transform: scale(var(--button-scale-factor));
+// 		// }
+// 	}
+// }

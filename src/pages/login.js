@@ -1,11 +1,12 @@
 // @flow
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Redirect } from 'react-router-dom'
 import { compose } from 'redux'
-import { connect } from 'react-redux'
+import { connect, useDispatch } from 'react-redux'
 import { withRPCRedux } from 'fusion-plugin-rpc-redux-react'
 
 import { RPC_IDS } from '../constants/rpc'
+import { resetStore } from '../actions/actions'
 import paths from '../constants/paths'
 
 import Loading from '../components/utils/Loading'
@@ -25,7 +26,7 @@ const LoginPage = ({ auth }) => {
 	}
 }
 
-const rpcs = [withRPCRedux(RPC_IDS.verifyLogin)]
+const rpcs = []
 
 const mapStateToProps = state => ({
 	auth: state.auth,

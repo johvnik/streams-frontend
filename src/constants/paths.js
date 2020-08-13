@@ -1,5 +1,6 @@
 export default {
-	stream: '/',
+	home: '/',
+	stream: '/stream',
 	streamList: '/list',
 	profile: '/profile',
 	search: '/search',

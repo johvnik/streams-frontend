@@ -10,5 +10,181 @@
 	padding-right: var(--edge-padding);
 	color: var(--light-text-color);
 
-	background-color: gray;
+	.streamNav {
+		display: grid;
+		height: 40px;
+		width: 100%;
+		grid-template-columns: 1fr 1fr;
+		justify-self: center;
+		// background-color: gray;
+
+		.navItem {
+			display: grid;
+			justify-content: center;
+			align-content: center;
+			text-align: center;
+			cursor: pointer;
+
+			font-size: 18px;
+
+			&:hover {
+				.icon {
+					// transform: scale(var(--button-scale-factor));
+				}
+			}
+		}
+
+		.active {
+			color: var(--accent-color);
+			// background-color: gray;
+			border-bottom: 1px solid var(--dark-border-color);
+		}
+	}
 }
+
+// .dashboardPage {
+// 	display: grid;
+// 	height: 100vh;
+// 	width: 100vw;
+// 	grid-template-rows: 50px auto;
+// 	// border: 5px dashed blue;
+
+// 	.infiniteScroll {
+// 		display: grid;
+// 		// grid-template-columns: 1fr 1fr;
+// 		// grid-auto-rows: 88vh;
+// 		// overflow-y: scroll;
+// 		justify-content: center;
+// 		align-items: start;
+// 		text-align: center;
+// 		// gap: 30vh;
+// 		// border: 4px dashed red;
+
+// 		.post {
+// 			display: grid;
+// 			height: 90vh;
+// 			width: 100vw;
+// 			justify-content: center;
+// 			align-content: center;
+// 			user-select: none;
+// 			// border: 4px dashed green;
+
+// 			.postImage {
+// 				// margin-top: 80px;
+// 				// margin-bottom: 80px;
+// 				// height: 30vh;
+// 				z-index: 1000;
+// 				padding-top: 10px;
+// 				padding-left: 10px;
+// 				padding-right: 10px;
+// 				padding-bottom: 4px;
+// 				background-color: #fff;
+// 				box-shadow: 12px 12px 24px #000, -8px -8px 16px #000;
+
+// 				img {
+// 					max-width: 90vw;
+// 					max-height: 70vh;
+// 					height: auto;
+// 					width: auto;
+// 					// border: 2px dashed blue;
+// 				}
+// 			}
+
+// 			.slideAnim {
+// 				animation-name: slide;
+// 				animation-duration: 2s;
+// 			}
+
+// 			@keyframes slide {
+// 				from {
+// 					margin-top: -20vh;
+// 				}
+// 				to {
+// 					margin-top: 0px;
+// 				}
+// 			}
+
+// 			.details {
+// 				z-index: -1;
+// 				height: 20vh;
+// 				background-color: #000;
+// 			}
+
+// 			.postFooter {
+// 				background-color: #fff;
+// 				z-index: 1000;
+// 				align-content: center;
+// 				justify-content: start;
+// 				display: grid;
+// 				grid-template-columns: 25px 1fr 20px 20px;
+// 				height: 3rem;
+// 				padding-left: 4px;
+// 				padding-right: 4px;
+// 				// border: 2px dashed blue;
+
+// 				&:hover {
+// 					background-color: #ccc;
+// 				}
+
+// 				.postProfileImage {
+// 					width: 1.2rem;
+// 					height: 1.2rem;
+// 					overflow: hidden;
+// 					border-radius: 50%;
+// 					cursor: pointer;
+// 					// border: 2px dashed gray;
+
+// 					img {
+// 						max-width: 1.8rem;
+// 						max-height: 1.8rem;
+// 						height: auto;
+// 						width: auto;
+// 					}
+// 				}
+
+// 				.postHandle {
+// 					color: #444;
+// 					font-size: 0.68rem;
+// 					font-weight: 100;
+// 					justify-self: start;
+// 					align-self: center;
+// 					cursor: pointer;
+// 					// border: 2px dashed gray;
+// 				}
+
+// 				.postLikeIcon {
+// 					color: #999;
+// 					font-size: 0.6rem;
+// 					align-self: center;
+// 					justify-self: end;
+// 					margin-right: 8px;
+// 					// border: 2px dashed gray;
+// 					cursor: pointer;
+// 				}
+
+// 				.postCommentIcon {
+// 					color: #999;
+// 					font-size: 0.6rem;
+// 					align-self: center;
+// 					justify-self: start;
+// 					// border: 2px dashed gray;
+// 					cursor: pointer;
+// 				}
+
+// 				.likeIcon {
+// 					height: 16px;
+// 					width: 16px;
+// 				}
+
+// 				.liked {
+// 					color: red;
+// 				}
+
+// 				.commentIcon {
+// 					height: 16px;
+// 					width: 16px;
+// 				}
+// 			}
+// 		}
+// 	}
+// }
