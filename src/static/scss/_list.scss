@@ -38,6 +38,7 @@
 .streamList {
 	display: grid;
 	justify-content: center;
+	text-align: center;
 	grid-template-columns: repeat(auto-fit, 280px);
 	// grid-template-columns: repeat(auto-fit, auto);
 	// grid-auto-rows: 320px;
@@ -66,7 +67,7 @@
 			text-align: center;
 			position: relative;
 			// grid-template-rows: 1fr 1fr;
-			border-bottom: 1px solid var(--dark-border-color);
+			// border-bottom: 1px solid var(--dark-border-color);
 
 			.headerText {
 				display: grid;
@@ -83,6 +84,10 @@
 					// background-color: green;
 					justify-self: center;
 					padding: 6px;
+
+					&:hover {
+						color: var(--accent-color);
+					}
 				}
 			}
 

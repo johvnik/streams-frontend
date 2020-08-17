@@ -1,0 +1,147 @@
+.post {
+	display: grid;
+	// min-height: 50vh;
+	// height: 90vh;
+	// width: 100vw;
+	// height: 80vh;
+	padding: 40px 0;
+	justify-content: center;
+	align-content: center;
+	user-select: none;
+	// border: 4px dashed green;
+	user-select: none;
+
+	.postImage {
+		z-index: 1;
+		padding-top: 10px;
+		padding-left: 10px;
+		padding-right: 10px;
+		padding-bottom: 4px;
+		background-color: #fff;
+		// box-shadow: 12px 12px 24px #000, -8px -8px 16px #000;
+
+		img {
+			max-width: 90vw;
+			max-height: 70vh;
+			height: auto;
+			width: auto;
+			// border: 2px dashed blue;
+		}
+
+		.ghostImage {
+			width: 400px;
+			height: 400px;
+			max-width: 90vw;
+			max-height: 70vh;
+			background-color: #111;
+		}
+	}
+
+	// .slideAnim {
+	// 	animation-name: slide;
+	// 	animation-duration: 2s;
+	// }
+
+	// @keyframes slide {
+	// 	from {
+	// 		margin-top: -20vh;
+	// 	}
+	// 	to {
+	// 		margin-top: 0px;
+	// 	}
+	// }
+
+	// .details {
+	// 	z-index: -1;
+	// 	height: 20vh;
+	// 	background-color: #000;
+	// }
+
+	.postFooter {
+		background-color: #fff;
+		z-index: 2;
+		align-content: center;
+		justify-content: start;
+		display: grid;
+		grid-template-columns: 35px 1fr 20px 20px;
+		height: 3rem;
+		padding-left: 4px;
+		padding-right: 4px;
+
+		// &:hover {
+		// 	background-color: #ccc;
+		// }
+
+		// .postProfileImage {
+		// 	width: 1.2rem;
+		// 	height: 1.2rem;
+		// 	overflow: hidden;
+		// 	border-radius: 50%;
+		// 	cursor: pointer;
+		// 	// border: 2px dashed gray;
+
+		// 	img {
+		// 		max-width: 1.8rem;
+		// 		max-height: 1.8rem;
+		// 		height: auto;
+		// 		width: auto;
+		// 	}
+		// }
+
+		.profilePhoto {
+			height: 28px;
+			width: 28px;
+			border-radius: 50%;
+			overflow: hidden;
+
+			img {
+				object-fit: cover;
+				height: 28px;
+				width: 28px;
+			}
+		}
+
+		.postHandle {
+			color: #444;
+			font-size: 12px;
+			font-weight: 100;
+			justify-self: start;
+			align-self: center;
+			cursor: pointer;
+			// border: 2px dashed gray;
+		}
+
+		.postLikeIcon {
+			color: #999;
+			font-size: 0.6rem;
+			align-self: center;
+			justify-self: end;
+			margin-right: 8px;
+			// border: 2px dashed gray;
+			cursor: pointer;
+		}
+
+		.likeIcon {
+			height: 16px;
+			width: 16px;
+		}
+
+		.liked {
+			color: red;
+		}
+
+		.postCommentIcon {
+			color: #999;
+			font-size: 0.6rem;
+			align-self: center;
+			justify-self: start;
+			// border: 2px dashed gray;
+			cursor: pointer;
+		}
+
+		.commentIcon {
+			height: 16px;
+			width: 16px;
+		}
+	}
+}

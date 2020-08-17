@@ -1,20 +1,26 @@
 import React from 'react'
 import { compose } from 'redux'
-import { connect } from 'react-redux'
+import { connect, useDispatch } from 'react-redux'
 import { withRPCRedux } from 'fusion-plugin-rpc-redux-react'
 
 import MinusIcon from '../icons/MinusIcon'
+import { openLoginModal } from '../../actions/actions'
 
-const UnfollowBtn = ({ profileId, myProfileId, unfollowFn }) => {
+const UnfollowBtn = ({ handle, authHandle, unfollowFn }) => {
+	const dispatch = useDispatch()
+
 	const handleUnfollow = e => {
 		e.stopPropagation()
-		unfollowFn({ profileId, myProfileId })
+		dispatch(openLoginModal())
+		// unfollowFn({ handle, authHandle })
 	}
 
-	return (
+	return handle !== authHandle ? (
 		<div className="button unfollowBtn" onClick={handleUnfollow}>
 			<MinusIcon />
 		</div>
+	) : (
+		<></>
 	)
 }
 

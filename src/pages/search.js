@@ -22,7 +22,7 @@ const SearchBar = ({ onChange, inputText }) => {
 }
 
 const SearchPage = ({
-	authProfileId,
+	authHandle,
 	profiles,
 	searchProfiles,
 	followProfile,
@@ -51,13 +51,13 @@ const SearchPage = ({
 	}
 
 	return (
-		<div className="searchPageWrapper">
+		<div id="searchPageId" className="searchPageWrapper">
 			<div className="searchPage">
 				{followModal ? (
 					<FollowModal
-						myProfileId={authProfileId}
+						authHandle={authHandle}
 						cancelFn={closeFollowModal}
-						profileId={followModal}
+						handle={followModal}
 						followProfile={followProfile}
 					/>
 				) : (
@@ -65,18 +65,19 @@ const SearchPage = ({
 				)}
 				<SearchBar onChange={onChange} />
 				<div className="searchResults">
-					{profiles.search.loading && (
+					{profiles.search.isSearching && (
 						<div className="loading slideAnim">
 							<Loading />
 						</div>
 					)}
-					{profiles.search.results && profiles.search.results.profileIds && (
+					{profiles.search.results && profiles.search.results.byProfile && (
 						<ProfileList
-							authProfileId={authProfileId}
+							authHandle={authHandle}
 							profiles={profiles}
 							paginationObject={profiles.search.results}
 							openFollowModalFn={openFollowModal}
 							emptyListMessage=""
+							scrollableTargetId="searchPageId"
 						/>
 					)}
 				</div>
@@ -91,7 +92,7 @@ const rpcs = [
 ]
 
 const mapStateToProps = state => ({
-	authProfileId: state.auth.authProfileId,
+	authHandle: state.auth.authHandle,
 	profiles: state.profiles,
 })
 

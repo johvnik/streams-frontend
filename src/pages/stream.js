@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useHistory, useParams } from 'fusion-plugin-react-router'
 
 import { compose } from 'redux'
@@ -7,24 +7,43 @@ import { withRPCRedux } from 'fusion-plugin-rpc-redux-react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 
 import { RPC_IDS } from '../constants/rpc'
+import paths from '../constants/paths'
 
 import Loading from '../components/utils/Loading'
+import ProfileList from '../components/ProfileList'
+import FollowModal from '../components/modals/FollowModal'
+import EditStreamModal from '../components/modals/EditStreamModal'
 
-const StreamPage = ({ authProfileId, profiles, streams }) => {
+import SubUnsubBtn from '../components/buttons/SubUnsubBtn'
+import EditStreamBtn from '../components/buttons/EditStreamBtn'
+
+const StreamPage = ({
+	getStream,
+	getFollowersForStream,
+	getFollowingForStream,
+	authHandle,
+	profiles,
+	streams,
+	followProfile,
+	unfollowStream,
+	followStream,
+}) => {
 	let { streamId } = useParams()
+	const history = useHistory()
 	const [body, setBody] = useState('following')
+	const [followModal, setFollowModal] = useState(0)
+	const [editStreamModal, setEditStreamModal] = useState(0)
 
-	const myStream = () => streams.byId[streamId].owner == authProfileId
+	useEffect(() => {
+		getStream({ streamId })
+		getFollowersForStream({ streamId })
+		getFollowingForStream({ streamId })
+	}, [])
 
-	const CondStreamName = () => {
-		if (myStream()) {
-			return (
-				<div className="streamName">
-					<input />
-				</div>
-			)
-		}
-		return <></>
+	const myStream = () => streams.byId[streamId].handle == authHandle
+
+	if (!streams.byId[streamId]) {
+		return <Loading />
 	}
 
 	const StreamNav = () => {
@@ -48,15 +67,100 @@ const StreamPage = ({ authProfileId, profiles, streams }) => {
 
 	const Body = () => {
 		if (body == 'following') {
-			return 'following'
+			return <StreamProfileList following={true} />
 		}
-		return 'subscribers'
+		return <StreamProfileList />
+	}
+
+	const openFollowModal = (e, handle) => {
+		e.stopPropagation()
+		setFollowModal(handle)
+	}
+
+	const closeModals = () => {
+		setFollowModal(0)
+		setEditStreamModal(0)
+	}
+
+	const openStreamEditModal = (e, streamId) => {
+		e.stopPropagation()
+		setEditStreamModal(streamId)
+	}
+
+	const handleHandleClick = (e, handle) => {
+		e.stopPropagation()
+		history.push(`${paths.profile}/${handle}`)
+	}
+
+	const StreamProfileList = ({ following }) => {
+		const followx = following ? 'following' : 'followers'
+
+		if (
+			!(
+				profiles.byStream[streamId] &&
+				profiles.byStream[streamId][followx] &&
+				profiles.byStream[streamId][followx].byProfile
+			)
+		) {
+			return <Loading />
+		}
+
+		return (
+			<ProfileList
+				authHandle={authHandle}
+				profiles={profiles}
+				paginationObject={profiles.byStream[streamId][followx]}
+				openFollowModalFn={openFollowModal}
+				emptyListMessage={following ? 'not following' : 'no subscribers'}
+			/>
+		)
 	}
 
 	return (
 		<div className="streamPageWrapper">
 			<div className="streamPage">
-				<CondStreamName />
+				{followModal ? (
+					<FollowModal
+						authHandle={authHandle}
+						cancelFn={closeModals}
+						handle={followModal}
+						followProfile={followProfile}
+					/>
+				) : (
+					<></>
+				)}
+				{editStreamModal ? (
+					<EditStreamModal streamId={streamId} cancelFn={closeModals} />
+				) : (
+					<></>
+				)}
+				<div className="header">
+					<div className="name">{streams.byId[streamId].name}</div>
+					<div
+						className="handle"
+						onClick={e => handleHandleClick(e, streams.byId[streamId].handle)}
+					>
+						{streams.byId[streamId].handle}
+					</div>
+					<div className="buttons">
+						{myStream() ? (
+							<EditStreamBtn
+								openStreamEditModalFn={e => openStreamEditModal(e, streamId)}
+							/>
+						) : authHandle ? (
+							<SubUnsubBtn
+								streams={streams}
+								authHandle={authHandle}
+								streamId={streamId}
+								streamOwner={streams.byId[streamId].handle}
+								unfollowStream={unfollowStream}
+								followStream={followStream}
+							/>
+						) : (
+							<></>
+						)}
+					</div>
+				</div>
 				<StreamNav />
 				<Body />
 			</div>
@@ -65,12 +169,17 @@ const StreamPage = ({ authProfileId, profiles, streams }) => {
 }
 
 const rpcs = [
+	withRPCRedux(RPC_IDS.getStream),
 	withRPCRedux(RPC_IDS.searchProfiles),
 	withRPCRedux(RPC_IDS.followProfile),
+	withRPCRedux(RPC_IDS.getFollowersForStream),
+	withRPCRedux(RPC_IDS.getFollowingForStream),
+	withRPCRedux(RPC_IDS.followStream),
+	withRPCRedux(RPC_IDS.unfollowStream),
 ]
 
 const mapStateToProps = state => ({
-	authProfileId: state.auth.authProfileId,
+	authHandle: state.auth.authHandle,
 	profiles: state.profiles,
 	streams: state.streams,
 })

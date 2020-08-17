@@ -5,32 +5,43 @@ import ProfileListItem from './ProfileListItem'
 import InfiniteScroll from 'react-infinite-scroll-component'
 
 const ProfileList = ({
-	authProfileId,
+	authHandle,
 	profiles,
 	paginationObject,
 	openFollowModalFn,
 	emptyListMessage,
+	scrollableTargetId,
 }) => {
 	return (
-		<div className="centeredWrapper">
+		<div id="profileListWrapper" className="centeredWrapper">
 			<div className="profileList">
-				{!Object.keys(paginationObject.profileIds).length && emptyListMessage}
+				{!Object.keys(paginationObject.byProfile).length && (
+					<div className="emptyMessageColor">{emptyListMessage}</div>
+				)}
+				{/* {console.log(paginationObject)} */}
 				<InfiniteScroll
 					className="infiniteScroll"
 					dataLength={paginationObject.count}
 					next={() => console.log('fetching more profiles')}
 					hasMore={paginationObject.next}
 					loader={<Loading />}
+					// scrollableTarget={scrollableTargetId}
 				>
-					{Object.keys(paginationObject.profileIds).map(id => {
-						if (!paginationObject.profileIds[id]) return
+					{Object.keys(paginationObject.byProfile).map(key => {
+						if (!paginationObject.byProfile[key]) return
 						return (
 							<ProfileListItem
-								authProfileId={authProfileId}
-								key={id}
+								authHandle={authHandle}
+								key={key}
 								profiles={profiles}
-								profileId={id}
-								openFollowModalFn={e => openFollowModalFn(e, id)}
+								handle={key}
+								openFollowModalFn={e => openFollowModalFn(e, key)}
+								pullDownToRefresh
+								pullDownToRefreshContent={
+									<h3 style={{ textAlign: 'center' }}>
+										&#8595; Pull down to refresh
+									</h3>
+								}
 							/>
 						)
 					})}
@@ -38,39 +49,6 @@ const ProfileList = ({
 			</div>
 		</div>
 	)
-	// return (
-	// 	<div className="resultsWrapper">
-	// 		<div className="results">
-	// 			{isLoading && (
-	// 				<div className="loading slideAnim">
-	// 					<Loading />
-	// 				</div>
-	// 			)}
-	// 			{listObject && !Object.keys(listObject).length && emptyMessage}
-	// 			{listObject && (
-	// 				<InfiniteScroll
-	// 					className="infiniteScroll"
-	// 					dataLength={listObject.count}
-	// 					next={fetchProfiles}
-	// 					hasMore={listObject.next}
-	// 					loader={<Loading />}
-	// 				>
-	// 					{Object.keys(listObject.profileIds).map(id => {
-	// 						if (!listObject.profileIds[id]) return
-	// 						return (
-	// 							<ProfileListItem
-	// 								key={id}
-	// 								profiles={profiles}
-	// 								profileId={id}
-	// 								openFollowModalFn={e => openFollowModal(e, id)}
-	// 							/>
-	// 						)
-	// 					})}
-	// 				</InfiniteScroll>
-	// 			)}
-	// 		</div>
-	// 	</div>
-	// )
 }
 
 export default ProfileList

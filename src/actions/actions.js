@@ -10,12 +10,14 @@ export const didPerformInitialLoad = () => ({
 	payload: null,
 })
 
-export const setCurrentStream = ({ stream }) => ({
-	type: ACTION_IDS.setCurrentStream,
-	payload: stream,
+// MODALS
+
+export const openLoginModal = () => ({
+	type: ACTION_IDS.openLoginModal,
+	payload: null,
 })
 
-export const setCurrentProfile = id => ({
-	type: ACTION_IDS.setCurrentProfile,
-	payload: id,
+export const closeLoginModal = () => ({
+	type: ACTION_IDS.closeLoginModal,
+	payload: null,
 })

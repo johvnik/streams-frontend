@@ -12,26 +12,26 @@ import FollowModal from '../components/modals/FollowModal'
 import ProfileList from '../components/ProfileList'
 
 const FollowersPage = ({
-	authProfileId,
+	authHandle,
 	profiles,
 	followProfile,
 	getFollowersForProfile,
 }) => {
-	let { profileId } = useParams()
+	let { handle } = useParams()
 
 	const [followModal, setFollowModal] = useState(0)
 
-	if (!profileId) {
-		profileId = authProfileId
+	if (!handle) {
+		handle = authHandle
 	}
 
 	useEffect(() => {
-		getFollowersForProfile({ profileId })
+		getFollowersForProfile({ handle })
 	}, [])
 
-	const openFollowModal = (e, profileId) => {
+	const openFollowModal = (e, handle) => {
 		e.stopPropagation()
-		setFollowModal(profileId)
+		setFollowModal(handle)
 	}
 
 	const closeFollowModal = () => {
@@ -40,9 +40,9 @@ const FollowersPage = ({
 
 	if (
 		!(
-			profiles.byProfileId[profileId] &&
-			profiles.byProfileId[profileId].followers &&
-			profiles.byProfileId[profileId].followers.profileIds
+			profiles.byProfile[handle] &&
+			profiles.byProfile[handle].followers &&
+			profiles.byProfile[handle].followers.byProfile
 		)
 	) {
 		return <Loading />
@@ -53,25 +53,21 @@ const FollowersPage = ({
 			<div className="followPage">
 				{followModal ? (
 					<FollowModal
-						myProfileId={authProfileId}
+						authHandle={authHandle}
 						cancelFn={closeFollowModal}
-						profileId={followModal}
+						handle={followModal}
 						followProfile={followProfile}
 					/>
 				) : (
 					<></>
 				)}
-				{profiles.byProfileId[profileId] &&
-					profiles.byProfileId[profileId].followers &&
-					profiles.byProfileId[profileId].followers.profileIds && (
-						<ProfileList
-							authProfileId={authProfileId}
-							profiles={profiles}
-							paginationObject={profiles.byProfileId[profileId].followers}
-							openFollowModalFn={openFollowModal}
-							emptyListMessage="no followers"
-						/>
-					)}
+				<ProfileList
+					authHandle={authHandle}
+					profiles={profiles}
+					paginationObject={profiles.byProfile[handle].followers}
+					openFollowModalFn={openFollowModal}
+					emptyListMessage="no followers"
+				/>
 			</div>
 		</div>
 	)
@@ -83,7 +79,7 @@ const rpcs = [
 ]
 
 const mapStateToProps = state => ({
-	authProfileId: state.auth.authProfileId,
+	authHandle: state.auth.authHandle,
 	profiles: state.profiles,
 })
 

@@ -19,6 +19,7 @@ const ProtectedRoute = ({
 	posts,
 	refreshLogin,
 	getProfile,
+	getAccount,
 	getStreamsForProfile,
 	getFollowersForProfile,
 	getFollowingForProfile,
@@ -30,20 +31,14 @@ const ProtectedRoute = ({
 		if (!auth.didPerformInitialLoad) {
 			refreshLogin()
 				.then(res => {
-					// console.log(res)
-					if (res.body) {
-						Promise.all([
-							getProfile({ profileId: res.body.authProfileId }),
-							getStreamsForProfile({ profileId: res.body.authProfileId }),
-							getFollowersForProfile({ profileId: res.body.authProfileId }),
-							getFollowingForProfile({ profileId: res.body.authProfileId }),
-						]).then(values => {
-							// console.log(values[0].body)
-							if (values[0].body) {
-								dispatch(didPerformInitialLoad())
-							}
-						})
-					}
+					Promise.all([
+						getAccount({ accountId: auth.authAccountId }),
+						getStreamsForProfile({ profileId: auth.authProfileId }),
+						getFollowingForProfile({ profileId: auth.authProfileId }),
+						getFollowersForProfile({ profileId: auth.authProfileId }),
+					]).then(values => {
+						dispatch(didPerformInitialLoad())
+					})
 				})
 				.catch(err => {
 					console.log(err)
@@ -101,6 +96,7 @@ const rpcs = [
 	withRPCRedux(RPC_IDS.getStreamsForProfile),
 	withRPCRedux(RPC_IDS.getFollowersForProfile),
 	withRPCRedux(RPC_IDS.getFollowingForProfile),
+	withRPCRedux(RPC_IDS.getAccount),
 	// withRPCRedux(RPC_IDS.getMyProfile),
 	// withRPCRedux(RPC_IDS.getStreams),
 	// withRPCRedux(RPC_IDS.getFollowersForMe),

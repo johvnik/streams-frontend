@@ -24,7 +24,7 @@ const getSignedURL = (data, callback) => {
 	request.send(JSON.stringify(data))
 }
 
-export const ImagePreview = ({ s3ObjectKey }) => {
+export const ImagePreview = ({ s3ObjectKey, measure }) => {
 	const [loadError, setLoadError] = useState(false)
 	const [signedURL, setSignedURL] = useState(null)
 	const [loaded, setLoaded] = useState(false)
@@ -51,7 +51,7 @@ export const ImagePreview = ({ s3ObjectKey }) => {
 		return <Loading />
 	}
 
-	return <img src={signedURL} />
+	return <img onLoad={measure} src={signedURL} />
 }
 
 // export class ImagePreview extends React.Component {

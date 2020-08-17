@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { withRPCRedux } from 'fusion-plugin-rpc-redux-react'
@@ -7,38 +7,19 @@ import { NavLink } from 'react-router-dom'
 import paths from '../../constants/paths'
 import { RPC_IDS } from '../../constants/rpc'
 
-import HomeIcon from '../icons/HomeIcon'
-import ProfileIcon from '../icons/ProfileIcon'
-import StreamListIcon from '../icons/StreamListIcon'
-import SearchIcon from '../icons/SearchIcon'
-import NavTitle from './NavTitle'
-import BackIcon from '../icons/BackIcon'
-import {
-	Route,
-	Switch,
-	useParams,
-	Redirect,
-	useHistory,
-} from 'fusion-plugin-react-router'
-// import BackBtn from './BackBtn'
-
-// const isWindowContext = typeof window !== 'undefined'
+// import BackBtn from '../buttons/BackBtn'
+import LoginBtn from '../buttons/LoginBtn'
+import SignupBtn from '../buttons/SignupBtn'
 
 const BackAndTitleBar = ({ auth }) => {
-	const history = useHistory()
-
-	const onClick = () => {
-		history.goBack()
-	}
-
-	// if (history.length < 2) {
-	// 	return null
-	// }
-
 	return (
 		<div className="backAndTitleBar">
-			<div onClick={onClick} className="barContents">
-				<BackIcon />
+			<div className="barContents">
+				<BackBtn />
+				<div className="buttons">
+					{!auth.authProfileId && <LoginBtn />}
+					{!auth.authProfileId && <SignupBtn />}
+				</div>
 			</div>
 		</div>
 	)
@@ -55,4 +36,4 @@ const hoc = compose(
 	connect(mapStateToProps),
 )
 
-export default hoc(BackAndTitleBar)
+// export default hoc(BackAndTitleBar)

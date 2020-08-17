@@ -5,10 +5,12 @@
 	background-color: var(--nav-color);
 	border-bottom: 0.1px solid var(--dark-border-color);
 	z-index: 1;
+	height: var(--nav-height);
+	overflow: hidden;
 
 	.navbarContents {
 		max-width: var(--max-width);
-		height: var(--nav-height);
+		height: 100%;
 		margin: 0 auto;
 		padding-left: var(--edge-padding);
 		padding-right: var(--edge-padding);
@@ -92,18 +94,25 @@
 		padding-right: var(--edge-padding);
 
 		display: grid;
-		grid-template-columns: auto;
+		grid-template-columns: auto 160px;
 		align-content: center;
 		user-select: none;
 
-		.icon {
-			width: 26px;
-			height: 26px;
-			cursor: pointer;
+		.backBtn {
 			justify-self: start;
+		}
 
-			&:hover {
-				transform: scale(var(--button-scale-factor));
+		.buttons {
+			// background-color: gray;
+			display: grid;
+			grid-template-columns: 80px 80px;
+
+			.loginBtn {
+				justify-self: center;
+			}
+
+			.signupBtn {
+				justify-self: center;
 			}
 		}
 	}

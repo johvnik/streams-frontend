@@ -1,4 +1,5 @@
-import { ResponseError } from 'fusion-plugin-rpc'
+// import { ResponseError } from 'fusion-plugin-rpc'
+import { ResponseError } from 'fusion-plugin-rpc-redux-react'
 
 import { endpointToBackendLookups } from './services/index'
 import { fireBackendCall } from './utils'
@@ -15,29 +16,26 @@ export default Object.keys(endpointToBackendLookups).reduce(
 	(acc, endpoint) => {
 		const backend = endpointToBackendLookups[endpoint]
 
-		const handler = async (args, ctx) => {
-			const result = await fireBackendCall(
-				backend,
-				endpoint,
-				args,
-				ctx,
-				SIMULATED_DELAY,
-			).catch(({ code, err, args }) => {
-				console.error(
-					`Failure calling ${endpoint} with args ${JSON.stringify(args)} from ${
-						backend.name
-					}`,
-				)
-				console.log(err)
-				const respError = new ResponseError(err)
-				respError.code = code
-				if (err.detail) {
-					respError.message = err.detail
-				}
-				respError.meta = err
-				throw respError
-			})
-			return result
+		const handler = (args, ctx) => {
+			return (
+				fireBackendCall(backend, endpoint, args, ctx, SIMULATED_DELAY)
+					.then(res => {
+						// console.log(res)
+						return res
+					})
+					// .catch(({ code, err, args }) => {
+					.catch(err => {
+						console.error(
+							`Failure calling ${endpoint} with args ${JSON.stringify(
+								args,
+							)} from ${backend.name}`,
+						)
+						// console.log(err)
+						const responseError = new ResponseError(err)
+						responseError.code = err.response.status
+						throw responseError
+					})
+			)
 		}
 
 		acc[endpoint] = handler

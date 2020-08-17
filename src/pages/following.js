@@ -14,26 +14,26 @@ import ProfileListItem from '../components/ProfileListItem'
 import InfiniteScroll from 'react-infinite-scroll-component'
 
 const FollowingPage = ({
-	authProfileId,
+	authHandle,
 	profiles,
 	followProfile,
 	getFollowingForProfile,
 }) => {
-	let { profileId } = useParams()
+	let { handle } = useParams()
 
 	const [followModal, setFollowModal] = useState(0)
 
-	if (!profileId) {
-		profileId = authProfileId
+	if (!handle) {
+		handle = authHandle
 	}
 
 	useEffect(() => {
-		getFollowingForProfile({ profileId })
+		getFollowingForProfile({ handle })
 	}, [])
 
-	const openFollowModal = (e, profileId) => {
+	const openFollowModal = (e, handle) => {
 		e.stopPropagation()
-		setFollowModal(profileId)
+		setFollowModal(handle)
 	}
 
 	const closeFollowModal = () => {
@@ -42,9 +42,9 @@ const FollowingPage = ({
 
 	if (
 		!(
-			profiles.byProfileId[profileId] &&
-			profiles.byProfileId[profileId].following &&
-			profiles.byProfileId[profileId].following.profileIds
+			profiles.byProfile[handle] &&
+			profiles.byProfile[handle].following &&
+			profiles.byProfile[handle].following.byProfile
 		)
 	) {
 		return <Loading />
@@ -55,25 +55,21 @@ const FollowingPage = ({
 			<div className="followPage">
 				{followModal ? (
 					<FollowModal
-						myProfileId={authProfileId}
+						authHandle={authHandle}
 						cancelFn={closeFollowModal}
-						profileId={followModal}
+						handle={followModal}
 						followProfile={followProfile}
 					/>
 				) : (
 					<></>
 				)}
-				{profiles.byProfileId[profileId] &&
-					profiles.byProfileId[profileId].following &&
-					profiles.byProfileId[profileId].following.profileIds && (
-						<ProfileList
-							authProfileId={authProfileId}
-							profiles={profiles}
-							paginationObject={profiles.byProfileId[profileId].following}
-							openFollowModalFn={openFollowModal}
-							emptyListMessage="not following"
-						/>
-					)}
+				<ProfileList
+					authHandle={authHandle}
+					profiles={profiles}
+					paginationObject={profiles.byProfile[handle].following}
+					openFollowModalFn={openFollowModal}
+					emptyListMessage="not following"
+				/>
 			</div>
 		</div>
 	)
@@ -85,7 +81,7 @@ const rpcs = [
 ]
 
 const mapStateToProps = state => ({
-	authProfileId: state.auth.authProfileId,
+	authHandle: state.auth.authHandle,
 	profiles: state.profiles,
 })
 

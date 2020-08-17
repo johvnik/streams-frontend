@@ -1,13 +1,12 @@
 import React from 'react'
 
-import EditIcon from '../icons/EditIcon'
-
-const EditProfileBtn = ({ openProfileEditModalFn }) => {
-	return (
+const EditProfileBtn = ({ handle, authHandle, openProfileEditModalFn }) => {
+	return handle === authHandle ? (
 		<div className="button editProfileBtn" onClick={openProfileEditModalFn}>
-			{/* <EditIcon /> */}
 			edit profile
 		</div>
+	) : (
+		<></>
 	)
 }
 

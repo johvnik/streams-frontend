@@ -8,18 +8,30 @@ const DEFAULT_STATE = {
 	isLoading: false,
 	isAuthenticated: false,
 	didAttempt: false,
+	authHandle: null,
 	didPerformInitialLoad: false,
-	authProfileId: null,
 	error: null,
 }
 
-const { createAccount, login, refreshLogin, ...endpoints } = RPC_IDS
-const specialEndpoints = [createAccount, login, refreshLogin]
+const { login, createAccount, refreshLogin, ...endpoints } = RPC_IDS
+const specialEndpoints = [login, createAccount, refreshLogin]
 
 const resetStore = (state, action) => {
 	switch (action.type) {
 		case ACTION_IDS.resetStore:
 			return { ...DEFAULT_STATE }
+		default:
+			return state
+	}
+}
+
+const didPerformInitialLoad = (state, action) => {
+	switch (action.type) {
+		case ACTION_IDS.didPerformInitialLoad:
+			return {
+				...state,
+				didPerformInitialLoad: true,
+			}
 		default:
 			return state
 	}
@@ -39,17 +51,13 @@ const specialReducers = specialEndpoints.reduce((acc, endpoint) => {
 					isLoading: false,
 					isAuthenticated: true,
 					didAttempt: true,
-					authProfileId: payload.body.authProfileId,
+					authHandle: payload.body.handle,
 					error: null,
 				}
 			},
 			failure: (state, { payload }) => ({
-				...state,
-				isLoading: false,
-				isAuthenticated: false,
+				...DEFAULT_STATE,
 				didAttempt: true,
-				didPerformInitialLoad: false,
-				authProfileId: null,
 				error: payload,
 			}),
 		}),
@@ -64,10 +72,7 @@ const reducers = Object.keys(endpoints).reduce(
 				failure: (state, { payload }) => {
 					if (payload.code === 401) {
 						return {
-							...state,
-							isLoading: false,
-							isAuthenticated: false,
-							didPerformInitialLoad: false,
+							...DEFAULT_STATE,
 							didAttempt: true,
 							error: payload,
 						}
@@ -79,24 +84,7 @@ const reducers = Object.keys(endpoints).reduce(
 		)
 		return acc
 	},
-	[...specialReducers],
+	[...specialReducers, didPerformInitialLoad, resetStore],
 )
 
-const didPerformInitialLoad = (state, action) => {
-	switch (action.type) {
-		case ACTION_IDS.didPerformInitialLoad:
-			return {
-				...state,
-				didPerformInitialLoad: true,
-			}
-		default:
-			return state
-	}
-}
-
-export default reduceReducers(
-	state => state || DEFAULT_STATE,
-	...reducers,
-	didPerformInitialLoad,
-	resetStore,
-)
+export default reduceReducers(state => state || DEFAULT_STATE, ...reducers)

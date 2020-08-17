@@ -12,7 +12,7 @@ export default createPlugin({
 			// before the response is sent to the browser
 
 			console.log(
-				`${new Date() - start} ms `.padEnd(8, ' '),
+				`${new Date() - start} ms `.padEnd(10, ' '),
 				`${ctx.method}`.padEnd(8, ' '),
 				`${ctx.status}`.padEnd(8, ' '),
 				path,

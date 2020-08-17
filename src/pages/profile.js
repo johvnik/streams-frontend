@@ -8,66 +8,115 @@ import { useParams, useHistory, Redirect } from 'fusion-plugin-react-router'
 import { RPC_IDS } from '../constants/rpc'
 import paths from '../constants/paths'
 
+import { ImagePreview } from '../components/utils/ImagePreview'
+import PlusIcon from '../components/icons/PlusIcon'
 import EditIcon from '../components/icons/EditIcon'
+import EditProfileBtn from '../components/buttons/EditProfileBtn'
+import UnfollowBtn from '../components/buttons/UnfollowBtn'
+import EditProfileModal from '../components/modals/EditProfileModal'
+import CreatePostModal from '../components/modals/CreatePostModal'
+import CreateStreamModal from '../components/modals/CreateStreamModal'
+import FollowModal from '../components/modals/FollowModal'
+
 import PostsIcon from '../components/icons/PostsIcon'
 import StreamListIcon from '../components/icons/StreamListIcon'
 import Loading from '../components/utils/Loading'
-import MyProfile from './myProfile'
-import UnfollowBtn from '../components/buttons/UnfollowBtn'
-import ProfileFollowBtn from '../components/buttons/ProfileFollowBtn'
+import FollowBtn from '../components/buttons/FollowBtn'
 import ProfilePostsGrid from '../components/ProfilePostsGrid'
-
 import StreamList from '../components/StreamList'
-import FollowModal from '../components/modals/FollowModal'
 
 const ProfilePage = ({
-	authProfileId,
+	authHandle,
+	posts,
 	profiles,
 	getProfile,
-	posts,
-	getStreamsForProfile,
-	unfollowProfileFromProfile,
+	followProfile,
 	getPostsForProfile,
+	getStreamsForProfile,
+	// unfollowProfileFromProfile,
 }) => {
-	let { profileId } = useParams()
+	let { handle } = useParams()
 	const history = useHistory()
 	const bottomRef = useRef(null)
 
-	const [body, setBody] = useState('posts')
-	const [followModal, setFollowModal] = useState(0)
+	const myProfile = handle === authHandle
+	const isLoadingPosts = !posts.byProfile[handle]
+	const isLoadingProfile = !(
+		profiles.byHandle[handle] && Object.keys(profiles.byHandle[handle]).length
+	)
+
+	const [body, setBody] = useState(myProfile ? 'posts' : 'streams')
+	const [followModal, setFollowModal] = useState(false)
+	const [editModal, setEditModal] = useState(false)
+	const [createPostModal, setCreatePostModal] = useState(false)
+	const [createStreamModal, setCreateStreamModal] = useState(false)
 
 	useEffect(() => {
-		getProfile({ profileId })
-		getStreamsForProfile({ profileId })
-		getPostsForProfile({ profileId })
+		getProfile({ handle })
+		getStreamsForProfile({ handle })
+		getPostsForProfile({ handle })
 	}, [])
-
-	const loading = () => {
-		if (
-			profiles.byId[profileId] &&
-			Object.keys(profiles.byId[profileId]).length
-		) {
-			return false
-		}
-		return true
-	}
-
-	if (loading()) {
-		return <Loading />
-	}
 
 	const handlePostsClick = () => {
 		setBody('posts')
-		// window.scrollTo({ behavior: 'smooth', top: myRef.current.offsetTop })
 		bottomRef.current.scrollIntoView({ behavior: 'smooth' })
 	}
 
 	const handleFollowersClick = () => {
-		history.push(`${paths.profile}/${profileId}/followers`)
+		history.push(`${paths.profile}/${handle}/followers`)
 	}
 
 	const handleFollowingClick = () => {
-		history.push(`${paths.profile}/${profileId}/following`)
+		history.push(`${paths.profile}/${handle}/following`)
+	}
+
+	const openProfileEditModal = e => {
+		e.stopPropagation()
+		closeModals()
+		setEditModal(true)
+	}
+
+	const openCreatePostModal = e => {
+		e.stopPropagation()
+		closeModals()
+		setCreatePostModal(true)
+	}
+
+	const openCreateStreamModal = e => {
+		e.stopPropagation()
+		closeModals()
+		setCreateStreamModal(true)
+	}
+
+	const openFollowModal = (e, profileId) => {
+		e.stopPropagation()
+		closeModals()
+		setFollowModal(profileId)
+	}
+
+	const closeModals = () => {
+		setEditModal(false)
+		setCreatePostModal(false)
+		setCreateStreamModal(false)
+		setFollowModal(false)
+	}
+
+	const AddPostButton = ({ openCreatePostModal }) => {
+		return (
+			<div className="addButton" onClick={openCreatePostModal}>
+				<PlusIcon />
+				<div className="addButtonText">post</div>
+			</div>
+		)
+	}
+
+	const AddStreamButton = ({ openModal }) => {
+		return (
+			<div className="addButton" onClick={openModal}>
+				<PlusIcon />
+				<div className="addButtonText">stream</div>
+			</div>
+		)
 	}
 
 	const Body = () => {
@@ -76,113 +125,83 @@ const ProfilePage = ({
 				<ProfilePostsGrid
 					posts={posts}
 					profiles={profiles}
-					currentProfile={profileId}
-					isLoading={isLoadingPosts()}
+					handle={handle}
+					isLoading={isLoadingPosts}
 				/>
 			)
 		}
 		if (body === 'streams') {
-			return <ProfileStreams currentProfile={profileId} />
-			// return 'streams'
-		}
-	}
-
-	if (profileId == authProfileId) {
-		return <Redirect to={`${paths.profile}`} />
-	}
-
-	const closeModal = () => {
-		setFollowModal(0)
-	}
-
-	const isLoadingPosts = () => {
-		if (posts.byAccountId[profileId]) {
-			return false
-		}
-		return true
-	}
-
-	const UnfollowBtnCondRender = ({ id }) => {
-		if (
-			profiles.myId &&
-			profiles.following.byId[profiles.myId] &&
-			profiles.myId != id &&
-			profiles.following.byId[profiles.myId][id]
-		) {
 			return (
-				<UnfollowBtn
-					profileId={id}
-					myProfileId={profiles.myId}
-					unfollowFn={unfollowProfileFromProfile}
-				/>
+				<div className="profileStreams">
+					<StreamList handle={handle} />
+				</div>
 			)
 		}
-		return <></>
 	}
 
-	const ProfileFollowBtnCondRender = ({ openModalFn, profileId }) => {
-		if (profiles.myId && profileId != profiles.myId) {
-			return <ProfileFollowBtn openModalFn={openModalFn} />
-		}
-		return <></>
+	if (isLoadingProfile) {
+		return <Loading />
 	}
 
 	return (
 		<div className="profilePageWrapper">
-			{followModal ? (
-				<FollowModal
-					myProfileId={authProfileId}
-					cancelFn={closeFollowModal}
-					profileId={followModal}
-					followProfile={followProfile}
-				/>
-			) : (
-				<></>
-			)}
 			<div className="profilePage">
+				{editModal && <EditProfileModal cancelFn={closeModals} />}
+				{createPostModal && <CreatePostModal cancelFn={closeModals} />}
+				{createStreamModal && <CreateStreamModal cancelFn={closeModals} />}
+				{followModal ? (
+					<FollowModal
+						myHandle={authHandle}
+						cancelFn={closeModals}
+						handle={followModal}
+						followProfile={followProfile}
+					/>
+				) : (
+					<></>
+				)}
 				<div className="profileTop">
 					<div className="profileInfoTop">
 						<div className="profilePhoto">
-							<img src={profiles.byId[profileId].image} />
+							<ImagePreview s3ObjectKey={profiles.byHandle[handle].image} />
 						</div>
 						<div className="profileTopRight">
-							{profiles.byId[profileId].full_name && (
+							{profiles.byHandle[handle].full_name && (
 								<div className="fullName">
-									{profiles.byId[profileId].full_name}
+									{profiles.byHandle[handle].full_name}
 								</div>
 							)}
 							<div
 								className={
-									profiles.byId[profileId].full_name
+									profiles.byHandle[handle].full_name
 										? 'handle'
 										: 'handle noName'
 								}
 							>
-								{profiles.byId[profileId].handle}
+								{profiles.byHandle[handle].handle}
 							</div>
 							<div className="profileNumbersWrapper">
 								<div
 									className={
-										profiles.byId[profileId].full_name
+										profiles.byHandle[handle].full_name
 											? 'profileNumbers'
 											: 'profileNumbers centered'
 									}
 								>
 									<div className="profileNumber" onClick={handlePostsClick}>
 										<div className="postCount">
-											{profiles.byId[profileId].post_count}
+											{profiles.byHandle[handle].post_count}
 										</div>
 										<div className="postText">Posts</div>
 									</div>
 									<div className="profileNumber" onClick={handleFollowersClick}>
 										<div className="followersCount">
-											{profiles.byId[profileId].follower_count}
+											{profiles.byHandle[handle].follower_count}
 										</div>
 										<div className="followersText">Followers</div>
 									</div>
 									<div className="profileNumber" onClick={handleFollowingClick}>
 										<div className="followingCount">
-											{profiles.byId[profileId].following_count}
+											{profiles.byHandle[handle].following_count}
 										</div>
 										<div className="followingText">Following</div>
 									</div>
@@ -190,13 +209,21 @@ const ProfilePage = ({
 							</div>
 						</div>
 					</div>
-					<div className="profileInfoBio">{profiles.byId[profileId].bio}</div>
+					<div className="profileInfoBio multiline">
+						{profiles.byHandle[handle].bio}
+					</div>
 					<div className="profileButtons">
-						<ProfileFollowBtnCondRender
-							profileId={profileId}
-							openModalFn={() => setFollowModal(profileId)}
+						<FollowBtn
+							handle={handle}
+							authHandle={authHandle}
+							openFollowModalFn={e => openFollowModal(e, handle)}
 						/>
-						<UnfollowBtnCondRender id={profileId} />
+						<UnfollowBtn handle={handle} authHandle={authHandle} unfollowFn />
+						<EditProfileBtn
+							handle={handle}
+							authHandle={authHandle}
+							openProfileEditModalFn={openProfileEditModal}
+						/>
 					</div>
 				</div>
 				<div className="profileBottom" ref={bottomRef}>
@@ -214,6 +241,17 @@ const ProfilePage = ({
 							<PostsIcon />
 						</div>
 					</div>
+					{myProfile && (
+						<div className="profileBody myProfileBody">
+							<div className="addHeader">
+								{body == 'streams' ? (
+									<AddStreamButton openModal={openCreateStreamModal} />
+								) : (
+									<AddPostButton openCreatePostModal={openCreatePostModal} />
+								)}
+							</div>
+						</div>
+					)}
 					<div className="profileBody">
 						<Body />
 					</div>
@@ -223,23 +261,16 @@ const ProfilePage = ({
 	)
 }
 
-const ProfileStreams = ({ currentProfile }) => {
-	return (
-		<div className="profileStreams">
-			<StreamList currentProfile={currentProfile} />
-		</div>
-	)
-}
-
 const rpcs = [
 	withRPCRedux(RPC_IDS.getProfile),
-	withRPCRedux(RPC_IDS.getStreamsForProfile),
-	withRPCRedux(RPC_IDS.unfollowProfileFromProfile),
+	withRPCRedux(RPC_IDS.followProfile),
 	withRPCRedux(RPC_IDS.getPostsForProfile),
+	withRPCRedux(RPC_IDS.getStreamsForProfile),
+	// withRPCRedux(RPC_IDS.unfollowProfileFromProfile),
 ]
 
 const mapStateToProps = state => ({
-	authProfileId: state.auth.authProfileId,
+	authHandle: state.auth.authHandle,
 	posts: state.posts,
 	profiles: state.profiles,
 })

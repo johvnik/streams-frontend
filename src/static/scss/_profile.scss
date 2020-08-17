@@ -12,6 +12,7 @@
 	// padding-right: var(--edge-padding);
 	color: var(--light-text-color);
 	padding-bottom: var(--top-bottom-margins);
+	margin-bottom: 20px;
 
 	.profileTop {
 		justify-content: center;
@@ -130,6 +131,9 @@
 		.profileInfoBio {
 			margin-top: var(--top-bottom-margins);
 			margin-bottom: var(--top-bottom-margins);
+			white-space: pre-wrap;
+			font-size: 14px;
+			cursor: default;
 			// background-color: gray;
 		}
 	}
@@ -217,7 +221,7 @@
 		}
 
 		.profileBody {
-			padding-top: 8px;
+			padding-top: 20px;
 			margin-left: var(--edge-padding);
 			margin-right: var(--edge-padding);
 			// background-color: blue;
@@ -252,7 +256,7 @@
 					cursor: pointer;
 
 					.addButtonText {
-						padding-bottom: 2px;
+						padding-bottom: 4px;
 					}
 
 					.icon {

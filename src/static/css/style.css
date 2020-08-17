@@ -24,7 +24,10 @@ body,
   --nav-color: rgb(18, 18, 18);
   --dark-border-color: rgb(28, 28, 28);
   --background-color: rgb(6, 6, 6);
+  --dark-green-color: rgb(24, 82, 24);
+  --dark-red-color: rgb(153, 47, 47);
   --dark-btn-color: #222;
+  --grayed-text-color: #666;
   --light-text-color: #ddd;
   --accent-color: #1baafd;
   --nav-height: 42px;
@@ -50,284 +53,9 @@ body,
           justify-content: center;
 }
 
-.button {
-  display: -ms-grid;
-  display: grid;
-  width: 90px;
-  height: 30px;
-  border-radius: 100vh;
-  font-size: 12px;
-  overflow: hidden;
+.emptyMessageColor {
   text-align: center;
-  -ms-grid-row-align: center;
-      align-self: center;
-  -ms-grid-column-align: center;
-      justify-self: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -ms-flex-line-pack: center;
-      align-content: center;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
-  cursor: pointer;
-}
-
-.editButton {
-  background-color: var(--dark-btn-color);
-  width: 60px;
-  height: 24px;
-}
-
-.editProfileBtn {
-  -ms-grid-columns: auto auto;
-      grid-template-columns: auto auto;
-  background-color: var(--dark-btn-color);
-  width: 100px;
-  height: 36px;
-}
-
-.followBtn {
-  background-color: var(--accent-color);
-  width: 30px;
-  height: 30px;
-}
-
-.unfollowBtn {
-  background-color: var(--dark-btn-color);
-  width: 30px;
-  height: 30px;
-}
-
-.subscribeBtn {
-  height: 24px;
-  background-color: var(--accent-color);
-}
-
-.unsubscribeBtn {
-  height: 24px;
-  background-color: var(--dark-btn-color);
-}
-
-.imagePreview {
-  display: -ms-grid;
-  display: grid;
-  -ms-flex-line-pack: center;
-      align-content: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  text-align: center;
-}
-
-.navbar {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0;
-  width: 100%;
-  background-color: var(--nav-color);
-  border-bottom: 0.1px solid var(--dark-border-color);
-  z-index: 1;
-}
-
-.navbar .navbarContents {
-  max-width: var(--max-width);
-  height: var(--nav-height);
-  margin: 0 auto;
-  padding-left: var(--edge-padding);
-  padding-right: var(--edge-padding);
-  display: -ms-grid;
-  display: grid;
-  -ms-grid-columns: auto 100px;
-      grid-template-columns: auto 100px;
-  -ms-flex-line-pack: center;
-      align-content: center;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
-}
-
-.navbar .navbarContents a {
-  color: var(--light-text-color);
-}
-
-.navbar .navbarContents ul li {
-  list-style: none;
-}
-
-.navbar .navbarContents ul li .icon {
-  width: 26px;
-  height: 26px;
-}
-
-.navbar .navbarContents ul li:hover {
-  -webkit-transform: scale(var(--button-scale-factor));
-          transform: scale(var(--button-scale-factor));
-}
-
-.navbar .navbarContents .active {
-  color: var(--accent-color);
-}
-
-.navbar .navbarContents .titleLink {
-  display: -ms-grid;
-  display: grid;
-  -ms-grid-columns: auto auto;
-      grid-template-columns: auto auto;
-  -ms-grid-column-align: start;
-      justify-self: start;
-  letter-spacing: 1px;
-  text-decoration: none;
-}
-
-.navbar .navbarContents .titleLink .icon {
-  width: 26px;
-  height: 26px;
-}
-
-.navbar .navbarContents .titleLink .navTitle {
-  padding-left: 8px;
-  font-size: 20px;
-}
-
-.navbar .navbarContents .titleLink:hover {
-  -webkit-transform: scale(var(--button-scale-factor));
-          transform: scale(var(--button-scale-factor));
-}
-
-.navbar .navbarContents ul {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-pack: distribute;
-      justify-content: space-around;
-}
-
-.backAndTitleBar {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0;
-  width: 100%;
-  background-color: var(--nav-color);
-  border-bottom: 1px solid var(--dark-border-color);
-  z-index: 1;
-}
-
-.backAndTitleBar .barContents {
-  max-width: var(--max-width);
-  height: var(--nav-height);
-  margin: 0 auto;
-  padding-left: var(--edge-padding);
-  padding-right: var(--edge-padding);
-  display: -ms-grid;
-  display: grid;
-  -ms-grid-columns: auto;
-      grid-template-columns: auto;
-  -ms-flex-line-pack: center;
-      align-content: center;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
-}
-
-.backAndTitleBar .barContents .icon {
-  width: 26px;
-  height: 26px;
-  cursor: pointer;
-  -ms-grid-column-align: start;
-      justify-self: start;
-}
-
-.backAndTitleBar .barContents .icon:hover {
-  -webkit-transform: scale(var(--button-scale-factor));
-          transform: scale(var(--button-scale-factor));
-}
-
-.loginPage {
-  display: -ms-grid;
-  display: grid;
-  height: 100%;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-
-.login-form {
-  width: 400px;
-  max-width: 90vw;
-  margin: 0 auto;
-}
-
-.login-form .form {
-  display: -ms-grid;
-  display: grid;
-  -ms-grid-rows: 3fr 3fr 1fr 3fr 3fr;
-      grid-template-rows: 3fr 3fr 1fr 3fr 3fr;
-  grid-row-gap: 1rem;
-}
-
-.login-form .form input {
-  padding: 0.8rem;
-  border-radius: 100vh;
-  border: 0;
-  background-color: #222;
-  color: var(--light-text-color);
-}
-
-.login-form .form .login-button {
-  padding: 0.8rem;
-  border-radius: 100vh;
-  border: 0px solid #444;
-  background-color: var(--accent-color);
-  color: var(--light-text-color);
-  cursor: pointer;
-}
-
-.login-form .form .forgot-password {
-  display: -ms-grid;
-  display: grid;
-  -ms-grid-row-align: start;
-      align-self: start;
-  -ms-grid-column-align: end;
-      justify-self: end;
-  font-size: 0.5rem;
-  padding-right: 12px;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.login-form .form .forgot-password:hover {
-  color: var(--accent-color);
-}
-
-.login-form .form .sign-up {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-item-align: center;
-      align-self: center;
-  justify-self: center;
-  font-size: 0.8rem;
-  cursor: pointer;
-}
-
-.login-form .form .sign-up .button {
-  padding-left: 6px;
-}
-
-.login-form .form .sign-up:hover {
-  color: var(--accent-color);
+  color: var(--grayed-text-color);
 }
 
 .loading {
@@ -471,6 +199,483 @@ body,
   }
 }
 
+.button {
+  display: -ms-grid;
+  display: grid;
+  width: 90px;
+  height: 30px;
+  border-radius: 100vh;
+  font-size: 12px;
+  overflow: hidden;
+  text-align: center;
+  -ms-grid-row-align: center;
+      align-self: center;
+  -ms-grid-column-align: center;
+      justify-self: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -ms-flex-line-pack: center;
+      align-content: center;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  cursor: pointer;
+}
+
+.loginBtn {
+  background-color: var(--accent-color);
+  width: 70px;
+  font-size: 14px;
+}
+
+.signupBtn {
+  background-color: var(--dark-btn-color);
+  width: 70px;
+  font-size: 14px;
+}
+
+.backBtn {
+  width: 30px;
+  height: 30px;
+}
+
+.backBtn .icon {
+  width: 24px;
+  height: 24px;
+}
+
+.backBtn:hover {
+  -webkit-transform: scale(var(--button-scale-factor));
+          transform: scale(var(--button-scale-factor));
+}
+
+.editButton {
+  background-color: var(--dark-btn-color);
+  width: 60px;
+  height: 24px;
+}
+
+.deleteBtn {
+  position: absolute;
+  right: 0;
+  width: 34px;
+  height: 34px;
+  color: var(--dark-red-color);
+}
+
+.deleteBtn .icon {
+  width: 18px;
+  height: 18px;
+}
+
+.editStreamBtn {
+  background-color: var(--dark-btn-color);
+  width: 100px;
+  height: 30px;
+  padding-bottom: 2px;
+}
+
+.editProfileBtn {
+  -ms-grid-columns: auto auto;
+      grid-template-columns: auto auto;
+  background-color: var(--dark-btn-color);
+  width: 100px;
+  height: 36px;
+  padding-bottom: 2px;
+}
+
+.loadingBtn {
+  display: -ms-grid;
+  display: grid;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -ms-flex-line-pack: center;
+      align-content: center;
+  cursor: default;
+}
+
+.loadingBtn .loading {
+  -webkit-transform: scale(0.3);
+          transform: scale(0.3);
+}
+
+.followBtn {
+  background-color: var(--accent-color);
+  width: 30px;
+  height: 30px;
+}
+
+.cancelBtn {
+  background-color: var(--dark-btn-color);
+  padding-bottom: 1px;
+  padding-bottom: 1px;
+}
+
+.unfollowBtn {
+  background-color: var(--dark-btn-color);
+  width: 30px;
+  height: 30px;
+}
+
+.subscribeBtn {
+  height: 24px;
+  background-color: var(--accent-color);
+  padding-bottom: 2px;
+}
+
+.unsubscribeBtn {
+  height: 24px;
+  background-color: var(--dark-btn-color);
+  padding-bottom: 2px;
+}
+
+.confirmDeleteBtn {
+  background-color: var(--dark-red-color);
+}
+
+.imagePreview {
+  display: -ms-grid;
+  display: grid;
+  -ms-flex-line-pack: center;
+      align-content: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  text-align: center;
+}
+
+.navbar {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  background-color: var(--nav-color);
+  border-bottom: 0.1px solid var(--dark-border-color);
+  z-index: 1;
+  height: var(--nav-height);
+  overflow: hidden;
+}
+
+.navbar .navbarContents {
+  max-width: var(--max-width);
+  height: 100%;
+  margin: 0 auto;
+  padding-left: var(--edge-padding);
+  padding-right: var(--edge-padding);
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: auto 100px;
+      grid-template-columns: auto 100px;
+  -ms-flex-line-pack: center;
+      align-content: center;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.navbar .navbarContents a {
+  color: var(--light-text-color);
+}
+
+.navbar .navbarContents ul li {
+  list-style: none;
+}
+
+.navbar .navbarContents ul li .icon {
+  width: 26px;
+  height: 26px;
+}
+
+.navbar .navbarContents ul li:hover {
+  -webkit-transform: scale(var(--button-scale-factor));
+          transform: scale(var(--button-scale-factor));
+}
+
+.navbar .navbarContents .active {
+  color: var(--accent-color);
+}
+
+.navbar .navbarContents .titleLink {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: auto auto;
+      grid-template-columns: auto auto;
+  -ms-grid-column-align: start;
+      justify-self: start;
+  letter-spacing: 1px;
+  text-decoration: none;
+}
+
+.navbar .navbarContents .titleLink .icon {
+  width: 26px;
+  height: 26px;
+}
+
+.navbar .navbarContents .titleLink .navTitle {
+  padding-left: 8px;
+  font-size: 20px;
+}
+
+.navbar .navbarContents .titleLink:hover {
+  -webkit-transform: scale(var(--button-scale-factor));
+          transform: scale(var(--button-scale-factor));
+}
+
+.navbar .navbarContents ul {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+}
+
+.backAndTitleBar {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  background-color: var(--nav-color);
+  border-bottom: 1px solid var(--dark-border-color);
+  z-index: 1;
+}
+
+.backAndTitleBar .barContents {
+  max-width: var(--max-width);
+  height: var(--nav-height);
+  margin: 0 auto;
+  padding-left: var(--edge-padding);
+  padding-right: var(--edge-padding);
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: auto 160px;
+      grid-template-columns: auto 160px;
+  -ms-flex-line-pack: center;
+      align-content: center;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.backAndTitleBar .barContents .backBtn {
+  -ms-grid-column-align: start;
+      justify-self: start;
+}
+
+.backAndTitleBar .barContents .buttons {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 80px 80px;
+      grid-template-columns: 80px 80px;
+}
+
+.backAndTitleBar .barContents .buttons .loginBtn {
+  -ms-grid-column-align: center;
+      justify-self: center;
+}
+
+.backAndTitleBar .barContents .buttons .signupBtn {
+  -ms-grid-column-align: center;
+      justify-self: center;
+}
+
+.formWrapper {
+  width: 500px;
+  max-width: 80vw;
+  margin: 0 auto;
+}
+
+.form {
+  margin: 10px;
+  display: -ms-grid;
+  display: grid;
+  grid-auto-rows: 40px;
+  gap: 8px;
+  text-align: center;
+}
+
+.form label {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr 4fr;
+      grid-template-columns: 1fr 4fr;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  font-size: 16px;
+}
+
+.form label .labelText {
+  -ms-grid-column-align: start;
+      justify-self: start;
+  font-size: 14px;
+  padding: 10px;
+}
+
+.form input {
+  padding-left: 14px;
+  padding-right: 14px;
+  border-radius: 100vh;
+  border: 0;
+  background-color: #222;
+  color: var(--light-text-color);
+}
+
+.form textarea {
+  border-radius: 8px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 14px;
+  padding-right: 14px;
+  border: 0;
+  background-color: #222;
+  color: var(--light-text-color);
+  resize: none;
+}
+
+.form .buttons {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  gap: 20px;
+}
+
+.form .buttons .loading {
+  -webkit-transform: scale(0.3);
+          transform: scale(0.3);
+}
+
+.form .span3 {
+  grid-row: span 3;
+}
+
+.form .submitBtn {
+  background-color: var(--accent-color);
+}
+
+.form .confirmDeleteBtn {
+  background-color: var(--dark-red-color);
+}
+
+.form .inactiveBtn {
+  background-color: transparent;
+  border: 1px solid #333;
+  color: #555;
+  cursor: default;
+}
+
+.form .green {
+  border: 1px solid var(--dark-green-color);
+  padding-left: 13px;
+  padding-right: 13px;
+}
+
+.form .greenForTxtArea {
+  border: 1px solid var(--dark-green-color);
+  padding-left: 13px;
+  padding-right: 13px;
+  padding-top: 7px;
+  padding-bottom: 7px;
+}
+
+.form .red {
+  border: 1px solid red;
+  padding-left: 13px;
+  padding-right: 13px;
+}
+
+.loginPage {
+  display: -ms-grid;
+  display: grid;
+  height: 100%;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.login-form {
+  width: 400px;
+  max-width: 90vw;
+  margin: 0 auto;
+}
+
+.login-form .form {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-rows: 3fr 3fr 1fr 3fr 3fr;
+      grid-template-rows: 3fr 3fr 1fr 3fr 3fr;
+  grid-row-gap: 1rem;
+}
+
+.login-form .form input {
+  padding: 0.8rem;
+  border-radius: 100vh;
+  border: 0;
+  background-color: #222;
+  color: var(--light-text-color);
+}
+
+.login-form .form .login-button {
+  padding: 0.8rem;
+  border-radius: 100vh;
+  border: 0px solid #444;
+  background-color: var(--accent-color);
+  color: var(--light-text-color);
+  cursor: pointer;
+}
+
+.login-form .form .forgot-password {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-row-align: start;
+      align-self: start;
+  -ms-grid-column-align: end;
+      justify-self: end;
+  font-size: 0.5rem;
+  padding-right: 12px;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.login-form .form .forgot-password:hover {
+  color: var(--accent-color);
+}
+
+.login-form .form .sign-up {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-item-align: center;
+      align-self: center;
+  justify-self: center;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.login-form .form .sign-up .button {
+  padding-left: 6px;
+}
+
+.login-form .form .sign-up:hover {
+  color: var(--accent-color);
+}
+
 .profilePageWrapper {
   display: -ms-grid;
   display: grid;
@@ -485,6 +690,7 @@ body,
   max-width: var(--max-width);
   color: var(--light-text-color);
   padding-bottom: var(--top-bottom-margins);
+  margin-bottom: 20px;
 }
 
 .profilePage .profileTop {
@@ -627,6 +833,9 @@ body,
 .profilePage .profileTop .profileInfoBio {
   margin-top: var(--top-bottom-margins);
   margin-bottom: var(--top-bottom-margins);
+  white-space: pre-wrap;
+  font-size: 14px;
+  cursor: default;
 }
 
 .profilePage .profileButtons {
@@ -715,7 +924,7 @@ body,
 }
 
 .profilePage .profileBottom .profileBody {
-  padding-top: 8px;
+  padding-top: 20px;
   margin-left: var(--edge-padding);
   margin-right: var(--edge-padding);
 }
@@ -760,7 +969,7 @@ body,
 }
 
 .profilePage .profileBottom .myProfileBody .addHeader .addButton .addButtonText {
-  padding-bottom: 2px;
+  padding-bottom: 4px;
 }
 
 .profilePage .profileBottom .myProfileBody .addHeader .addButton .icon {
@@ -824,6 +1033,54 @@ body,
   padding-left: var(--edge-padding);
   padding-right: var(--edge-padding);
   color: var(--light-text-color);
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.streamPage .loading {
+  -webkit-transform: scale(0.6);
+          transform: scale(0.6);
+}
+
+.streamPage .header {
+  display: -ms-grid;
+  display: grid;
+  text-align: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -ms-flex-line-pack: center;
+      align-content: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.streamPage .header .name {
+  font-size: 24px;
+}
+
+.streamPage .header .handle {
+  cursor: pointer;
+  -ms-grid-column-align: center;
+      justify-self: center;
+  padding: 8px;
+}
+
+.streamPage .header .handle:hover {
+  color: var(--accent-color);
+}
+
+.streamPage .header .buttons {
+  margin-top: 10px;
+  display: -ms-grid;
+  display: grid;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -ms-flex-line-pack: center;
+      align-content: center;
 }
 
 .streamPage .streamNav {
@@ -875,6 +1132,7 @@ body,
   color: var(--light-text-color);
   margin-top: 20px;
   margin-bottom: 20px;
+  overflow-y: scroll;
 }
 
 .searchPage .searchBar {
@@ -913,67 +1171,12 @@ body,
 
 .searchPage .searchResults {
   margin-top: 10px;
-  width: 100%;
-  max-width: 400px;
-  -ms-grid-column-align: center;
-      justify-self: center;
 }
 
 .searchPage .searchResults .loading {
   -webkit-transform: scale(0.6);
           transform: scale(0.6);
   height: 30px;
-  padding: 0;
-  margin: 0;
-}
-
-.searchPage .searchResults .result {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: start;
-      -ms-flex-pack: start;
-          justify-content: start;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  height: 50px;
-  padding-right: 10px;
-  padding-left: 10px;
-  cursor: pointer;
-  border-radius: 100vw;
-  overflow: hidden;
-}
-
-.searchPage .searchResults .result:hover {
-  background-color: #111;
-}
-
-.searchPage .searchResults .result .resultProfileImage {
-  height: 30px;
-  width: 30px;
-  border-radius: 50%;
-  overflow: hidden;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
-}
-
-.searchPage .searchResults .result .resultProfileImage img {
-  -o-object-fit: cover;
-     object-fit: cover;
-  height: 30px;
-  width: 30px;
-}
-
-.searchPage .searchResults .result .resultName {
-  padding-left: 12px;
-}
-
-.searchPage .searchResults .result .resultHandle {
-  padding-left: 10px;
-  color: #999;
 }
 
 .listPageWrapper {
@@ -1027,6 +1230,7 @@ body,
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
+  text-align: center;
   -ms-grid-columns: (280px)[auto-fit];
       grid-template-columns: repeat(auto-fit, 280px);
   grid-auto-rows: auto;
@@ -1058,7 +1262,6 @@ body,
   display: grid;
   text-align: center;
   position: relative;
-  border-bottom: 1px solid var(--dark-border-color);
 }
 
 .streamList .stream .streamHeader .headerText {
@@ -1078,6 +1281,10 @@ body,
   -ms-grid-column-align: center;
       justify-self: center;
   padding: 6px;
+}
+
+.streamList .stream .streamHeader .headerText .handle:hover {
+  color: var(--accent-color);
 }
 
 .streamList .stream .streamHeader .headerButton {
@@ -1263,7 +1470,7 @@ body,
   top: 0;
   left: 0;
   z-index: 10;
-  background-color: rgba(255, 255, 255, 0.06);
+  background-color: rgba(14, 14, 14, 0.9);
   display: -ms-grid;
   display: grid;
   -webkit-box-pack: center;
@@ -1273,10 +1480,20 @@ body,
       align-content: center;
 }
 
+.modal {
+  padding-left: 20px;
+  padding-right: 20px;
+  max-height: 70vh;
+  max-width: 95vw;
+  min-height: 200px;
+  background-color: var(--background-color);
+  border-radius: 6px;
+  overflow-y: auto;
+}
+
 .modalHeading {
+  padding: 20px;
   font-size: 18px;
-  -webkit-text-emphasis: center;
-          text-emphasis: center;
   border-bottom: 1px solid var(--dark-border-color);
   display: -ms-grid;
   display: grid;
@@ -1288,19 +1505,171 @@ body,
   text-align: center;
 }
 
-.modal {
-  height: 60vh;
-  max-width: 95vw;
-  width: 900px;
-  background-color: var(--background-color);
-  border-radius: 3px;
-  overflow-y: auto;
+.modalHeading .accent {
   display: -ms-grid;
   display: grid;
-  -ms-grid-rows: 50px auto;
-      grid-template-rows: 50px auto;
+  color: var(--accent-color);
+  font-size: 16px;
+  padding-top: 1px;
+}
+
+.modalBody {
+  position: relative;
+  padding: 20px;
+}
+
+.followModal {
+  width: 1000px;
 }
 
 .followModal .modalBody {
-  padding: 15px;
+  padding-top: 30px;
+  padding-bottom: 40px;
+}
+
+.createPostModal .uploadPhotoContainer {
+  width: 95%;
+  height: 30%;
+  background-color: gray;
+}
+
+.confirmDeleteModalWrapper {
+  position: absolute;
+  display: -ms-grid;
+  display: grid;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -ms-flex-line-pack: center;
+      align-content: center;
+  z-index: 20;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: var(--background-color);
+}
+
+.homePage {
+  height: calc(100vh - var(--nav-height));
+}
+
+.post {
+  display: -ms-grid;
+  display: grid;
+  padding: 40px 0;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -ms-flex-line-pack: center;
+      align-content: center;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  user-select: none;
+}
+
+.post .postImage {
+  z-index: 1;
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 4px;
+  background-color: #fff;
+}
+
+.post .postImage img {
+  max-width: 90vw;
+  max-height: 70vh;
+  height: auto;
+  width: auto;
+}
+
+.post .postImage .ghostImage {
+  width: 400px;
+  height: 400px;
+  max-width: 90vw;
+  max-height: 70vh;
+  background-color: #111;
+}
+
+.post .postFooter {
+  background-color: #fff;
+  z-index: 2;
+  -ms-flex-line-pack: center;
+      align-content: center;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: start;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 35px 1fr 20px 20px;
+      grid-template-columns: 35px 1fr 20px 20px;
+  height: 3rem;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.post .postFooter .profilePhoto {
+  height: 28px;
+  width: 28px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.post .postFooter .profilePhoto img {
+  -o-object-fit: cover;
+     object-fit: cover;
+  height: 28px;
+  width: 28px;
+}
+
+.post .postFooter .postHandle {
+  color: #444;
+  font-size: 12px;
+  font-weight: 100;
+  -ms-grid-column-align: start;
+      justify-self: start;
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
+  cursor: pointer;
+}
+
+.post .postFooter .postLikeIcon {
+  color: #999;
+  font-size: 0.6rem;
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
+  -ms-grid-column-align: end;
+      justify-self: end;
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+.post .postFooter .likeIcon {
+  height: 16px;
+  width: 16px;
+}
+
+.post .postFooter .liked {
+  color: red;
+}
+
+.post .postFooter .postCommentIcon {
+  color: #999;
+  font-size: 0.6rem;
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
+  -ms-grid-column-align: start;
+      justify-self: start;
+  cursor: pointer;
+}
+
+.post .postFooter .commentIcon {
+  height: 16px;
+  width: 16px;
 }

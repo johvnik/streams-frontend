@@ -3,7 +3,9 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 
 import Loading from './utils/Loading'
 
-const ProfilePostsGrid = ({ posts, currentProfile, isLoading }) => {
+import { ImagePreview } from '../components/utils/ImagePreview'
+
+const ProfilePostsGrid = ({ posts, handle, isLoading }) => {
 	if (isLoading) {
 		return <Loading />
 	}
@@ -12,27 +14,27 @@ const ProfilePostsGrid = ({ posts, currentProfile, isLoading }) => {
 		console.log('fetching posts...')
 	}
 	// return <div>loaded up</div>
-	return Object.keys(posts.byAccountId[currentProfile].postIds).length ? (
+	return Object.keys(posts.byProfile[handle].postIds).length ? (
 		<InfiniteScroll
 			className="infiniteScroll"
-			dataLength={posts.byAccountId[currentProfile].count}
+			dataLength={posts.byProfile[handle].count}
 			next={fetchPosts}
-			hasMore={posts.byAccountId[currentProfile].next}
+			hasMore={posts.byProfile[handle].next}
 			loader={<Loading />}
 			// endMessage={}
 		>
-			{Object.keys(posts.byAccountId[currentProfile].postIds).map(postId => {
+			{Object.keys(posts.byProfile[handle].postIds).map(postId => {
 				return (
 					<div className="tile" key={postId}>
 						<div className="content">
-							<img src={posts.byId[postId].image} />
+							<ImagePreview s3ObjectKey={posts.byId[postId].image} />
 						</div>
 					</div>
 				)
 			})}
 		</InfiniteScroll>
 	) : (
-		<div>no posts</div>
+		<div className="emptyMessageColor">no posts</div>
 	)
 }
 

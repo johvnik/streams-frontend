@@ -1,18 +1,23 @@
 const MASTER_API_BASEPATH = 'http://localhost:8000/api'
 
 const LOGIN_ENDPOINT = 'login'
-const REFRESH_LOGIN_ENDPOINT = 'refreshLogin'
-// const VERIFY_LOGIN_ENDPOINT = 'verifyLogin'
+const REFRESH_ENDPOINT = 'refreshLogin'
 const CREATE_ACCOUNT_ENDPOINT = 'createAccount'
 
 const safeEndpoints = [
-	CREATE_ACCOUNT_ENDPOINT,
 	LOGIN_ENDPOINT,
+	REFRESH_ENDPOINT,
+	CREATE_ACCOUNT_ENDPOINT,
 	'getProfile',
+	'getStream',
 	'getPostsForProfile',
 	'getFollowersForProfile',
 	'getFollowingForProfile',
 	'getStreamsForProfile',
+	'getFollowersForStream',
+	'getFollowingForStream',
+	'searchProfiles',
+	'getPostsForStream',
 ]
 
 const masterBackend = {
@@ -21,27 +26,28 @@ const masterBackend = {
 	safeEndpoints,
 	createAccountEndpoint: CREATE_ACCOUNT_ENDPOINT,
 	loginEndpoint: LOGIN_ENDPOINT,
-	refreshLoginEndpoint: REFRESH_LOGIN_ENDPOINT,
-	// verifyLoginEndpoint: VERIFY_LOGIN_ENDPOINT,
+	refreshEndpoint: REFRESH_ENDPOINT,
 	endpoints: [
 		...safeEndpoints,
-		REFRESH_LOGIN_ENDPOINT,
-		// VERIFY_LOGIN_ENDPOINT,
-		'getStreams',
-		'getPostsForStream',
-		'getMyProfile',
+		// 'getStreams',
+		// 'getMyProfile',
 		'getPostLikesForProfile',
 		'getCommentLikesForProfile',
 		'likePost',
 		'unlikePost',
-		'searchProfiles',
-		'getFollowersForMe',
-		'getFollowingForMe',
+		// 'getFollowersForMe',
+		// 'getFollowingForMe',
 		'unfollowStream',
 		'unfollowProfile',
 		'unfollowProfileFromProfile',
 		'followStream',
 		'followProfile',
+		'getAccount',
+		'updateAccount',
+		'deleteAccount',
+		'createStream',
+		'updateStream',
+		'deleteStream',
 	],
 }
 

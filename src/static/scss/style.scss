@@ -1,9 +1,10 @@
 @import 'config';
+@import 'loading';
 @import 'buttons';
 @import 'images';
 @import 'header';
+@import 'forms';
 @import 'login';
-@import 'loading';
 @import 'profile';
 @import 'stream';
 @import 'search';
@@ -11,3 +12,5 @@
 @import 'signup';
 @import 'profileList';
 @import 'modals';
+@import 'home';
+@import 'post';

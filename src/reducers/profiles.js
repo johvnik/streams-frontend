@@ -5,17 +5,16 @@ import keyBy from 'lodash/keyBy'
 
 import { RPC_IDS } from '../constants/rpc'
 import ACTION_IDS from '../constants/actions'
+import following from '../pages/following'
 
 const DEFAULT_STATE = {
-	loading: false,
 	search: {
-		loading: false,
-		results: [],
-		error: null,
+		isLoading: false,
+		results: {},
 	},
-	byProfileId: {},
-	byId: {},
-	error: null,
+	byProfile: {},
+	byStream: {},
+	byHandle: {},
 }
 
 const resetStore = (state, action) => {
@@ -30,18 +29,49 @@ const resetStore = (state, action) => {
 const getProfile = createRPCReducer(RPC_IDS.getProfile, {
 	start: state => ({
 		...state,
-		loading: true,
 	}),
 	success: (state, { payload }) => ({
 		...state,
-		loading: false,
-		byId: { ...state.byId, [payload.body.id]: payload.body },
-		error: null,
+		byHandle: { ...state.byHandle, [payload.body.handle]: payload.body },
 	}),
 	failure: (state, { payload }) => ({
 		...state,
-		loading: false,
-		error: payload,
+	}),
+})
+
+const getAccount = createRPCReducer(RPC_IDS.getAccount, {
+	start: state => ({
+		...state,
+	}),
+	success: (state, { payload }) => {
+		return {
+			...state,
+			byHandle: {
+				...state.byHandle,
+				[payload.body.handle]: payload.body.profile,
+			},
+		}
+	},
+	failure: (state, { payload }) => ({
+		...state,
+	}),
+})
+
+const updateAccount = createRPCReducer(RPC_IDS.updateAccount, {
+	start: state => ({
+		...state,
+	}),
+	success: (state, { payload }) => {
+		return {
+			...state,
+			byHandle: {
+				...state.byHandle,
+				[payload.body.handle]: payload.body.profile,
+			},
+		}
+	},
+	failure: (state, { payload }) => ({
+		...state,
 	}),
 })
 
@@ -50,192 +80,106 @@ const searchProfiles = createRPCReducer(RPC_IDS.searchProfiles, {
 		...state,
 		search: {
 			...state.search,
-			loading: true,
+			isSearching: true,
 		},
 	}),
 	success: (state, { payload }) => ({
 		...state,
-		byId: { ...state.byId, ...mapKeys(payload.body.results, 'id') },
+		byHandle: { ...state.byHandle, ...mapKeys(payload.body.results, 'handle') },
 		search: {
 			...state.search,
-			loading: false,
+			isSearching: false,
 			results: {
 				count: payload.body.count,
 				next: payload.body.next,
 				previous: payload.body.previous,
-				profileIds: {
+				byProfile: {
 					...payload.body.results.reduce((acc, profile) => {
-						acc[profile.id] = true
+						acc[profile.handle] = true
 						return acc
 					}, {}),
 				},
 			},
-			error: null,
 		},
 	}),
 	failure: (state, { payload }) => ({
 		...state,
 		search: {
 			...state.search,
-			loading: false,
-			error: payload,
+			isSearching: false,
 		},
 	}),
 })
 
-const getFollowersForProfile = createRPCReducer(
-	RPC_IDS.getFollowersForProfile,
-	{
+const getFollowxForXHelper = ({ stream, following }) => {
+	const byXId = stream ? 'byStream' : 'byProfile'
+	const xId = stream ? 'streamId' : 'handle'
+	const followx = following ? 'following' : 'followers'
+
+	return {
 		start: (state, { payload }) => {
 			return {
 				...state,
-				byProfileId: {
-					...state.byProfileId,
-					[payload.profileId]: {
-						...state.byProfileId[payload.profileId],
-						followers: {
-							...(state.byProfileId[payload.profileId] &&
-							state.byProfileId[payload.profileId].followers
-								? state.byProfileId[payload.profileId].followers
-								: {}),
-							loading: true,
-						},
-					},
-				},
 			}
 		},
-		success: (state, { payload }) => {
-			return {
-				...state,
-				byId: { ...state.byId, ...mapKeys(payload.body.results, 'id') },
-				byProfileId: {
-					...state.byProfileId,
-					[payload.args.profileId]: {
-						...state.byProfileId[payload.args.profileId],
-						followers: {
-							count: payload.body.count,
-							next: payload.body.next,
-							previous: payload.body.previous,
-							profileIds: {
-								...(state.byProfileId[payload.args.profileId] &&
-								state.byProfileId[payload.args.profileId].followers
-									? state.byProfileId[payload.args.profileId].followers
-											.profileIds
-									: {}),
-								...payload.body.results.reduce((acc, profile) => {
-									acc[profile.id] = true
-									return acc
-								}, {}),
-							},
-							loading: false,
-							error: null,
-						},
-					},
-				},
-				error: null,
-			}
-		},
-		failure: (state, { payload }) => ({
+		success: (state, { payload }) => ({
 			...state,
-			byProfileId: {
-				...state.byProfileId,
-				[payload.args.profileId]: {
-					...state.byProfileId[payload.args.profileId],
-					followers: {
-						...(state.byProfileId[payload.args.profileId] &&
-						state.byProfileId[payload.args.profileId].followers
-							? state.byProfileId[payload.args.profileId].followers
-							: {}),
-						error: payload,
+			byHandle: {
+				...state.byHandle,
+				...mapKeys(payload.body.results, 'handle'),
+			},
+			[byXId]: {
+				...state[byXId],
+				[payload.initialArgs[xId]]: {
+					...state[byXId][payload.initialArgs[xId]],
+					[followx]: {
+						count: payload.body.count,
+						next: payload.body.next,
+						previous: payload.body.previous,
+						byProfile: {
+							...(state[byXId][payload.initialArgs[xId]] &&
+							state[byXId][payload.initialArgs[xId]][followx]
+								? state[byXId][payload.initialArgs[xId]][followx].handles
+								: {}),
+							...payload.body.results.reduce((acc, profile) => {
+								acc[profile.handle] = true
+								return acc
+							}, {}),
+						},
 					},
 				},
 			},
 		}),
-	},
+		failure: (state, { payload }) => {
+			return {
+				...state,
+			}
+		},
+	}
+}
+
+const getFollowersForProfile = createRPCReducer(
+	RPC_IDS.getFollowersForProfile,
+	getFollowxForXHelper({}),
 )
 
 const getFollowingForProfile = createRPCReducer(
 	RPC_IDS.getFollowingForProfile,
-	{
-		start: (state, { payload }) => {
-			return {
-				...state,
-				byProfileId: {
-					...state.byProfileId,
-					[payload.profileId]: {
-						...state.byProfileId[payload.profileId],
-						following: {
-							...(state.byProfileId[payload.profileId] &&
-							state.byProfileId[payload.profileId].following
-								? state.byProfileId[payload.profileId].following
-								: {}),
-							loading: true,
-						},
-					},
-				},
-			}
-		},
-		success: (state, { payload }) => {
-			return {
-				...state,
-				byId: { ...state.byId, ...mapKeys(payload.body.results, 'id') },
-				byProfileId: {
-					...state.byProfileId,
-					[payload.args.profileId]: {
-						...state.byProfileId[payload.args.profileId],
-						following: {
-							count: payload.body.count,
-							next: payload.body.next,
-							previous: payload.body.previous,
-							profileIds: {
-								...(state.byProfileId[payload.args.profileId] &&
-								state.byProfileId[payload.args.profileId].following
-									? state.byProfileId[payload.args.profileId].following
-											.profileIds
-									: {}),
-								...payload.body.results.reduce((acc, profile) => {
-									acc[profile.id] = true
-									return acc
-								}, {}),
-							},
-							loading: false,
-							error: null,
-						},
-					},
-				},
-				error: null,
-			}
-		},
-		failure: (state, { payload }) => ({
-			...state,
-			byProfileId: {
-				...state.byProfileId,
-				[payload.args.profileId]: {
-					...state.byProfileId[payload.args.profileId],
-					following: {
-						...(state.byProfileId[payload.args.profileId] &&
-						state.byProfileId[payload.args.profileId].following
-							? state.byProfileId[payload.args.profileId].following
-							: {}),
-						error: payload,
-					},
-				},
-			},
-		}),
-	},
+	getFollowxForXHelper({ following: true }),
 )
 
-const setCurrentProfile = (state, action) => {
-	switch (action.type) {
-		case ACTION_IDS.setCurrentProfile:
-			return {
-				...state,
-				currentProfile: action.payload,
-			}
-		default:
-			return state
-	}
-}
+const getFollowersForStream = createRPCReducer(
+	RPC_IDS.getFollowersForStream,
+	getFollowxForXHelper({ stream: true }),
+)
+
+const getFollowingForStream = createRPCReducer(
+	RPC_IDS.getFollowingForStream,
+	getFollowxForXHelper({
+		stream: true,
+		following: true,
+	}),
+)
 
 const unfollowProfileFromProfile = createRPCReducer(
 	RPC_IDS.unfollowProfileFromProfile,
@@ -246,13 +190,13 @@ const unfollowProfileFromProfile = createRPCReducer(
 				...state,
 				following: {
 					...state.following,
-					byId: {
-						...state.following.byId,
-						[payload.myProfileId]: {
-							...(state.following.byId[payload.myProfileId]
-								? state.following.byId[payload.myProfileId]
+					byProfile: {
+						...state.following.byProfile,
+						[payload.myHandle]: {
+							...(state.following.byProfile[payload.myHandle]
+								? state.following.byProfile[payload.myHandle]
 								: {}),
-							[payload.profileId]: false,
+							[payload.handle]: false,
 						},
 					},
 				},
@@ -265,13 +209,13 @@ const unfollowProfileFromProfile = createRPCReducer(
 				...state,
 				following: {
 					...state.following,
-					byId: {
-						...state.following.byId,
-						[payload.myProfileId]: {
-							...(state.following.byId[payload.myProfileId]
-								? state.following.byId[payload.myProfileId]
+					byProfile: {
+						...state.following.byProfile,
+						[payload.initialArgs.myHandle]: {
+							...(state.following.byProfile[payload.initialArgs.myHandle]
+								? state.following.byProfile[payload.initialArgs.myHandle]
 								: {}),
-							[payload.profileId]: true,
+							[payload.initialArgs.handle]: true,
 						},
 					},
 				},
@@ -280,59 +224,121 @@ const unfollowProfileFromProfile = createRPCReducer(
 	},
 )
 
-const followProfile = createRPCReducer(RPC_IDS.followProfile, {
-	start: (state, { payload }) => {
-		console.log(payload)
-		return {
-			...state,
-			following: {
-				...state.following,
-				byId: {
-					...state.following.byId,
-					[payload.myProfileId]: {
-						...(state.following.byId[payload.myProfileId]
-							? state.following.byId[payload.myProfileId]
-							: {}),
-						[payload.profileId]: true,
-					},
-				},
-			},
-		}
-	},
-	success: (state, { payload }) => state,
-	failure: (state, { payload }) => state,
-})
-
 export default reduceReducers(
 	state => state || DEFAULT_STATE,
 	resetStore,
 	getProfile,
-	// getMyProfile,
-	followProfile,
+	getAccount,
+	updateAccount,
 	searchProfiles,
-	setCurrentProfile,
-	// getFollowingForMe,
-	// getFollowersForMe,
 	getFollowersForProfile,
 	getFollowingForProfile,
+	getFollowersForStream,
+	getFollowingForStream,
 	unfollowProfileFromProfile,
 )
+
+// const unfollowStream = createRPCReducer(RPC_IDS.unfollowStream, {
+// 	start: (state, { payload }) => {
+// 		console.log(payload)
+// 		return {
+// 			...state,
+// 			byProfileId: {
+// 				...state.byProfileId,
+// 				[payload.profileId]: {
+// 					...state.byProfieId[payload.profileId],
+// 					following: {
+// 						...(state.byProfieId[payload.profileId] &&
+// 						state.byProfieId[payload.profileId].following
+// 							? state.byProfieId[payload.profileId].following
+// 							: {}),
+// 						profileIds: {
+// 							...(state.byProfieId[payload.profileId] &&
+// 							state.byProfieId[payload.profileId].following &&
+// 							state.byProfieId[payload.profileId].following.profileIds
+// 								? state.byProfieId[payload.profileId].following.profileIds
+// 								: {}),
+// 							[payload.streamOwnerId]: true,
+// 						},
+// 					},
+// 				},
+// 				[payload.streamOwnerId]: {
+// 					...state.byProfieId[payload.streamOwnerId],
+// 					followers: {
+// 						...(state.byProfieId[payload.streamOwnerId] &&
+// 						state.byProfieId[payload.streamOwnerId].followers
+// 							? state.byProfieId[payload.streamOwnerId].followers
+// 							: {}),
+// 						profileIds: {
+// 							...(state.byProfieId[payload.streamOwnerId] &&
+// 							state.byProfieId[payload.streamOwnerId].followers &&
+// 							state.byProfieId[payload.streamOwnerId].followers.profileIds
+// 								? state.byProfieId[payload.streamOwnerId].followers.profileIds
+// 								: {}),
+// 							[payload.profileId]: false,
+// 						},
+// 					},
+// 				},
+// 			},
+// 		}
+// 	},
+// 	success: (state, { payload }) => state,
+// 	failure: (state, { payload }) => state,
+// })
+
+// const followProfile = createRPCReducer(RPC_IDS.followProfile, {
+// 	start: (state, { payload }) => {
+// 		console.log(payload)
+// 		return {
+// 			...state,
+// 			byProfileId: {
+// 				...state.byProfileId,
+// 				[payload.authProfileId]: {
+// 					...state.byProfieId[payload.authProfileId],
+// 					following: {
+// 						...(state.byProfieId[payload.authProfileId] &&
+// 						state.byProfieId[payload.authProfileId].following
+// 							? state.byProfieId[payload.authProfileId].following
+// 							: {}),
+// 						[payload.profileId]: true,
+// 					},
+// 				},
+// 			},
+// 		}
+// 	},
+// 	success: (state, { payload }) => state,
+// 	failure: (state, { payload }) => ({
+// 		...state,
+// 		byProfileId: {
+// 			...state.byProfileId,
+// 			[payload.authProfileId]: {
+// 				...state.byProfieId[payload.authProfileId],
+// 				following: {
+// 					...(state.byProfieId[payload.authProfileId]
+// 						? state.byProfieId[payload.authProfileId].following
+// 						: {}),
+// 					[payload.profileId]: false,
+// 				},
+// 			},
+// 		},
+// 	}),
+// })
 
 // const getMyProfile = createRPCReducer(RPC_IDS.getMyProfile, {
 // 	start: state => ({
 // 		...state,
-// 		loading: true,
+// 		isLoading: true,
 // 	}),
 // 	success: (state, { payload }) => ({
 // 		...state,
-// 		loading: false,
+// 		isLoading: false,
 // 		hasLoaded: true,
 // 		byId: { ...state.byId, [payload.body.id]: payload.body },
 // 		error: null,
 // 	}),
 // 	failure: (state, { payload }) => ({
 // 		...state,
-// 		loading: false,
+// 		isLoading: false,
 // 		hasLoaded: true,
 // 		error: payload,
 // 	}),
@@ -343,7 +349,7 @@ export default reduceReducers(
 // 		...state,
 // 		followers: {
 // 			...state.followers,
-// 			loading: true,
+// 			isLoading: true,
 // 		},
 // 	}),
 // 	success: (state, { payload }) => ({
@@ -355,7 +361,7 @@ export default reduceReducers(
 // 		byId: { ...state.byId, ...mapKeys(payload.body.results, 'id') },
 // 		followers: {
 // 			...state.followers,
-// 			loading: false,
+// 			isLoading: false,
 // 			byProfileId: {
 // 				...state.followers.byProfileId,
 // 				// [payload.body.profile]: {
@@ -364,13 +370,13 @@ export default reduceReducers(
 // 				// 		return acc
 // 				// 	}, {}),
 // 				// },
-// 				[payload.args.profileId]: {
+// 				[payload.initialArgs.profileId]: {
 // 					count: payload.body.count,
 // 					next: payload.body.next,
 // 					previous: payload.body.previous,
 // 					profileIds: {
-// 						...(state.followers.byProfileId[payload.args.profileId]
-// 							? state.followers.byProfileId[payload.args.profileId].profileIds
+// 						...(state.followers.byProfileId[payload.initialArgs.profileId]
+// 							? state.followers.byProfileId[payload.initialArgs.profileId].profileIds
 // 							: {}),
 // 						...payload.body.results.reduce((acc, profile) => {
 // 							acc[profile.id] = true
@@ -386,7 +392,7 @@ export default reduceReducers(
 // 		...state,
 // 		followers: {
 // 			...state.followers,
-// 			loading: false,
+// 			isLoading: false,
 // 			error: payload,
 // 		},
 // 	}),
@@ -397,7 +403,7 @@ export default reduceReducers(
 // 		...state,
 // 		following: {
 // 			...state.following,
-// 			loading: true,
+// 			isLoading: true,
 // 		},
 // 	}),
 // 	success: (state, { payload }) => {
@@ -408,7 +414,7 @@ export default reduceReducers(
 // 			byId: { ...state.byId, ...mapKeys(payload.body.results, 'id') },
 // 			following: {
 // 				...state.following,
-// 				loading: false,
+// 				isLoading: false,
 // 				byId: {
 // 					...state.following.byId,
 // 					// [payload.body.profile]: {
@@ -417,13 +423,13 @@ export default reduceReducers(
 // 					// 		return acc
 // 					// 	}, {}),
 // 					// },
-// 					[payload.args.profileId]: {
+// 					[payload.initialArgs.profileId]: {
 // 						count: payload.body.count,
 // 						next: payload.body.next,
 // 						previous: payload.body.previous,
 // 						profileIds: {
-// 							...(state.following.byProfileId[payload.args.profileId]
-// 								? state.following.byProfileId[payload.args.profileId].profileIds
+// 							...(state.following.byProfileId[payload.initialArgs.profileId]
+// 								? state.following.byProfileId[payload.initialArgs.profileId].profileIds
 // 								: {}),
 // 							...payload.body.results.reduce((acc, profile) => {
 // 								acc[profile.id] = true
@@ -440,7 +446,7 @@ export default reduceReducers(
 // 		...state,
 // 		following: {
 // 			...state.following,
-// 			loading: false,
+// 			isLoading: false,
 // 			error: payload,
 // 		},
 // 	}),

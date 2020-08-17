@@ -1,26 +1,33 @@
 import React from 'react'
 import { useHistory } from 'fusion-plugin-react-router'
 
+import { ImagePreview } from './utils/ImagePreview'
+
 import paths from '../constants/paths'
-import ProfileFollowBtn from './buttons/ProfileFollowBtn'
+import FollowBtn from './buttons/FollowBtn'
 import UnfollowBtn from './buttons/UnfollowBtn'
 
 const ProfileListItem = ({
-	authProfileId,
+	authHandle,
 	profiles,
-	profileId,
+	handle,
 	openFollowModalFn,
 	displayUnfollowBtn,
 }) => {
 	const history = useHistory()
 
 	const handleProfileClick = () => {
-		history.push(`${paths.profile}/${profileId}`)
+		history.push(`${paths.profile}/${handle}`)
 	}
 
 	const CondFollowBtn = () => {
-		if (authProfileId != profileId) {
-			return <ProfileFollowBtn openFollowModalFn={openFollowModalFn} />
+		if (authHandle != handle) {
+			return (
+				<FollowBtn
+					authHandle={authHandle}
+					openFollowModalFn={openFollowModalFn}
+				/>
+			)
 		}
 		return <></>
 	}
@@ -29,14 +36,14 @@ const ProfileListItem = ({
 		<div className="profileListItem" onClick={handleProfileClick}>
 			<div className="info">
 				<div className="profileImage">
-					<img src={profiles.byId[profileId].image} />
+					<ImagePreview s3ObjectKey={profiles.byHandle[handle].image} />
 				</div>
-				{profiles.byId[profileId].full_name && (
+				{profiles.byHandle[handle].full_name && (
 					<div className="profileName">
-						{profiles.byId[profileId].full_name}
+						{profiles.byHandle[handle].full_name}
 					</div>
 				)}
-				<div className="profileHandle">{profiles.byId[profileId].handle}</div>
+				<div className="profileHandle">{profiles.byHandle[handle].handle}</div>
 			</div>
 			{displayUnfollowBtn ? <UnfollowBtn /> : <CondFollowBtn />}
 		</div>

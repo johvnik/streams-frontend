@@ -16,24 +16,93 @@
 	cursor: pointer;
 }
 
+.loginBtn {
+	background-color: var(--accent-color);
+	width: 70px;
+	font-size: 14px;
+}
+
+.signupBtn {
+	background-color: var(--dark-btn-color);
+	width: 70px;
+	font-size: 14px;
+}
+
+.backBtn {
+	width: 30px;
+	height: 30px;
+
+	.icon {
+		width: 24px;
+		height: 24px;
+	}
+
+	&:hover {
+		transform: scale(var(--button-scale-factor));
+	}
+}
+
 .editButton {
 	background-color: var(--dark-btn-color);
 	width: 60px;
 	height: 24px;
 }
 
+.deleteBtn {
+	position: absolute;
+	right: 0;
+	width: 34px;
+	height: 34px;
+	color: var(--dark-red-color);
+	// background-color: blue;
+	.icon {
+		width: 18px;
+		height: 18px;
+	}
+}
+
+.editStreamBtn {
+	background-color: var(--dark-btn-color);
+	width: 100px;
+	height: 30px;
+
+	padding-bottom: 2px;
+}
+
 .editProfileBtn {
-	// display: flex;
 	grid-template-columns: auto auto;
 	background-color: var(--dark-btn-color);
 	width: 100px;
 	height: 36px;
+
+	padding-bottom: 2px;
+}
+
+.loadingBtn {
+	display: grid;
+	justify-content: center;
+	align-content: center;
+	// background-color: var(--dark-btn-color);
+	// border: 1px solid var(--dark-border-color);
+	cursor: default;
+
+	.loading {
+		transform: scale(0.3);
+		// background-color: green;
+	}
 }
 
 .followBtn {
 	background-color: var(--accent-color);
 	width: 30px;
 	height: 30px;
+}
+
+.cancelBtn {
+	background-color: var(--dark-btn-color);
+	padding-bottom: 1px;
+
+	padding-bottom: 1px;
 }
 
 .unfollowBtn {
@@ -46,10 +115,18 @@
 .subscribeBtn {
 	height: 24px;
 	background-color: var(--accent-color);
+
+	padding-bottom: 2px;
 }
 
 .unsubscribeBtn {
 	height: 24px;
 	background-color: var(--dark-btn-color);
 	// border: 1px solid #333;
+
+	padding-bottom: 2px;
+}
+
+.confirmDeleteBtn {
+	background-color: var(--dark-red-color);
 }

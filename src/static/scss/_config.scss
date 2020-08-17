@@ -25,7 +25,10 @@ body,
 	--nav-color: rgb(18, 18, 18);
 	--dark-border-color: rgb(28, 28, 28);
 	--background-color: rgb(6, 6, 6);
+	--dark-green-color: rgb(24, 82, 24);
+	--dark-red-color: rgb(153, 47, 47);
 	--dark-btn-color: #222;
+	--grayed-text-color: #666;
 	// --color-lightgray: #ccc;
 	--light-text-color: #ddd;
 	--accent-color: #1baafd;
@@ -57,3 +60,34 @@ body,
 	display: grid;
 	justify-content: center;
 }
+
+.emptyMessageColor {
+	text-align: center;
+	color: var(--grayed-text-color);
+}
+
+// .profileList {
+// 	height: 20vh;
+// 	overflow-y: scroll;
+// }
+
+// .centeredWrapper {
+// 	overflow-y: scroll;
+// }
+
+// .searchPage {
+// 	height: 20vh;
+// 	overflow-y: scroll;
+// }
+
+// .searchPageWrapper {
+// 	height: 20vh;
+// 	overflow-y: scroll;
+// }
+
+// .infiniteScroll {
+// 	background-color: gray;
+// 	// overflow: hidden;
+// 	height: 10vh;
+// 	// width: 100vh;
+// }

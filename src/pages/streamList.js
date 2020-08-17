@@ -12,7 +12,7 @@ const StreamListPage = ({ profiles }) => {
 	return (
 		<div className="listPageWrapper">
 			<div className="listPage">
-				<StreamList currentProfile={profiles.myId} />
+				{/* <StreamList currentProfile={profiles.myId} /> */}
 			</div>
 		</div>
 	)

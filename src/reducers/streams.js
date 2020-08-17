@@ -6,11 +6,9 @@ import { RPC_IDS } from '../constants/rpc'
 import ACTION_IDS from '../constants/actions'
 
 const DEFAULT_STATE = {
-	loading: false,
-	hasLoaded: false,
-	error: null,
-	currentStream: null,
-	byProfileId: {},
+	isSaving: false,
+	isDeleting: false,
+	byProfile: {},
 	byId: {},
 }
 
@@ -23,23 +21,201 @@ const resetStore = (state, action) => {
 	}
 }
 
-const getStreamsForProfile = createRPCReducer(RPC_IDS.getStreamsForProfile, {
+const createStream = createRPCReducer(RPC_IDS.createStream, {
 	start: state => ({
 		...state,
-		loading: true,
+		isSaving: true,
 	}),
+	success: (state, { payload }) => {
+		console.log(payload)
+		return {
+			...state,
+			isSaving: false,
+			byProfile: {
+				...state.byProfile,
+				[payload.body.handle]: {
+					...(state.byProfile[payload.body.handle]
+						? state.byProfile[payload.body.handle]
+						: {}),
+					all: {
+						...(state.byProfile[payload.body.handle] &&
+						state.byProfile[payload.body.handle].all
+							? state.byProfile[payload.body.handle].all
+							: {}),
+						[payload.body.id]: true,
+					},
+				},
+			},
+			byId: {
+				...state.byId,
+				[payload.body.id]: payload.body,
+			},
+		}
+	},
+	failure: (state, { payload }) => ({
+		...state,
+		isSaving: false,
+	}),
+})
+
+const getStream = createRPCReducer(RPC_IDS.getStream, {
+	start: (state, { payload }) => {
+		return {
+			...state,
+		}
+	},
 	success: (state, { payload }) => {
 		return {
 			...state,
-			loading: false,
-			hasLoaded: true,
-			error: null,
-			byProfileId: {
-				...state.byProfileId,
-				[payload.body.profileId]: {
+			byId: {
+				...state.byId,
+				[payload.body.id]: payload.body,
+			},
+		}
+	},
+	failure: (state, { payload }) => {
+		return {
+			...state,
+		}
+	},
+})
+
+const updateStream = createRPCReducer(RPC_IDS.updateStream, {
+	start: state => ({
+		...state,
+		isSaving: true,
+	}),
+	success: (state, { payload }) => {
+		console.log(payload)
+		return {
+			...state,
+			isSaving: false,
+			byId: {
+				...state.byId,
+				[payload.body.id]: payload.body,
+			},
+		}
+	},
+	failure: (state, { payload }) => ({
+		...state,
+		isSaving: false,
+	}),
+})
+
+const deleteStream = createRPCReducer(RPC_IDS.deleteStream, {
+	start: (state, { payload }) => {
+		console.log(payload)
+		return {
+			...state,
+			isDeleting: true,
+			byProfile: {
+				...state.byProfile,
+				[payload.handle]: {
+					...(state.byProfile[payload.handle]
+						? state.byProfile[payload.handle]
+						: {}),
+					all: {
+						...(state.byProfile[payload.handle] &&
+						state.byProfile[payload.handle].all
+							? state.byProfile[payload.handle].all
+							: {}),
+						[payload.streamId]: false,
+					},
+				},
+			},
+		}
+	},
+	success: (state, { payload }) => {
+		return {
+			...state,
+			isDeleting: false,
+		}
+	},
+	failure: (state, { payload }) => ({
+		...state,
+		isDeleting: false,
+		byProfile: {
+			...state.byProfile,
+			[payload.initialArgs.handle]: {
+				...(state.byProfile[payload.initialArgs.handle]
+					? state.byProfile[payload.initialArgs.handle]
+					: {}),
+				all: {
+					...(state.byProfile[payload.initialArgs.handle] &&
+					state.byProfile[payload.initialArgs.handle].all
+						? state.byProfile[payload.initialArgs.handle].all
+						: {}),
+					[payload.initialArgs.streamId]: false,
+				},
+			},
+		},
+	}),
+})
+
+const followUnfollowStreamHelper = ({ unfollow }) => {
+	return {
+		start: (state, { payload }) => {
+			return {
+				...state,
+				byProfile: {
+					...state.byProfile,
+					[payload.handle]: {
+						...state.byProfile[payload.handle],
+						following: {
+							...(state.byProfile[payload.handle]
+								? state.byProfile[payload.handle].following
+								: {}),
+							[payload.streamId]: !unfollow,
+						},
+					},
+				},
+			}
+		},
+		success: (state, { payload }) => state,
+		failure: (state, { payload }) => {
+			return {
+				...state,
+				byProfile: {
+					...state.byProfile,
+					[payload.initialArgs.handle]: {
+						...state.byProfile[payload.initialArgs.handle],
+						following: {
+							...(state.byProfile[payload.initialArgs.handle]
+								? state.byProfile[payload.initialArgs.handle].following
+								: {}),
+							[payload.initialArgs.streamId]: !!unfollow,
+						},
+					},
+				},
+			}
+		},
+	}
+}
+
+const followStream = createRPCReducer(
+	RPC_IDS.followStream,
+	followUnfollowStreamHelper({}),
+)
+
+const unfollowStream = createRPCReducer(
+	RPC_IDS.unfollowStream,
+	followUnfollowStreamHelper({ unfollow: true }),
+)
+
+const getStreamsForProfile = createRPCReducer(RPC_IDS.getStreamsForProfile, {
+	start: state => ({
+		...state,
+	}),
+	success: (state, { payload }) => {
+		// console.log(payload)
+		return {
+			...state,
+			byProfile: {
+				...state.byProfile,
+				[payload.initialArgs.handle]: {
 					following: {
 						...payload.body.streams.reduce((acc, stream) => {
-							if (stream.owner != payload.body.profileId) {
+							if (stream.handle != payload.initialArgs.handle) {
 								acc[stream.id] = true
 							}
 							return acc
@@ -61,106 +237,30 @@ const getStreamsForProfile = createRPCReducer(RPC_IDS.getStreamsForProfile, {
 	},
 	failure: (state, { payload }) => ({
 		...state,
-		loading: false,
-		hasLoaded: true,
-		error: payload,
 	}),
 })
 
-const unfollowStream = createRPCReducer(RPC_IDS.unfollowStream, {
-	start: (state, { payload }) => {
-		return {
-			...state,
-			byProfileId: {
-				...state.byProfileId,
-				[payload.profileId]: {
-					...state.byProfileId[payload.profileId],
-					following: {
-						...(state.byProfileId[payload.profileId]
-							? state.byProfileId[payload.profileId].following
-							: {}),
-						[payload.streamId]: false,
-					},
-				},
-			},
-		}
-	},
-	success: (state, { payload }) => state,
-	failure: (state, { payload }) => {
-		return {
-			...state,
-			byProfileId: {
-				...state.byProfileId,
-				[payload.initialArgs.profileId]: {
-					...state.byProfileId[payload.initialArgs.profileId],
-					following: {
-						...(state.byProfileId[payload.initialArgs.profileId]
-							? state.byProfileId[payload.initialArgs.profileId].following
-							: {}),
-						[payload.initialArgs.streamId]: true,
-					},
-				},
-			},
-		}
-	},
-})
-
-const followStream = createRPCReducer(RPC_IDS.followStream, {
-	start: (state, { payload }) => {
-		// console.log(payload)
-		return {
-			...state,
-			byProfileId: {
-				...state.byProfileId,
-				[payload.profileId]: {
-					...state.byProfileId[payload.profileId],
-					following: {
-						...(state.byProfileId[payload.profileId]
-							? state.byProfileId[payload.profileId].following
-							: {}),
-						[payload.streamId]: true,
-					},
-				},
-			},
-		}
-	},
-	success: (state, { payload }) => state,
-	failure: (state, { payload }) => {
-		return {
-			...state,
-			byProfileId: {
-				...state.byProfileId,
-				[payload.initialArgs.profileId]: {
-					...state.byProfileId[payload.initialArgs.profileId],
-					following: {
-						...(state.byProfileId[payload.initialArgs.profileId]
-							? state.byProfileId[payload.initialArgs.profileId].following
-							: {}),
-						[payload.initialArgs.streamId]: false,
-					},
-				},
-			},
-		}
-	},
-})
-
-const setCurrentStream = (state, action) => {
-	switch (action.type) {
-		case ACTION_IDS.setCurrentStream:
-			return {
-				...state,
-				currentStream: action.payload,
-			}
-		default:
-			return state
-	}
-}
-
 export default reduceReducers(
 	state => state || DEFAULT_STATE,
-	getStreamsForProfile,
-	setCurrentStream,
 	resetStore,
-	unfollowStream,
+	getStreamsForProfile,
+	createStream,
+	getStream,
+	updateStream,
+	deleteStream,
 	followStream,
+	unfollowStream,
+	getStreamsForProfile,
 )
+
+// const setHomeStream = (state, action) => {
+// 	switch (action.type) {
+// 		case ACTION_IDS.setHomeStream:
+// 			return {
+// 				...state,
+// 				homeStream: action.payload,
+// 			}
+// 		default:
+// 			return state
+// 	}
+// }
