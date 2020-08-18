@@ -4,7 +4,7 @@ import { ResponseError } from 'fusion-plugin-rpc-redux-react'
 import { endpointToBackendLookups } from './services/index'
 import { fireBackendCall } from './utils'
 
-const SIMULATED_DELAY = 1200
+const SIMULATED_DELAY = 200
 
 import s3 from '../clients/s3'
 
@@ -32,7 +32,7 @@ export default Object.keys(endpointToBackendLookups).reduce(
 						)
 						// console.log(err)
 						const responseError = new ResponseError(err)
-						responseError.code = err.response.status
+						responseError.code = err.response && err.response.status
 						throw responseError
 					})
 			)

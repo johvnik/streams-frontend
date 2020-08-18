@@ -11,12 +11,9 @@
   outline: none;
 }
 
-html,
 body,
-#root,
-.App {
+html {
   height: 100%;
-  overflow: auto;
 }
 
 :root {
@@ -37,20 +34,6 @@ body,
   background-color: var(--background-color);
   font-family: Verdana, Geneva, sans-serif;
   color: #eee;
-  height: 100%;
-  width: 100%;
-}
-
-.hidden {
-  display: none;
-}
-
-.centeredWrapper {
-  display: -ms-grid;
-  display: grid;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
 }
 
 .emptyMessageColor {
@@ -68,8 +51,6 @@ body,
           justify-content: center;
   text-align: center;
   height: 100%;
-  -webkit-transform: scale(0.8);
-          transform: scale(0.8);
 }
 
 .loading .lds-roller {
@@ -676,6 +657,67 @@ body,
   color: var(--accent-color);
 }
 
+.signupPage {
+  display: -ms-grid;
+  display: grid;
+  height: 100%;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.signupPage .signupForm {
+  width: 400px;
+  max-width: 90vw;
+  margin: 0 auto;
+}
+
+.signupPage .signupForm .form {
+  display: -ms-grid;
+  display: grid;
+  grid-row-gap: 1rem;
+}
+
+.signupPage .signupForm .form input {
+  padding: 0.8rem;
+  border-radius: 100vh;
+  border: 0;
+  background-color: #222;
+  color: var(--light-text-color);
+}
+
+.signupPage .signupForm .form .submitButton {
+  padding: 0.8rem;
+  border-radius: 100vh;
+  border: 0px solid #444;
+  background-color: var(--accent-color);
+  color: var(--light-text-color);
+  cursor: pointer;
+}
+
+.signupPage .signupForm .form .login {
+  margin-top: 12px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-item-align: center;
+      align-self: center;
+  justify-self: center;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.signupPage .signupForm .form .login:hover {
+  color: var(--accent-color);
+}
+
+.signupPage .signupForm .form .login .button {
+  padding-left: 6px;
+}
+
 .profilePageWrapper {
   display: -ms-grid;
   display: grid;
@@ -689,8 +731,6 @@ body,
   width: 100vw;
   max-width: var(--max-width);
   color: var(--light-text-color);
-  padding-bottom: var(--top-bottom-margins);
-  margin-bottom: 20px;
 }
 
 .profilePage .profileTop {
@@ -923,20 +963,7 @@ body,
   border-bottom: 1px solid var(--dark-border-color);
 }
 
-.profilePage .profileBottom .profileBody {
-  padding-top: 20px;
-  margin-left: var(--edge-padding);
-  margin-right: var(--edge-padding);
-}
-
-.profilePage .profileBottom .myProfileBody {
-  display: -ms-grid;
-  display: grid;
-  -ms-grid-rows: 60px auto;
-      grid-template-rows: 60px auto;
-}
-
-.profilePage .profileBottom .myProfileBody .addHeader {
+.profilePage .profileBottom .addHeader {
   display: -ms-grid;
   display: grid;
   -webkit-box-pack: center;
@@ -947,7 +974,7 @@ body,
           align-items: center;
 }
 
-.profilePage .profileBottom .myProfileBody .addHeader .addButton {
+.profilePage .profileBottom .addHeader .addButton {
   display: -ms-grid;
   display: grid;
   -webkit-box-pack: center;
@@ -968,180 +995,29 @@ body,
   cursor: pointer;
 }
 
-.profilePage .profileBottom .myProfileBody .addHeader .addButton .addButtonText {
+.profilePage .profileBottom .addHeader .addButton .addButtonText {
   padding-bottom: 4px;
 }
 
-.profilePage .profileBottom .myProfileBody .addHeader .addButton .icon {
+.profilePage .profileBottom .addHeader .addButton .icon {
   -ms-grid-column-align: center;
       justify-self: center;
   font-size: 18px;
   padding-right: 4px;
 }
 
-.profilePage .profileBottom .myProfileBody .addHeader .addButton:hover {
+.profilePage .profileBottom .addHeader .addButton:hover {
   background-color: var(--accent-color);
 }
 
-.profilePage .profileBottom .infiniteScroll {
-  display: -ms-grid;
-  display: grid;
-  -ms-grid-columns: 1fr 1fr 1fr;
-      grid-template-columns: 1fr 1fr 1fr;
-  grid-auto-rows: auto;
-  gap: 1px;
-}
-
-.profilePage .profileBottom .infiniteScroll .tile {
-  position: relative;
-  width: 100%;
-}
-
-.profilePage .profileBottom .infiniteScroll .tile::before {
-  content: '';
-  display: block;
-  padding-top: 100%;
-}
-
-.profilePage .profileBottom .infiniteScroll .tile .content {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  overflow: hidden;
-}
-
-.profilePage .profileBottom .infiniteScroll .tile img {
-  -o-object-fit: cover;
-     object-fit: cover;
-  height: 100%;
-  width: 100%;
-}
-
-.streamPageWrapper {
-  display: -ms-grid;
-  display: grid;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-}
-
-.streamPage {
-  width: 100vw;
-  max-width: var(--max-width);
-  padding-left: var(--edge-padding);
-  padding-right: var(--edge-padding);
-  color: var(--light-text-color);
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
-}
-
-.streamPage .loading {
-  -webkit-transform: scale(0.6);
-          transform: scale(0.6);
-}
-
-.streamPage .header {
-  display: -ms-grid;
-  display: grid;
-  text-align: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -ms-flex-line-pack: center;
-      align-content: center;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-.streamPage .header .name {
-  font-size: 24px;
-}
-
-.streamPage .header .handle {
-  cursor: pointer;
-  -ms-grid-column-align: center;
-      justify-self: center;
-  padding: 8px;
-}
-
-.streamPage .header .handle:hover {
-  color: var(--accent-color);
-}
-
-.streamPage .header .buttons {
-  margin-top: 10px;
-  display: -ms-grid;
-  display: grid;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -ms-flex-line-pack: center;
-      align-content: center;
-}
-
-.streamPage .streamNav {
-  display: -ms-grid;
-  display: grid;
-  height: 40px;
-  width: 100%;
-  -ms-grid-columns: 1fr 1fr;
-      grid-template-columns: 1fr 1fr;
-  -ms-grid-column-align: center;
-      justify-self: center;
-}
-
-.streamPage .streamNav .navItem {
-  display: -ms-grid;
-  display: grid;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -ms-flex-line-pack: center;
-      align-content: center;
-  text-align: center;
-  cursor: pointer;
-  font-size: 18px;
-}
-
-.streamPage .streamNav .active {
-  color: var(--accent-color);
-  border-bottom: 1px solid var(--dark-border-color);
-}
-
-.searchPageWrapper {
-  max-width: var(--max-width);
-  margin: 0 auto;
+.profilePage .profileBottom .profileBody {
+  margin: 0 8px;
+  background-color: purple;
 }
 
 .searchPage {
-  display: -ms-grid;
-  display: grid;
-  -ms-grid-rows: auto auto;
-      grid-template-rows: auto auto;
-  -ms-grid-columns: 1fr;
-      grid-template-columns: 1fr;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  padding-left: var(--edge-padding);
-  padding-right: var(--edge-padding);
-  color: var(--light-text-color);
-  margin-top: 20px;
-  margin-bottom: 20px;
-  overflow-y: scroll;
-}
-
-.searchPage .searchBar {
-  position: -webkit-sticky;
-  position: sticky;
-  -ms-grid-column-align: center;
-      justify-self: center;
-  width: 100%;
-  max-width: 400px;
+  max-width: var(--max-width);
+  margin: 0 auto;
 }
 
 .searchPage .searchBar .searchField {
@@ -1169,59 +1045,21 @@ body,
   pointer-events: none;
 }
 
-.searchPage .searchResults {
-  margin-top: 10px;
-}
-
-.searchPage .searchResults .loading {
+.searchPage .loading {
   -webkit-transform: scale(0.6);
           transform: scale(0.6);
-  height: 30px;
+  height: 40px;
+  background-color: blue;
 }
 
-.listPageWrapper {
-  max-width: var(--max-width);
-  margin: 0 auto;
+.windowScrollerWrapper {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
 }
 
-.listPage {
-  color: var(--light-text-color);
-  margin-bottom: 20px;
-  padding-top: 8px;
-}
-
-.listPage .add {
-  display: -ms-grid;
-  display: grid;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  height: 90px;
-}
-
-.listPage .add .addButton {
-  display: -ms-grid;
-  display: grid;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  height: 50px;
-  width: 50px;
-  border-radius: 100vh;
-  border: 1px solid var(--dark-border-color);
-  overflow: hidden;
-  font-size: 26px;
-  cursor: pointer;
-}
-
-.listPage .add .addButton:hover {
-  background-color: var(--accent-color);
+.postGrid .postGridCell:nth-child(odd) {
+  background-color: gray;
 }
 
 .streamList {
@@ -1335,73 +1173,20 @@ body,
   background-color: var(--background-color);
 }
 
-.signupPage {
-  display: -ms-grid;
-  display: grid;
-  height: 100%;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-
-.signupPage .signupForm {
-  width: 400px;
-  max-width: 90vw;
-  margin: 0 auto;
-}
-
-.signupPage .signupForm .form {
-  display: -ms-grid;
-  display: grid;
-  grid-row-gap: 1rem;
-}
-
-.signupPage .signupForm .form input {
-  padding: 0.8rem;
-  border-radius: 100vh;
-  border: 0;
-  background-color: #222;
-  color: var(--light-text-color);
-}
-
-.signupPage .signupForm .form .submitButton {
-  padding: 0.8rem;
-  border-radius: 100vh;
-  border: 0px solid #444;
-  background-color: var(--accent-color);
-  color: var(--light-text-color);
-  cursor: pointer;
-}
-
-.signupPage .signupForm .form .login {
-  margin-top: 12px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-item-align: center;
-      align-self: center;
-  justify-self: center;
-  font-size: 0.8rem;
-  cursor: pointer;
-}
-
-.signupPage .signupForm .form .login:hover {
-  color: var(--accent-color);
-}
-
-.signupPage .signupForm .form .login .button {
-  padding-left: 6px;
-}
-
 .profileList {
-  width: 100vw;
-  max-width: 400px;
+  width: 400px;
+  max-width: 98vw;
   margin-top: 10px;
   margin-bottom: 10px;
   text-align: center;
+}
+
+.profileListRow {
+  display: -ms-grid;
+  display: grid;
+  -ms-flex-line-pack: center;
+      align-content: center;
+  border-bottom: 1px solid gray;
 }
 
 .profileListItem {
@@ -1461,6 +1246,99 @@ body,
 .profileListItem .info .profileHandle {
   padding-left: 10px;
   color: #999;
+}
+
+.streamPageWrapper {
+  display: -ms-grid;
+  display: grid;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.streamPage {
+  width: 100vw;
+  max-width: var(--max-width);
+  padding-left: var(--edge-padding);
+  padding-right: var(--edge-padding);
+  color: var(--light-text-color);
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.streamPage .loading {
+  -webkit-transform: scale(0.6);
+          transform: scale(0.6);
+}
+
+.streamPage .header {
+  display: -ms-grid;
+  display: grid;
+  text-align: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -ms-flex-line-pack: center;
+      align-content: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.streamPage .header .name {
+  font-size: 24px;
+}
+
+.streamPage .header .handle {
+  cursor: pointer;
+  -ms-grid-column-align: center;
+      justify-self: center;
+  padding: 8px;
+}
+
+.streamPage .header .handle:hover {
+  color: var(--accent-color);
+}
+
+.streamPage .header .buttons {
+  margin-top: 10px;
+  display: -ms-grid;
+  display: grid;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -ms-flex-line-pack: center;
+      align-content: center;
+}
+
+.streamPage .streamNav {
+  display: -ms-grid;
+  display: grid;
+  height: 40px;
+  width: 100%;
+  -ms-grid-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr;
+  -ms-grid-column-align: center;
+      justify-self: center;
+}
+
+.streamPage .streamNav .navItem {
+  display: -ms-grid;
+  display: grid;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -ms-flex-line-pack: center;
+      align-content: center;
+  text-align: center;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.streamPage .streamNav .active {
+  color: var(--accent-color);
+  border-bottom: 1px solid var(--dark-border-color);
 }
 
 .modalWrapper {
@@ -1552,6 +1430,16 @@ body,
 
 .homePage {
   height: calc(100vh - var(--nav-height));
+}
+
+.homePage .postRow {
+  display: -ms-grid;
+  display: grid;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -ms-flex-line-pack: center;
+      align-content: center;
 }
 
 .post {

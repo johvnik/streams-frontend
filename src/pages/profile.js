@@ -22,7 +22,7 @@ import PostsIcon from '../components/icons/PostsIcon'
 import StreamListIcon from '../components/icons/StreamListIcon'
 import Loading from '../components/utils/Loading'
 import FollowBtn from '../components/buttons/FollowBtn'
-import ProfilePostsGrid from '../components/ProfilePostsGrid'
+import PostGrid from '../components/PostGrid'
 import StreamList from '../components/StreamList'
 
 const ProfilePage = ({
@@ -59,7 +59,9 @@ const ProfilePage = ({
 
 	const handlePostsClick = () => {
 		setBody('posts')
-		bottomRef.current.scrollIntoView({ behavior: 'smooth' })
+		setTimeout(() => {
+			bottomRef.current.scrollIntoView({ behavior: 'smooth' })
+		}, 100)
 	}
 
 	const handleFollowersClick = () => {
@@ -122,20 +124,16 @@ const ProfilePage = ({
 	const Body = () => {
 		if (body === 'posts') {
 			return (
-				<ProfilePostsGrid
-					posts={posts}
-					profiles={profiles}
-					handle={handle}
-					isLoading={isLoadingPosts}
+				<PostGrid
+				// posts={posts}
+				// profiles={profiles}
+				// handle={handle}
+				// isLoading={isLoadingPosts}
 				/>
 			)
 		}
 		if (body === 'streams') {
-			return (
-				<div className="profileStreams">
-					<StreamList handle={handle} />
-				</div>
-			)
+			return <StreamList handle={handle} />
 		}
 	}
 
@@ -242,15 +240,15 @@ const ProfilePage = ({
 						</div>
 					</div>
 					{myProfile && (
-						<div className="profileBody myProfileBody">
-							<div className="addHeader">
-								{body == 'streams' ? (
-									<AddStreamButton openModal={openCreateStreamModal} />
-								) : (
-									<AddPostButton openCreatePostModal={openCreatePostModal} />
-								)}
-							</div>
+						// <div className="profileBody myProfileBody">
+						<div className="addHeader">
+							{body == 'streams' ? (
+								<AddStreamButton openModal={openCreateStreamModal} />
+							) : (
+								<AddPostButton openCreatePostModal={openCreatePostModal} />
+							)}
 						</div>
+						// </div>
 					)}
 					<div className="profileBody">
 						<Body />

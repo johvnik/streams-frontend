@@ -47,15 +47,6 @@ const root = (
 			<Route exact path={paths.signup} component={SignupPage} />
 			<LayoutRoute exact path={paths.streamList} component={StreamListPage} />
 			<LayoutRoute exact path={paths.search} component={SearchPage} />
-			{/* <LayoutRoute
-				path={`${paths.profile}/followers`}
-				component={FollowersPage}
-			/>
-			<LayoutRoute
-				path={`${paths.profile}/following`}
-				component={FollowingPage}
-			/>
-			<LayoutRoute exact path={paths.profile} component={ProfilePage} /> */}
 			<LayoutRoute
 				path={`${paths.profile}/:handle/followers`}
 				component={FollowersPage}

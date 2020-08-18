@@ -1,9 +1,18 @@
 .profileList {
-	width: 100vw;
-	max-width: 400px;
+	width: 400px;
+	max-width: 98vw;
 	margin-top: 10px;
 	margin-bottom: 10px;
 	text-align: center;
+}
+
+.profileListRow {
+	display: grid;
+	align-content: center;
+	border-bottom: 1px solid gray;
+	// &:nth-child(odd) {
+	// 	background-color: gray;
+	// }
 }
 
 .profileListItem {

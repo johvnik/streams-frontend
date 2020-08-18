@@ -10,8 +10,6 @@ import { RPC_IDS } from '../constants/rpc'
 import Loading from '../components/utils/Loading'
 import FollowModal from '../components/modals/FollowModal'
 import ProfileList from '../components/ProfileList'
-import ProfileListItem from '../components/ProfileListItem'
-import InfiniteScroll from 'react-infinite-scroll-component'
 
 const FollowingPage = ({
 	authHandle,

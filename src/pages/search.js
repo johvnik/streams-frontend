@@ -21,84 +21,87 @@ const SearchBar = ({ onChange, inputText }) => {
 	)
 }
 
-const SearchPage = ({
-	authHandle,
-	profiles,
-	searchProfiles,
-	followProfile,
-}) => {
-	const [followModal, setFollowModal] = useState(0)
-
-	const delayedQuery = useCallback(
-		debounce(query => {
-			if (query) {
-				searchProfiles({ query })
-			}
-		}, 500),
-	)
-
-	const onChange = e => {
-		delayedQuery(e.target.value)
-	}
-
-	const openFollowModal = (e, profileId) => {
-		e.stopPropagation()
-		setFollowModal(profileId)
-	}
-
-	const closeFollowModal = () => {
-		setFollowModal(0)
-	}
-
+export default () => {
 	return (
-		<div id="searchPageId" className="searchPageWrapper">
-			<div className="searchPage">
-				{followModal ? (
-					<FollowModal
-						authHandle={authHandle}
-						cancelFn={closeFollowModal}
-						handle={followModal}
-						followProfile={followProfile}
-					/>
-				) : (
-					<></>
-				)}
-				<SearchBar onChange={onChange} />
-				<div className="searchResults">
-					{profiles.search.isSearching && (
-						<div className="loading slideAnim">
-							<Loading />
-						</div>
-					)}
-					{profiles.search.results && profiles.search.results.byProfile && (
-						<ProfileList
-							authHandle={authHandle}
-							profiles={profiles}
-							paginationObject={profiles.search.results}
-							openFollowModalFn={openFollowModal}
-							emptyListMessage=""
-							scrollableTargetId="searchPageId"
-						/>
-					)}
-				</div>
-			</div>
+		<div className="searchPage">
+			<ProfileList />
 		</div>
 	)
 }
 
-const rpcs = [
-	withRPCRedux(RPC_IDS.searchProfiles),
-	withRPCRedux(RPC_IDS.followProfile),
-]
+// const SearchPage = ({
+// 	authHandle,
+// 	profiles,
+// 	searchProfiles,
+// 	followProfile,
+// }) => {
+// 	const [followModal, setFollowModal] = useState(0)
 
-const mapStateToProps = state => ({
-	authHandle: state.auth.authHandle,
-	profiles: state.profiles,
-})
+// 	const delayedQuery = useCallback(
+// 		debounce(query => {
+// 			if (query) {
+// 				searchProfiles({ query })
+// 			}
+// 		}, 500),
+// 	)
 
-const hoc = compose(
-	...rpcs,
-	connect(mapStateToProps),
-)
+// 	const onChange = e => {
+// 		delayedQuery(e.target.value)
+// 	}
 
-export default hoc(SearchPage)
+// 	const openFollowModal = (e, profileId) => {
+// 		e.stopPropagation()
+// 		setFollowModal(profileId)
+// 	}
+
+// 	const closeFollowModal = () => {
+// 		setFollowModal(0)
+// 	}
+
+// 	return (
+// 		<div className="searchPage">
+// 			{followModal ? (
+// 				<FollowModal
+// 					authHandle={authHandle}
+// 					cancelFn={closeFollowModal}
+// 					handle={followModal}
+// 					followProfile={followProfile}
+// 				/>
+// 			) : (
+// 				<></>
+// 			)}
+// 			<SearchBar onChange={onChange} />
+// 			{profiles.search.isSearching && (
+// 				<div className="loading slideAnim">
+// 					<Loading />
+// 				</div>
+// 			)}
+// 			{/* {profiles.search.results && profiles.search.results.byProfile && ( */}
+// 			<ProfileList
+// 				authHandle={authHandle}
+// 				profiles={profiles}
+// 				paginationObject={profiles.search.results}
+// 				openFollowModalFn={openFollowModal}
+// 				emptyListMessage=""
+// 			/>
+// 			{/* )} */}
+// 		</div>
+// 	)
+// }
+
+// const rpcs = [
+// 	withRPCRedux(RPC_IDS.searchProfiles),
+// 	withRPCRedux(RPC_IDS.followProfile),
+// ]
+
+// const mapStateToProps = state => ({
+// 	authHandle: state.auth.authHandle,
+// 	profiles: state.profiles,
+// })
+
+// const hoc = compose(
+// 	...rpcs,
+// 	connect(mapStateToProps),
+// )
+
+// export default hoc(SearchPage)

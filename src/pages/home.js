@@ -20,27 +20,30 @@ import {
 	CellMeasurerCache,
 	InfiniteLoader,
 	AutoSizer,
+	WindowScroller,
 } from 'react-virtualized'
 
 import { RPC_IDS } from '../constants/rpc'
 
-// import useWindowDimensions from '../components/utils/useWindowDimensions'
+import useWindowDimensions from '../components/utils/useWindowDimensions'
 import Loading from '../components/utils/Loading'
 import { ImagePreview } from '../components/utils/ImagePreview'
 
 const Post = ({ post, measure }) => {
 	if (!post) {
 		return <GhostPost />
+		// return <></>
 	}
 
 	return (
 		<div className="post">
 			<div className="postImage">
-				{/* <img onLoad={measure} src={post.image} /> */}
 				<ImagePreview s3ObjectKey={post.image} measure={measure} />
+				{/* <img src="https://source.unsplash.com/QhKX67yT7wk" onLoad={measure} /> */}
 				<div className="postFooter">
 					<div className="profilePhoto">
 						<ImagePreview s3ObjectKey={post.profile_image} />
+						{/* <img src="https://source.unsplash.com/QhKX67yT7wk" /> */}
 					</div>
 					<div className="postHandle">{post.handle}</div>
 					{/* <LikeIcon
@@ -105,6 +108,7 @@ const HomePage = ({ posts, getPostsForStream }) => {
 		!(
 			posts.byStream[streamId] &&
 			posts.byStream[streamId].postIds &&
+			posts.byStream[streamId].count &&
 			Object.keys(posts.byStream[streamId].postIds).length
 		)
 	) {
@@ -112,14 +116,21 @@ const HomePage = ({ posts, getPostsForStream }) => {
 	}
 
 	const isRowLoaded = ({ index }) => {
-		return !!posts.byId[Object.keys(posts.byStream[streamId].postIds)[index]]
+		// return (
+		// 	Object.keys(posts.byStream[streamId].postIds)[index] &&
+		// 	posts.byId[Object.keys(posts.byStream[streamId].postIds)[index]]
+		// )
+		return false
 	}
 
 	const fetchMoreRows = ({ startIndex, stopIndex }) => {
-		console.log(`startIndex ${startIndex} - stopIndex ${stopIndex}`)
+		const limit = stopIndex - startIndex + 1
+		const offset = startIndex
+
+		console.log(`limit ${limit} - offset ${offset}`)
 		getPostsForStream({
 			streamId,
-			params: { limit: stopIndex - startIndex, offset: startIndex },
+			params: { limit, offset },
 		})
 	}
 
@@ -141,7 +152,7 @@ const HomePage = ({ posts, getPostsForStream }) => {
 			>
 				{({ measure, registerChild }) => {
 					return (
-						<div ref={registerChild} style={style}>
+						<div ref={registerChild} style={style} className="postRow">
 							<Post
 								post={
 									posts.byId[
@@ -165,8 +176,10 @@ const HomePage = ({ posts, getPostsForStream }) => {
 				rowCount={posts.byStream[streamId].count}
 			>
 				{({ onRowsRendered, registerChild }) => (
+					// <WindowScroller>
+					// 	{({ height, scrollTop }) => (
 					<AutoSizer>
-						{({ width, height }) => (
+						{({ height, width }) => (
 							<List
 								width={width}
 								height={height}
@@ -174,12 +187,17 @@ const HomePage = ({ posts, getPostsForStream }) => {
 								ref={registerChild}
 								rowCount={posts.byStream[streamId].count}
 								rowHeight={cache.rowHeight}
+								// rowHeight={height - 60}
 								rowRenderer={rowRenderer}
 								deferredMeasurementCache={cache}
-								// overscanRowCount={5}
+								overscanRowCount={5}
+								// scrollTop={scrollTop}
+								// isScrolling={false}
 							/>
 						)}
 					</AutoSizer>
+					// 	)}
+					// </WindowScroller>
 				)}
 			</InfiniteLoader>
 		</div>

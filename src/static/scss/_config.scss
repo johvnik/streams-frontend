@@ -10,13 +10,9 @@
 	outline: none;
 }
 
-html,
 body,
-#root,
-.App {
+html {
 	height: 100%;
-	// width: 100%;
-	overflow: auto;
 }
 
 :root {
@@ -29,7 +25,6 @@ body,
 	--dark-red-color: rgb(153, 47, 47);
 	--dark-btn-color: #222;
 	--grayed-text-color: #666;
-	// --color-lightgray: #ccc;
 	--light-text-color: #ddd;
 	--accent-color: #1baafd;
 
@@ -42,52 +37,9 @@ body,
 	background-color: var(--background-color);
 	font-family: Verdana, Geneva, sans-serif;
 	color: #eee;
-	height: 100%;
-	width: 100%;
-}
-
-@mixin for-desktop-up {
-	@media (min-width: 900px) {
-		@content;
-	}
-}
-
-.hidden {
-	display: none;
-}
-
-.centeredWrapper {
-	display: grid;
-	justify-content: center;
 }
 
 .emptyMessageColor {
 	text-align: center;
 	color: var(--grayed-text-color);
 }
-
-// .profileList {
-// 	height: 20vh;
-// 	overflow-y: scroll;
-// }
-
-// .centeredWrapper {
-// 	overflow-y: scroll;
-// }
-
-// .searchPage {
-// 	height: 20vh;
-// 	overflow-y: scroll;
-// }
-
-// .searchPageWrapper {
-// 	height: 20vh;
-// 	overflow-y: scroll;
-// }
-
-// .infiniteScroll {
-// 	background-color: gray;
-// 	// overflow: hidden;
-// 	height: 10vh;
-// 	// width: 100vh;
-// }

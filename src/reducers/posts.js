@@ -25,7 +25,7 @@ const getPostsForStream = createRPCReducer(RPC_IDS.getPostsForStream, {
 		...state,
 	}),
 	success: (state, { payload }) => {
-		console.log(payload)
+		// console.log(payload)
 		return {
 			...state,
 			byId: { ...state.byId, ...mapKeys(payload.body.results, 'id') },
@@ -111,7 +111,11 @@ const getStreamsForProfile = createRPCReducer(RPC_IDS.getStreamsForProfile, {
 				...state.byStream,
 				...Object.keys(payload.body.posts).reduce((acc, streamId) => {
 					acc[streamId] = {
+						...(state.byStream[streamId] ? state.byStream[streamId] : {}),
 						postIds: {
+							...(state.byStream[streamId] && state.byStream[streamId].postIds
+								? state.byStream[streamId].postIds
+								: {}),
 							...payload.body.posts[streamId].reduce((accu, post) => {
 								accu[post.id] = true
 								return accu

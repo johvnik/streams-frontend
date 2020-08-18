@@ -1,15 +1,9 @@
 .homePage {
-	// background-color: gray;
-	// max-width: var(--max-width);
-	// margin: 0 auto;
 	height: calc(100vh - var(--nav-height));
+
+	.postRow {
+		display: grid;
+		justify-content: center;
+		align-content: center;
+	}
 }
-
-// overflow-y: scroll;
-// height: calc(100vh - var(--nav-height));
-
-// 	.infiniteScroll {
-// 		display: grid;
-// 		grid-auto-rows: 20vh;
-// 	}
-// }

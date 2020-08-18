@@ -50,8 +50,6 @@ export const fireBackendCall = (
 					if (res.data.refresh) {
 						ctx.refresh_token = res.data.refresh
 
-						console.log(res.data)
-
 						if (jwt_decode(res.data.refresh).handle) {
 							res.data.handle = jwt_decode(res.data.refresh).handle
 						}
@@ -77,6 +75,7 @@ export const fireBackendCall = (
 								return reject(err)
 							})
 					} else {
+						console.log(err)
 						return reject(err)
 					}
 				}, delay)

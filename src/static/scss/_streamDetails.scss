@@ -1,0 +1,79 @@
+.streamPageWrapper {
+	display: grid;
+	justify-content: center;
+}
+
+.streamPage {
+	width: 100vw;
+	max-width: var(--max-width);
+	padding-left: var(--edge-padding);
+	padding-right: var(--edge-padding);
+	color: var(--light-text-color);
+	user-select: none;
+
+	.loading {
+		transform: scale(0.6);
+	}
+
+	.header {
+		display: grid;
+		text-align: center;
+		justify-content: center;
+		align-content: center;
+
+		margin-top: 10px;
+		margin-bottom: 10px;
+
+		.name {
+			font-size: 24px;
+		}
+
+		.handle {
+			cursor: pointer;
+			justify-self: center;
+			padding: 8px;
+
+			&:hover {
+				color: var(--accent-color);
+			}
+		}
+
+		.buttons {
+			margin-top: 10px;
+			display: grid;
+			justify-content: center;
+			align-content: center;
+		}
+	}
+
+	.streamNav {
+		display: grid;
+		height: 40px;
+		width: 100%;
+		grid-template-columns: 1fr 1fr;
+		justify-self: center;
+		// background-color: gray;
+
+		.navItem {
+			display: grid;
+			justify-content: center;
+			align-content: center;
+			text-align: center;
+			cursor: pointer;
+
+			font-size: 18px;
+
+			&:hover {
+				.icon {
+					// transform: scale(var(--button-scale-factor));
+				}
+			}
+		}
+
+		.active {
+			color: var(--accent-color);
+			// background-color: gray;
+			border-bottom: 1px solid var(--dark-border-color);
+		}
+	}
+}

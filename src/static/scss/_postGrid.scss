@@ -1,0 +1,42 @@
+.postGrid {
+	.postGridCell {
+		&:nth-child(odd) {
+			background-color: gray;
+		}
+	}
+}
+
+// .postGrid {
+// 	display: grid;
+// 	grid-template-columns: 1fr 1fr 1fr;
+// 	grid-auto-rows: auto;
+// 	gap: 1px;
+// 	background-color: red;
+
+// 	.tile {
+// 		position: relative;
+// 		width: 100%;
+
+// 		&::before {
+// 			content: '';
+// 			display: block;
+// 			padding-top: 100%;
+// 			// background-color: transparent;
+// 		}
+
+// 		.content {
+// 			position: absolute;
+// 			top: 0;
+// 			left: 0;
+// 			bottom: 0;
+// 			right: 0;
+// 			overflow: hidden;
+// 		}
+
+// 		img {
+// 			object-fit: cover;
+// 			height: 100%;
+// 			width: 100%;
+// 		}
+// 	}
+// }
