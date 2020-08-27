@@ -104,7 +104,6 @@ const updateStream = createRPCReducer(RPC_IDS.updateStream, {
 
 const deleteStream = createRPCReducer(RPC_IDS.deleteStream, {
 	start: (state, { payload }) => {
-		console.log(payload)
 		return {
 			...state,
 			isDeleting: true,
@@ -203,9 +202,18 @@ const unfollowStream = createRPCReducer(
 )
 
 const getStreamsForProfile = createRPCReducer(RPC_IDS.getStreamsForProfile, {
-	start: state => ({
-		...state,
-	}),
+	start: (state, { payload }) => {
+		return {
+			...state,
+			byProfile: {
+				...state.byProfile,
+				[payload.handle]: {
+					...state.byProfile[payload.handle],
+					isLoading: true,
+				},
+			},
+		}
+	},
 	success: (state, { payload }) => {
 		// console.log(payload)
 		return {
@@ -213,6 +221,8 @@ const getStreamsForProfile = createRPCReducer(RPC_IDS.getStreamsForProfile, {
 			byProfile: {
 				...state.byProfile,
 				[payload.initialArgs.handle]: {
+					isLoading: false,
+					error: null,
 					following: {
 						...payload.body.streams.reduce((acc, stream) => {
 							if (stream.handle != payload.initialArgs.handle) {
@@ -235,9 +245,19 @@ const getStreamsForProfile = createRPCReducer(RPC_IDS.getStreamsForProfile, {
 			},
 		}
 	},
-	failure: (state, { payload }) => ({
-		...state,
-	}),
+	failure: (state, { payload }) => {
+		return {
+			...state,
+			byProfile: {
+				...state.byProfile,
+				[payload.initialArgs.handle]: {
+					...state.byProfile[payload.initialArgs.handle],
+					isLoading: false,
+					error: payload.body,
+				},
+			},
+		}
+	},
 })
 
 export default reduceReducers(

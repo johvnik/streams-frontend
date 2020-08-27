@@ -1,21 +1,13 @@
-.profilePageWrapper {
-	display: grid;
-	justify-content: center;
-}
-
 .profilePage {
 	--top-bottom-margins: 16px;
 
-	width: 100vw;
+	margin: var(--top-bottom-margins) auto;
 	max-width: var(--max-width);
-	// padding-left: var(--edge-padding);
-	// padding-right: var(--edge-padding);
-	color: var(--light-text-color);
-	// padding-bottom: var(--top-bottom-margins);
+	padding-left: var(--edge-padding);
+	padding-right: var(--edge-padding);
 
 	.profileTop {
 		justify-content: center;
-		margin-top: var(--top-bottom-margins);
 		margin-bottom: var(--top-bottom-margins);
 		padding-left: var(--edge-padding);
 		padding-right: var(--edge-padding);
@@ -143,6 +135,8 @@
 		justify-content: center;
 		align-content: center;
 		gap: 8px;
+		margin-top: var(--top-bottom-margins);
+		margin-bottom: var(--top-bottom-margins);
 		// background-color: red;
 
 		// .button {
@@ -223,6 +217,8 @@
 			display: grid;
 			justify-content: center;
 			align-items: center;
+			margin-top: var(--top-bottom-margins);
+			// margin-bottom: var(--top-bottom-margins);
 			// height: 90px;
 			// background-color: green;
 
@@ -258,6 +254,7 @@
 		}
 
 		.profileBody {
+			margin-top: var(--top-bottom-margins);
 			// padding-top: 20px;
 			// margin-left: var(--edge-padding);
 			// margin-right: var(--edge-padding);
@@ -269,8 +266,8 @@
 			// justify-content: center;
 			// margin: 0 auto;
 			// height: 100%;
-			margin: 0 8px;
-			background-color: purple;
+			// margin: 0 8px;
+			// background-color: purple;
 		}
 	}
 }

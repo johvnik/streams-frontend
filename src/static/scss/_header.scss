@@ -1,7 +1,20 @@
+// trynna make it when you scroll above the navbar,
+// that is still shows the navbar color
+
+// .navbar::before {
+// 	content: '';
+// 	position: fixed;
+// 	background-color: red;
+// 	top: -20px;
+// 	left: 10px;
+// 	right: -10px;
+// 	bottom: 0;
+// }
+
 .navbar {
 	position: sticky;
 	top: 0;
-	width: 100%;
+	// width: 100%;
 	background-color: var(--nav-color);
 	border-bottom: 0.1px solid var(--dark-border-color);
 	z-index: 1;
@@ -9,22 +22,20 @@
 	overflow: hidden;
 
 	.navbarContents {
+		margin: 0 auto;
 		max-width: var(--max-width);
 		height: 100%;
-		margin: 0 auto;
 		padding-left: var(--edge-padding);
 		padding-right: var(--edge-padding);
 
 		display: grid;
-		grid-template-columns: auto 100px;
+		grid-template-columns: auto 120px;
 		align-content: center;
 		user-select: none;
 
-		// 	transition: top 0.4s ease-in-out;
-
-		// 	.hidden {
-		// 		top: -var(--nav-height);
-		// 	}
+		.active {
+			color: var(--accent-color);
+		}
 
 		a {
 			color: var(--light-text-color);
@@ -32,41 +43,22 @@
 
 		ul li {
 			list-style: none;
-			// padding: 10px;
 
 			.icon {
 				width: 26px;
 				height: 26px;
 			}
-
-			&:hover {
-				transform: scale(var(--button-scale-factor));
-			}
-		}
-
-		.active {
-			color: var(--accent-color);
 		}
 
 		.titleLink {
-			display: grid;
-			grid-template-columns: auto auto;
+			// display: grid;
+			// grid-template-columns: auto auto;
 			justify-self: start;
 			letter-spacing: 1px;
 			text-decoration: none;
 
-			.icon {
-				width: 26px;
-				height: 26px;
-			}
-
 			.navTitle {
-				padding-left: 8px;
 				font-size: 20px;
-			}
-
-			&:hover {
-				transform: scale(var(--button-scale-factor));
 			}
 		}
 
@@ -75,45 +67,112 @@
 			justify-content: space-around;
 		}
 	}
-}
 
-.backAndTitleBar {
-	position: sticky;
-	top: 0;
-	width: 100%;
-	background-color: var(--nav-color);
-	border-bottom: 1px solid var(--dark-border-color);
-	z-index: 1;
-	// background-color: gray;
-
-	.barContents {
+	.unauthBarContents {
 		max-width: var(--max-width);
-		height: var(--nav-height);
 		margin: 0 auto;
-		padding-left: var(--edge-padding);
-		padding-right: var(--edge-padding);
+		height: 100%;
 
 		display: grid;
-		grid-template-columns: auto 160px;
+		justify-content: end;
 		align-content: center;
-		user-select: none;
+		padding-right: 8px;
 
-		.backBtn {
-			justify-self: start;
+		.active {
+			color: var(--accent-color);
 		}
 
+		a {
+			margin-left: 10px;
+			color: var(--light-text-color);
+			.icon {
+				width: 26px;
+				height: 26px;
+			}
+		}
+
+		// ul li {
+		// 	list-style: none;
+
+		// }
+
 		.buttons {
-			// background-color: gray;
-			display: grid;
-			grid-template-columns: 80px 80px;
-
-			.loginBtn {
-				justify-self: center;
-			}
-
-			.signupBtn {
-				justify-self: center;
-			}
+			display: flex;
+			flex-direction: row;
+			gap: 8px;
 		}
 	}
 }
+
+.localNav {
+	display: grid;
+	height: 40px;
+	width: 100%;
+	grid-template-columns: 1fr 1fr;
+	justify-self: center;
+	margin-bottom: 16px;
+	// background-color: gray;
+
+	.navItem {
+		display: grid;
+		justify-content: center;
+		align-content: center;
+		text-align: center;
+		cursor: pointer;
+
+		font-size: 18px;
+
+		&:hover {
+			.icon {
+				// transform: scale(var(--button-scale-factor));
+			}
+		}
+	}
+
+	.active {
+		color: var(--accent-color);
+		// background-color: gray;
+		border-bottom: 1px solid var(--dark-border-color);
+	}
+}
+
+// .backAndTitleBar {
+// 	position: sticky;
+// 	top: 0;
+// 	width: 100%;
+// 	background-color: var(--nav-color);
+// 	border-bottom: 1px solid var(--dark-border-color);
+// 	z-index: 1;
+// 	// background-color: gray;
+
+// 	.barContents {
+// 		max-width: var(--max-width);
+// 		height: var(--nav-height);
+// 		margin: 0 auto;
+// 		padding-left: var(--edge-padding);
+// 		padding-right: var(--edge-padding);
+
+// 		display: grid;
+// 		grid-template-columns: auto 160px;
+// 		align-content: center;
+// 		user-select: none;
+
+// 		.backBtn {
+// 			justify-self: start;
+// 		}
+
+// 		.buttons {
+// 			// background-color: gray;
+// 			display: grid;
+// 			grid-template-columns: 80px 80px;
+
+// 			.loginBtn {
+// 				justify-self: center;
+// 			}
+
+// 			.signupBtn {
+// 				justify-self: center;
+// 			}
+// 		}
+// 	}
+// }

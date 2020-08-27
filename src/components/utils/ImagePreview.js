@@ -1,101 +1,98 @@
 /* eslint-env browser */
 import React, { useState, useEffect } from 'react'
+import { compose } from 'redux'
+import { connect } from 'react-redux'
+import { withRPCRedux } from 'fusion-plugin-rpc-redux-react'
+import { RPC_IDS } from '../../constants/rpc'
 
 import Loading from './Loading'
 
-const getSignedURL = (data, callback) => {
-	const loadURL = `/api/getSignedURL`
-	const request = new XMLHttpRequest()
-	request.onload = () => {
-		if (request.status === 200) {
-			const response = JSON.parse(request.response)
-			if (response.status === 'success') {
-				callback(null, response.data.signedURL)
-			} else {
-				callback(response.data.error)
-			}
-		} else {
-			console.error(request.response)
-		}
-	}
-	request.open('POST', loadURL)
-	request.setRequestHeader('Accept', '*/*')
-	request.setRequestHeader('Content-Type', 'application/json;charset=UTF-8')
-	request.send(JSON.stringify(data))
-}
-
-export const ImagePreview = ({ s3ObjectKey, measure }) => {
-	const [loadError, setLoadError] = useState(false)
-	const [signedURL, setSignedURL] = useState(null)
-	const [loaded, setLoaded] = useState(false)
-
+const ImagePreview = ({
+	images,
+	s3ObjectKey,
+	getSignedUrl,
+	measure,
+	useDefaultImage,
+}) => {
 	useEffect(() => {
-		const abortController = new AbortController()
-		const signal = abortController.signal
-
-		getSignedURL({ s3ObjectKey }, (err, signedURL) => {
-			if (err) {
-				setLoadError(err)
-			} else {
-				setLoaded(true)
-				setSignedURL(signedURL)
-			}
-		})
+		if (
+			!(images[s3ObjectKey] && images[s3ObjectKey].signedUrl) &&
+			!(images[s3ObjectKey] && images[s3ObjectKey].isLoading)
+		) {
+			getSignedUrl({ s3ObjectKey })
+		}
 	}, [])
 
-	if (loadError) {
-		return <div>error loading image</div>
+	// const [loadError, setLoadError] = useState(false)
+	// const [signedURL, setSignedURL] = useState(null)
+	// const [loaded, setLoaded] = useState(false)
+
+	// useEffect(() => {
+	// 	const abortController = new AbortController()
+	// 	const signal = abortController.signal
+
+	// 	getSignedURL({ s3ObjectKey }, (err, signedURL) => {
+	// 		if (err) {
+	// 			setLoadError(err)
+	// 		} else {
+	// 			setLoaded(true)
+	// 			setSignedURL(signedURL)
+	// 		}
+	// 	})
+	// }, [])
+
+	// if (loadError) {
+	// 	return <div>error loading image</div>
+	// }
+
+	// if (!loaded) {
+	// 	return <Loading />
+	// }
+
+	if (!(images[s3ObjectKey] && images[s3ObjectKey].signedUrl)) {
+		if (useDefaultImage) {
+			return <div className="loadingImage">loading</div>
+		} else {
+			return 'loading'
+		}
 	}
 
-	if (!loaded) {
-		return <Loading />
+	const onLoad = () => {
+		// measure
+		console.log('image has loaded!!')
 	}
 
-	return <img onLoad={measure} src={signedURL} />
+	return <img onLoad={measure} src={images[s3ObjectKey].signedUrl} />
 }
 
-// export class ImagePreview extends React.Component {
-// 	constructor(props) {
-// 		super(props)
+const rpcs = [withRPCRedux(RPC_IDS.getSignedUrl)]
 
-// 		this.state = {
-// 			loadError: false,
-// 			signedURL: null,
-// 			loaded: false,
-// 		}
-// 	}
+const mapStateToProps = state => ({
+	images: state.ui.images,
+})
 
-// 	componentDidMount() {
-// 		const { s3ObjectKey } = this.props
+export default compose(
+	...rpcs,
+	connect(mapStateToProps),
+)(ImagePreview)
 
-// 		getSignedURL({ s3ObjectKey }, (err, signedURL) => {
-// 			if (err) {
-// 				return this.setState({
-// 					loadError: err,
-// 				})
+// const getSignedURL = (data, callback) => {
+// 	const loadURL = `/api/getSignedURL`
+// 	const request = new XMLHttpRequest()
+// 	request.onload = () => {
+// 		if (request.status === 200) {
+// 			const response = JSON.parse(request.response)
+// 			if (response.status === 'success') {
+// 				callback(null, response.data.signedURL)
+// 			} else {
+// 				callback(response.data.error)
 // 			}
-// 			return this.setState({
-// 				loaded: true,
-// 				signedURL,
-// 			})
-// 		})
-// 	}
-
-// 	render() {
-// 		const { signedURL, loaded, loadError } = this.state
-
-// 		if (loadError) {
-// 			return <div className="imagePreview">failure</div>
+// 		} else {
+// 			console.error(request.response)
 // 		}
-
-// 		if (!loaded) {
-// 			return <div className="imagePreview">loading</div>
-// 		}
-
-// 		return (
-// 			<div className="imagePreview">
-// 				<img src={signedURL} style={{ width: '100%' }} />
-// 			</div>
-// 		)
 // 	}
+// 	request.open('POST', loadURL)
+// 	request.setRequestHeader('Accept', '*/*')
+// 	request.setRequestHeader('Content-Type', 'application/json;charset=UTF-8')
+// 	request.send(JSON.stringify(data))
 // }

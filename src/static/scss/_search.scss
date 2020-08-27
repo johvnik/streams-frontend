@@ -1,11 +1,11 @@
 .searchPage {
-	max-width: var(--max-width);
 	margin: 0 auto;
-	// background-color: green;
-	// height: 800px;
-	// overflow-y: auto;
+	max-width: var(--max-width);
 
 	.searchBar {
+		margin: 16px auto;
+		max-width: var(--max-smaller-width);
+
 		.searchField {
 			position: relative;
 
@@ -31,21 +31,6 @@
 			}
 		}
 	}
-
-	.loading {
-		transform: scale(0.6);
-		height: 40px;
-
-		background-color: blue;
-	}
-
-	.searchResults {
-		// margin-top: 10px;
-	}
-}
-
-.windowScrollerWrapper {
-	flex: 1 1 auto;
 }
 
 // .searchPage {

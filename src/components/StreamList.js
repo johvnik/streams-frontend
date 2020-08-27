@@ -6,12 +6,12 @@ import { useHistory } from 'fusion-plugin-react-router'
 
 import { RPC_IDS } from '../constants/rpc'
 import paths from '../constants/paths'
-import { setCurrentStream } from '../actions/actions'
+import { setHomeStream, openLoginModal } from '../actions/actions'
 
 import DetailsIcon from '../components/icons/DetailsIcon'
 import Loading from '../components/utils/Loading'
 import SubUnsubBtn from '../components/buttons/SubUnsubBtn'
-import { ImagePreview } from './utils/ImagePreview'
+import ImagePreview from './utils/ImagePreview'
 
 const StreamList = ({
 	authHandle,
@@ -28,15 +28,45 @@ const StreamList = ({
 }) => {
 	// const dispatch = useDispatch()
 	const history = useHistory()
+	const dispatch = useDispatch()
+
+	useEffect(() => {
+		if (
+			!streams.byProfile[handle] &&
+			!(streams.byProfile[handle] && streams.byProfile[handle].isLoading)
+		) {
+			getStreamsForProfile({ handle })
+		}
+	}, [])
 
 	const handleStreamClick = streamId => {
-		// console.log(`clicked on stream ${stream.name}`)
-		streamSelectFn(streamId)
+		if (authHandle) {
+			// console.log(`clicked on stream ${stream.name}`)
+			if (streamSelectFn) {
+				// if function, call it.  most likely to follow a profile.
+				streamSelectFn(streamId)
+			} else {
+				// if not, set it as the home stream and go home
+				dispatch(
+					setHomeStream(
+						streamId,
+						streams.byId[streamId] && streams.byId[streamId].name,
+					),
+				)
+				history.push(paths.home)
+			}
+		} else {
+			dispatch(openLoginModal())
+		}
 	}
 
 	const handleDetails = (e, streamId) => {
 		e.stopPropagation()
-		history.push(`${paths.stream}/${streamId}`)
+		if (authHandle) {
+			history.push(`${paths.stream}/${streamId}`)
+		} else {
+			dispatch(openLoginModal())
+		}
 	}
 
 	const handleHandleClick = (e, profileId) => {
@@ -44,7 +74,7 @@ const StreamList = ({
 		history.push(`${paths.profile}/${profileId}`)
 	}
 
-	if (!streams.byProfile[handle]) {
+	if (!(streams.byProfile[handle] && streams.byProfile[handle].all)) {
 		return <Loading />
 	}
 
@@ -82,10 +112,10 @@ const StreamList = ({
 						<div className="streamHeader">
 							<div className="headerText">
 								<div className="name">{stream.name}</div>
-								{stream.owner != handle && (
+								{stream.handle != handle && (
 									<div
 										className="handle"
-										onClick={e => handleHandleClick(e, stream.owner)}
+										onClick={e => handleHandleClick(e, stream.handle)}
 									>
 										{stream.handle}
 									</div>
@@ -109,8 +139,8 @@ const StreamList = ({
 							</div>
 						</div>
 						{posts.byStream[stream.id] &&
-							posts.byStream[stream.id].postIds &&
-							Object.keys(posts.byStream[stream.id].postIds)
+							posts.byStream[stream.id].results &&
+							Object.keys(posts.byStream[stream.id].results)
 								.slice(0, 4)
 								.map(key => {
 									return (

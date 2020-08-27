@@ -16,6 +16,22 @@
 	cursor: pointer;
 }
 
+.likeBtn {
+	padding: 6px;
+	// background-color: lightcyan;
+	border-radius: 100vh;
+	user-select: none;
+	cursor: pointer;
+
+	.icon {
+		// background-color: lightgoldenrodyellow;
+	}
+
+	.likedLikeIcon {
+		color: red;
+	}
+}
+
 .loginBtn {
 	background-color: var(--accent-color);
 	width: 70px;
@@ -129,4 +145,17 @@
 
 .confirmDeleteBtn {
 	background-color: var(--dark-red-color);
+}
+
+.closeBtn {
+	height: 36px;
+	width: 36px;
+	border-radius: 100vw;
+	background-color: rgba(12, 12, 12, 0.7);
+	margin: 10px;
+
+	.icon {
+		width: 30px;
+		height: 30px;
+	}
 }

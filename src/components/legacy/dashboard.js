@@ -1,33 +1,33 @@
-import React, { useState, useEffect } from 'react'
-import { compose } from 'redux'
-import { connect, useDispatch } from 'react-redux'
-import { withRPCRedux } from 'fusion-plugin-rpc-redux-react'
-import { Route, Switch } from 'fusion-plugin-react-router'
+// import React, { useState, useEffect } from 'react'
+// import { compose } from 'redux'
+// import { connect, useDispatch } from 'react-redux'
+// import { withRPCRedux } from 'fusion-plugin-rpc-redux-react'
+// import { Route, Switch } from 'fusion-plugin-react-router'
 
-import paths from '../constants/paths'
+// import paths from '../constants/paths'
 
-// import { RPC_IDS } from '../constants/rpc'
+// // import { RPC_IDS } from '../constants/rpc'
 
-import NotFoundPage from './NotFoundPage'
-import Navbar from '../components/header/Navbar'
-import Stream from '../components/Stream'
-import StreamList from '../components/StreamList'
+// import NotFoundPage from './NotFoundPage'
+// import Navbar from '../components/header/Navbar'
+// import Stream from '../components/Stream'
+// import StreamList from '../components/StreamList'
 
-const Dashboard = () => {
-	return (
-		<>
-			<Navbar />
-			<Switch>
-				{/* <ProtectedRoute exact path={paths.home} component={DashboardPage} /> */}
-				<Route exact path={paths.dashboard} component={StreamList} />
-				<Route exact path={paths.streamList} component={StreamList} />
-				<Route component={NotFoundPage} />
-			</Switch>
-		</>
-	)
-}
+// const Dashboard = () => {
+// 	return (
+// 		<>
+// 			<Navbar />
+// 			<Switch>
+// 				{/* <ProtectedRoute exact path={paths.home} component={DashboardPage} /> */}
+// 				<Route exact path={paths.dashboard} component={StreamList} />
+// 				<Route exact path={paths.streamList} component={StreamList} />
+// 				<Route component={NotFoundPage} />
+// 			</Switch>
+// 		</>
+// 	)
+// }
 
-export default Dashboard
+// export default Dashboard
 
 // import React, { useState, useEffect } from 'react'
 // import { compose } from 'redux'

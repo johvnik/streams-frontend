@@ -1,9 +1,12 @@
 export default {
 	home: '/',
 	stream: '/stream',
-	streamList: '/list',
+	follows: '/follows',
+	followers: '/followers',
+	following: '/following',
 	profile: '/profile',
 	search: '/search',
 	login: '/login',
 	signup: '/signup',
+	explore: '/explore',
 }

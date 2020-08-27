@@ -1,55 +1,57 @@
-.post {
+.postWrapper {
 	display: grid;
-	// min-height: 50vh;
-	// height: 90vh;
+	// min-height: 50%;
+	// height: 90%;
 	// width: 100vw;
-	// height: 80vh;
-	padding: 40px 0;
+	// height: 80%;
+	margin: 6vh auto;
+	max-width: 98%;
+	// max-height: 60vh;
+	// max-height: 80vh;
+	// padding: 40px 0;
 	justify-content: center;
-	align-content: center;
+	// border: 2px dotted pink;
 	user-select: none;
-	user-select: none;
+}
 
-	.postImage {
-		z-index: 1;
-		padding-top: 10px;
-		padding-left: 10px;
-		padding-right: 10px;
-		padding-bottom: 4px;
-		background-color: #fff;
+.post {
+	background-color: white;
+	padding: 6px;
 
-		img {
-			max-width: 90vw;
-			max-height: 70vh;
-			height: auto;
-			width: auto;
-		}
+	img {
+		max-width: 100%;
+		max-height: 74vh;
+		height: auto;
+		width: auto;
+	}
 
-		.ghostImage {
-			width: 400px;
-			height: 400px;
-			max-width: 90vw;
-			max-height: 70vh;
-			background-color: #111;
-		}
+	.ghostImage {
+		width: 400px;
+		height: 400px;
+		max-width: 90%;
+		max-height: 70%;
+		background-color: #111;
 	}
 
 	.postFooter {
-		background-color: #fff;
-		z-index: 2;
+		// background-color: #fff;
+		// z-index: 2;
+		margin-top: 3px;
 		align-content: center;
 		justify-content: start;
 		display: grid;
 		grid-template-columns: 35px 1fr 20px 20px;
-		height: 3rem;
-		padding-left: 4px;
-		padding-right: 4px;
+		// height: 3rem;
+		// padding-left: 4px;
+		// padding-right: 4px;
+		// border: 2px dotted purple;
 
 		.profilePhoto {
 			height: 28px;
 			width: 28px;
 			border-radius: 50%;
 			overflow: hidden;
+			// border: 2px dotted green;
 
 			img {
 				object-fit: cover;
@@ -65,7 +67,7 @@
 			justify-self: start;
 			align-self: center;
 			cursor: pointer;
-			// border: 2px dashed gray;
+			// border: 2px dotted purple;
 		}
 
 		.postLikeIcon {
@@ -100,3 +102,127 @@
 		}
 	}
 }
+
+.loadingImage {
+	position: relative;
+	display: inline-block;
+	width: 60%;
+	height: 70%;
+	vertical-align: middle;
+	background-color: var(--background-color);
+}
+
+// .post {
+// 	// display: grid;
+// 	// min-height: 50%;
+// 	// height: 90%;
+// 	// width: 100vw;
+// 	// height: 80%;
+// 	margin: 0 auto;
+// 	max-width: 98%;
+// 	max-height: 40%;
+// 	// padding: 40px 0;
+// 	// justify-content: center;
+// 	// align-content: center;
+// 	user-select: none;
+
+// 	.postImage {
+// 		z-index: 1;
+// 		padding-top: 10px;
+// 		padding-left: 10px;
+// 		padding-right: 10px;
+// 		padding-bottom: 4px;
+// 		// background-color: #fff;
+// 		border: 1px dashed red;
+
+// 		img {
+// 			max-width: 100%;
+// 			max-height: 50%;
+// 			// height: auto;
+// 			// width: auto;
+// 		}
+
+// 		.ghostImage {
+// 			width: 400px;
+// 			height: 400px;
+// 			max-width: 90%;
+// 			max-height: 70%;
+// 			background-color: #111;
+// 		}
+// 	}
+
+// 	.postFooter {
+// 		background-color: #fff;
+// 		z-index: 2;
+// 		align-content: center;
+// 		justify-content: start;
+// 		display: grid;
+// 		grid-template-columns: 35px 1fr 20px 20px;
+// 		height: 3rem;
+// 		padding-left: 4px;
+// 		padding-right: 4px;
+
+// 		.profilePhoto {
+// 			height: 28px;
+// 			width: 28px;
+// 			border-radius: 50%;
+// 			overflow: hidden;
+
+// 			img {
+// 				object-fit: cover;
+// 				height: 28px;
+// 				width: 28px;
+// 			}
+// 		}
+
+// 		.postHandle {
+// 			color: #444;
+// 			font-size: 12px;
+// 			font-weight: 100;
+// 			justify-self: start;
+// 			align-self: center;
+// 			cursor: pointer;
+// 			// border: 2px dashed gray;
+// 		}
+
+// 		.postLikeIcon {
+// 			color: #999;
+// 			font-size: 0.6rem;
+// 			align-self: center;
+// 			justify-self: end;
+// 			margin-right: 8px;
+// 			cursor: pointer;
+// 		}
+
+// 		.likeIcon {
+// 			height: 16px;
+// 			width: 16px;
+// 		}
+
+// 		.liked {
+// 			color: red;
+// 		}
+
+// 		.postCommentIcon {
+// 			color: #999;
+// 			font-size: 0.6rem;
+// 			align-self: center;
+// 			justify-self: start;
+// 			cursor: pointer;
+// 		}
+
+// 		.commentIcon {
+// 			height: 16px;
+// 			width: 16px;
+// 		}
+// 	}
+// }
+
+// .loadingImage {
+// 	position: relative;
+// 	display: inline-block;
+// 	width: 60%;
+// 	height: 70%;
+// 	vertical-align: middle;
+// 	background-color: var(--background-color);
+// }

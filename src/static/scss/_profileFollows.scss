@@ -1,0 +1,28 @@
+.followPage {
+	margin: 0 auto;
+	max-width: var(--max-width);
+	padding: 8px;
+
+	text-align: center;
+	cursor: default;
+
+	.fullName {
+		font-size: 28px;
+		padding: 8px;
+	}
+
+	.handleWrapper {
+		display: grid;
+		width: 100%;
+	}
+
+	.handle {
+		justify-self: center;
+		cursor: pointer;
+		padding-bottom: 8px;
+
+		&:hover {
+			color: var(--accent-color);
+		}
+	}
+}

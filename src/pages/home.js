@@ -1,19 +1,8 @@
 // @flow
 import React, { useState, useEffect } from 'react'
 import { compose } from 'redux'
-import { connect } from 'react-redux'
+import { connect, useDispatch } from 'react-redux'
 import { withRPCRedux } from 'fusion-plugin-rpc-redux-react'
-
-// import 'react-virtualized/styles.css'
-
-// You can import any component you want as a named export from 'react-virtualized', eg
-// import { Column, Table } from 'react-virtualized'
-
-// But if you only use a few react-virtualized components,
-// And you're concerned about increasing your application's bundle size,
-// You can directly import only the components you need, like so:
-// import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer'
-// import List from 'react-virtualized/dist/commonjs/List'
 import {
 	List,
 	CellMeasurer,
@@ -25,102 +14,87 @@ import {
 
 import { RPC_IDS } from '../constants/rpc'
 
-import useWindowDimensions from '../components/utils/useWindowDimensions'
+import Post from '../components/Post'
 import Loading from '../components/utils/Loading'
-import { ImagePreview } from '../components/utils/ImagePreview'
+import ImagePreview from '../components/utils/ImagePreview'
+import useWindowDimensions from '../components/utils/useWindowDimensions'
+import StreamList from '../components/StreamList'
+import { openPostModal } from '../actions/actions'
 
-const Post = ({ post, measure }) => {
-	if (!post) {
-		return <GhostPost />
-		// return <></>
-	}
+const cache = new CellMeasurerCache({ fixedWidth: true, defaultHeight: 1400 })
 
-	return (
-		<div className="post">
-			<div className="postImage">
-				<ImagePreview s3ObjectKey={post.image} measure={measure} />
-				{/* <img src="https://source.unsplash.com/QhKX67yT7wk" onLoad={measure} /> */}
-				<div className="postFooter">
-					<div className="profilePhoto">
-						<ImagePreview s3ObjectKey={post.profile_image} />
-						{/* <img src="https://source.unsplash.com/QhKX67yT7wk" /> */}
-					</div>
-					<div className="postHandle">{post.handle}</div>
-					{/* <LikeIcon
-						postId={postId}
-						myId={myId}
-						streamIdLike={streamIdLike}
-						liked={liked}
-					/>
-					<CommentIcon commented={commented} /> */}
-				</div>
-			</div>
-		</div>
-	)
-}
-
-const GhostPost = () => {
-	return (
-		<div className="post">
-			<div className="postImage">
-				<div className="ghostImage">
-					<Loading />
-				</div>
-				<div className="postFooter">
-					{/* <div className="profilePhoto">
-						<img src={post.profile_image} />
-					</div>
-					<div className="poststreamId">{post.streamId}</div> */}
-					{/* <LikeIcon
-						postId={postId}
-						myId={myId}
-						streamIdLike={streamIdLike}
-						liked={liked}
-					/>
-					<CommentIcon commented={commented} /> */}
-				</div>
-			</div>
-		</div>
-	)
-}
-
-const cache = new CellMeasurerCache({ fixedWidth: true, defaultHeight: 600 })
-
-const HomePage = ({ posts, getPostsForStream }) => {
-	// const { height, width } = useWindowDimensions()
-
-	const streamId = 'ba9192f5-8ee9-452e-830b-8bec56fb0e7b'
+const HomePage = ({
+	homeStream,
+	posts,
+	streams,
+	profiles,
+	authHandle,
+	getPostsForStream,
+}) => {
+	const { width, height } = useWindowDimensions()
+	const dispatch = useDispatch()
 
 	useEffect(() => {
-		// eval(`getPostsFor${streamOrProfile()}({ streamId })`)
-		getPostsForStream({ streamId })
-	}, [])
+		if (
+			!(
+				posts.byStream[homeStream] &&
+				posts.byStream[homeStream].count &&
+				posts.byStream[homeStream].results &&
+				Object.keys(posts.byStream[homeStream].results).length
+			)
+		) {
+			getPostsForStream({ streamId: homeStream })
+		}
+	}, [homeStream])
+
+	useEffect(() => {
+		cache.clearAll()
+	}, [width, height])
+
+	if (!homeStream) {
+		return (
+			<div className="homePage">
+				<div>choose a stream to view.</div>
+				<StreamList handle={authHandle} />
+			</div>
+		)
+	}
 
 	if (
-		posts.byStream[streamId] &&
-		'count' in posts.byStream[streamId] &&
-		posts.byStream[streamId].count === 0
+		posts.byStream[homeStream] &&
+		'count' in posts.byStream[homeStream] &&
+		posts.byStream[homeStream].count === 0
 	) {
-		return <div className="">no posts</div>
+		return (
+			<div className="homePage">
+				<div className="emptyMessageColor">no posts</div>
+			</div>
+		)
 	}
 
 	if (
 		!(
-			posts.byStream[streamId] &&
-			posts.byStream[streamId].postIds &&
-			posts.byStream[streamId].count &&
-			Object.keys(posts.byStream[streamId].postIds).length
+			posts.byStream[homeStream] &&
+			posts.byStream[homeStream].results &&
+			posts.byStream[homeStream].count
 		)
 	) {
 		return <Loading />
 	}
 
 	const isRowLoaded = ({ index }) => {
-		// return (
-		// 	Object.keys(posts.byStream[streamId].postIds)[index] &&
-		// 	posts.byId[Object.keys(posts.byStream[streamId].postIds)[index]]
-		// )
-		return false
+		// console.log(index)
+		const isLoaded = !!(
+			posts.byStream[homeStream] &&
+			posts.byStream[homeStream].results &&
+			posts.byId[Object.keys(posts.byStream[homeStream].results)[index]]
+		)
+			? true
+			: false
+
+		// console.log(isLoaded)
+
+		return isLoaded
 	}
 
 	const fetchMoreRows = ({ startIndex, stopIndex }) => {
@@ -129,7 +103,7 @@ const HomePage = ({ posts, getPostsForStream }) => {
 
 		console.log(`limit ${limit} - offset ${offset}`)
 		getPostsForStream({
-			streamId,
+			streamId: homeStream,
 			params: { limit, offset },
 		})
 	}
@@ -143,23 +117,29 @@ const HomePage = ({ posts, getPostsForStream }) => {
 		style,
 	}) => {
 		return (
-			<CellMeasurer
-				key={key}
-				cache={cache}
-				parent={parent}
-				columnIndex={0}
-				rowIndex={index}
-			>
+			<CellMeasurer key={key} cache={cache} parent={parent} rowIndex={index}>
 				{({ measure, registerChild }) => {
 					return (
-						<div ref={registerChild} style={style} className="postRow">
+						<div
+							ref={registerChild}
+							style={style}
+							className="postRow"
+							onClick={() =>
+								dispatch(
+									openPostModal(
+										Object.keys(posts.byStream[homeStream].results)[index],
+									),
+								)
+							}
+						>
 							<Post
 								post={
 									posts.byId[
-										Object.keys(posts.byStream[streamId].postIds)[index]
+										Object.keys(posts.byStream[homeStream].results)[index]
 									]
 								}
 								measure={measure}
+								useDefaultImage
 							/>
 						</div>
 					)
@@ -169,29 +149,31 @@ const HomePage = ({ posts, getPostsForStream }) => {
 	}
 
 	return (
-		<div id="homePage" className="homePage">
+		<div className="homePage">
 			<InfiniteLoader
 				isRowLoaded={isRowLoaded}
 				loadMoreRows={fetchMoreRows}
-				rowCount={posts.byStream[streamId].count}
+				rowCount={posts.byStream[homeStream].count}
 			>
 				{({ onRowsRendered, registerChild }) => (
 					// <WindowScroller>
 					// 	{({ height, scrollTop }) => (
 					<AutoSizer>
-						{({ height, width }) => (
+						{({ width, height }) => (
 							<List
+								// autoHeight
+								// scrollTop={scrollTop}
 								width={width}
 								height={height}
 								onRowsRendered={onRowsRendered}
 								ref={registerChild}
-								rowCount={posts.byStream[streamId].count}
+								rowCount={posts.byStream[homeStream].count}
 								rowHeight={cache.rowHeight}
-								// rowHeight={height - 60}
 								rowRenderer={rowRenderer}
 								deferredMeasurementCache={cache}
-								overscanRowCount={5}
-								// scrollTop={scrollTop}
+								overscanRowCount={20}
+								defaultHeight={cache.defaultHeight}
+								// scrollToIndex={5}
 								// isScrolling={false}
 							/>
 						)}
@@ -207,7 +189,11 @@ const HomePage = ({ posts, getPostsForStream }) => {
 const rpcs = [withRPCRedux(RPC_IDS.getPostsForStream)]
 
 const mapStateToProps = state => ({
+	homeStream: state.ui.homeStream,
 	posts: state.posts,
+	streams: state.streams,
+	profiles: state.profiles,
+	authHandle: state.auth.authHandle,
 })
 
 const hoc = compose(

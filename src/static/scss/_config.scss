@@ -10,10 +10,10 @@
 	outline: none;
 }
 
-body,
-html {
-	height: 100%;
-}
+// body,
+// html {
+// 	height: 100%;
+// }
 
 :root {
 	// variables
@@ -30,6 +30,7 @@ html {
 
 	--nav-height: 42px;
 	--max-width: 1000px;
+	--max-smaller-width: 600px;
 	--edge-padding: 10px;
 	--button-scale-factor: 0.96;
 

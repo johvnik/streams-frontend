@@ -4,6 +4,7 @@ import { compose } from 'redux'
 import { connect, useDispatch } from 'react-redux'
 import { withRPCRedux } from 'fusion-plugin-rpc-redux-react'
 
+import { closeModals } from '../../actions/actions'
 import paths from '../../constants/paths'
 import { RPC_IDS } from '../../constants/rpc'
 
@@ -11,17 +12,14 @@ import Loading from '../utils/Loading'
 import CancelBtn from '../buttons/CancelBtn'
 import LoadingBtn from '../buttons/LoadingBtn'
 
-const CreateStreamModal = ({ streams, createStream, cancelFn }) => {
+const CreateStreamModal = ({ streams, createStream }) => {
+	const dispatch = useDispatch()
 	const [name, setName] = useState('')
-
-	const handleModalClick = e => {
-		e.stopPropagation()
-	}
 
 	const handleSubmit = () => {
 		createStream({ name }).then(res => {
 			if (!res.code) {
-				cancelFn()
+				dispatch(closeModals())
 			}
 		})
 	}
@@ -29,8 +27,11 @@ const CreateStreamModal = ({ streams, createStream, cancelFn }) => {
 	const canSave = () => name != ''
 
 	return (
-		<div className="modalWrapper" onClick={cancelFn}>
-			<div className="modal editProfileModal" onClick={handleModalClick}>
+		<div className="modalWrapper" onClick={() => dispatch(closeModals())}>
+			<div
+				className="modal editProfileModal"
+				onClick={e => e.stopPropagation()}
+			>
 				<div className="modalHeading">create stream</div>
 				<div className="modalBody">
 					<div className="formWrapper">
@@ -47,7 +48,7 @@ const CreateStreamModal = ({ streams, createStream, cancelFn }) => {
 							</label>
 							<br />
 							<div className="buttons">
-								<CancelBtn cancelFn={cancelFn} />
+								<CancelBtn cancelFn={() => dispatch(closeModals())} />
 								{streams.isSaving ? (
 									<LoadingBtn />
 								) : (

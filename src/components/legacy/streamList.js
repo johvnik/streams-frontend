@@ -3,10 +3,10 @@ import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { withRPCRedux } from 'fusion-plugin-rpc-redux-react'
 
-import { RPC_IDS } from '../constants/rpc'
-import Loading from '../components/utils/Loading'
-import PlusIcon from '../components/icons/PlusIcon'
-import StreamList from '../components/StreamList'
+import { RPC_IDS } from '../../constants/rpc'
+import Loading from '../utils/Loading'
+import PlusIcon from '../icons/PlusIcon'
+import StreamList from '../StreamList'
 
 const StreamListPage = ({ profiles }) => {
 	return (

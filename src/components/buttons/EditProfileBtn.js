@@ -1,12 +1,18 @@
 import React from 'react'
 
-const EditProfileBtn = ({ handle, authHandle, openProfileEditModalFn }) => {
-	return handle === authHandle ? (
-		<div className="button editProfileBtn" onClick={openProfileEditModalFn}>
+import { useDispatch } from 'react-redux'
+import { openEditProfileModal } from '../../actions/actions'
+
+const EditProfileBtn = () => {
+	const dispatch = useDispatch()
+
+	return (
+		<div
+			className="button editProfileBtn"
+			onClick={() => dispatch(openEditProfileModal())}
+		>
 			edit profile
 		</div>
-	) : (
-		<></>
 	)
 }
 

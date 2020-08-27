@@ -55,12 +55,16 @@ export const fireBackendCall = (
 						}
 					}
 
-					return resolve({ body: res.data, initialArgs: args })
+					return resolve({
+						body: res.data,
+						initialArgs: args,
+						code: res.status,
+					})
 				}, delay)
 			})
 			.catch(err => {
 				setTimeout(() => {
-					if (withRefresh && err.response.status === 401) {
+					if (withRefresh && err.response && err.response.status === 401) {
 						attemptRefresh(backend, ctx, delay)
 							.then(() => {
 								fireBackendCall(backend, endpoint, args, ctx, delay, false)
@@ -71,7 +75,11 @@ export const fireBackendCall = (
 										return reject(err)
 									})
 							})
-							.catch(err => {
+							.catch(() => {
+								// if refresh fails, clear the tokens
+								ctx.access_token = null
+								ctx.refresh_token = null
+
 								return reject(err)
 							})
 					} else {
@@ -85,7 +93,9 @@ export const fireBackendCall = (
 
 const attemptRefresh = (backend, ctx, delay) => {
 	console.log('attempting refresh...')
-	const data = { refresh: ctx.refresh_token }
+	const data = {
+		refresh: ctx.refresh_token || 'make return return 401 instead of 400',
+	}
 	return new Promise((resolve, reject) => {
 		axios({
 			method: 'POST',
@@ -107,18 +117,21 @@ const attemptRefresh = (backend, ctx, delay) => {
 					if (res.data.refresh) {
 						ctx.refresh_token = res.data.refresh
 
-						if (jwt_decode(res.data.refresh).handle) {
-							res.data.handle = jwt_decode(res.data.refresh).handle
-						}
+						// if (jwt_decode(res.data.refresh).handle) {
+						// 	res.data.handle = jwt_decode(res.data.refresh).handle
+						// }
 					}
 
-					return resolve({ body: res.data, initialArgs: data })
+					// return resolve({ body: res.data, initialArgs: data })
+					return resolve()
 				}, delay)
 			})
 			.catch(err => {
 				setTimeout(() => {
 					console.log('refresh failed')
-					return reject(err)
+					// console.log(data)
+					// console.log(ctx)
+					return reject()
 				}, delay)
 			})
 	})

@@ -5,12 +5,14 @@ import keyBy from 'lodash/keyBy'
 
 import { RPC_IDS } from '../constants/rpc'
 import ACTION_IDS from '../constants/actions'
-import following from '../pages/following'
 
 const DEFAULT_STATE = {
 	search: {
-		isLoading: false,
+		count: 0,
+		next: null,
+		prev: null,
 		results: {},
+		isSearching: false,
 	},
 	byProfile: {},
 	byStream: {},
@@ -21,6 +23,18 @@ const resetStore = (state, action) => {
 	switch (action.type) {
 		case ACTION_IDS.resetStore:
 			return { ...DEFAULT_STATE }
+		default:
+			return state
+	}
+}
+
+const clearSearchResults = (state, action) => {
+	switch (action.type) {
+		case ACTION_IDS.clearSearchResults:
+			return {
+				...state,
+				search: DEFAULT_STATE.search,
+			}
 		default:
 			return state
 	}
@@ -89,16 +103,15 @@ const searchProfiles = createRPCReducer(RPC_IDS.searchProfiles, {
 		search: {
 			...state.search,
 			isSearching: false,
+			count: payload.body.count,
+			next: payload.body.next,
+			previous: payload.body.previous,
 			results: {
-				count: payload.body.count,
-				next: payload.body.next,
-				previous: payload.body.previous,
-				byProfile: {
-					...payload.body.results.reduce((acc, profile) => {
-						acc[profile.handle] = true
-						return acc
-					}, {}),
-				},
+				...state.search.results,
+				...payload.body.results.reduce((acc, profile) => {
+					acc[profile.handle] = true
+					return acc
+				}, {}),
 			},
 		},
 	}),
@@ -136,7 +149,7 @@ const getFollowxForXHelper = ({ stream, following }) => {
 						count: payload.body.count,
 						next: payload.body.next,
 						previous: payload.body.previous,
-						byProfile: {
+						results: {
 							...(state[byXId][payload.initialArgs[xId]] &&
 							state[byXId][payload.initialArgs[xId]][followx]
 								? state[byXId][payload.initialArgs[xId]][followx].handles
@@ -227,6 +240,7 @@ const unfollowProfileFromProfile = createRPCReducer(
 export default reduceReducers(
 	state => state || DEFAULT_STATE,
 	resetStore,
+	clearSearchResults,
 	getProfile,
 	getAccount,
 	updateAccount,

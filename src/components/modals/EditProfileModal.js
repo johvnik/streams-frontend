@@ -1,9 +1,10 @@
-import React, { useState, seEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Route, Switch, useParams, Redirect } from 'fusion-plugin-react-router'
 import { compose } from 'redux'
 import { connect, useDispatch } from 'react-redux'
 import { withRPCRedux } from 'fusion-plugin-rpc-redux-react'
 
+import { closeModals } from '../../actions/actions'
 import paths from '../../constants/paths'
 import { RPC_IDS } from '../../constants/rpc'
 
@@ -16,16 +17,21 @@ const EditProfileModal = ({
 	prevAccount,
 	prevProfile,
 	updateAccount,
-	cancelFn,
 }) => {
-	const handleModalClick = e => {
-		e.stopPropagation()
-	}
+	const dispatch = useDispatch()
+
+	useEffect(() => {
+		document.body.style.overflow = 'hidden'
+		return () => (document.body.style.overflow = '')
+	}, [])
 
 	if (!prevAccount || !prevProfile) {
 		return (
-			<div className="modalWrapper" onClick={cancelFn}>
-				<div className="modal editProfileModal" onClick={handleModalClick}>
+			<div className="modalWrapper" onClick={() => dispatch(closeModals())}>
+				<div
+					className="modal editProfileModal"
+					onClick={e => e.stopPropagation()}
+				>
 					<div className="modalHeading">edit profile</div>
 					<div className="modalBody">
 						<div className="formWrapper">
@@ -43,7 +49,6 @@ const EditProfileModal = ({
 	const [bio, setBio] = useState(prevProfile.bio)
 
 	const handleSubmit = () => {
-		// followProfile({ streamId, profileId })
 		updateAccount({
 			email,
 			phone,
@@ -61,8 +66,11 @@ const EditProfileModal = ({
 		bio != prevProfile.bio
 
 	return (
-		<div className="modalWrapper" onClick={cancelFn}>
-			<div className="modal editProfileModal" onClick={handleModalClick}>
+		<div className="modalWrapper" onClick={() => dispatch(closeModals())}>
+			<div
+				className="modal editProfileModal"
+				onClick={e => e.stopPropagation()}
+			>
 				<div className="modalHeading">edit profile</div>
 				<div className="modalBody">
 					<div className="formWrapper">
@@ -75,7 +83,7 @@ const EditProfileModal = ({
 									type="text"
 									placeholder="no name"
 									name="full_name"
-									className={fullName == prevProfile.full_name ? 'green' : ''}
+									className={fullName != prevProfile.full_name ? 'blue' : ''}
 								/>
 							</label>
 							<label>
@@ -87,7 +95,7 @@ const EditProfileModal = ({
 									placeholder="you must have a valid email"
 									name="email"
 									className={
-										email == prevAccount.email ? 'green' : !email ? 'red' : ''
+										email != prevAccount.email ? 'blue' : !email ? 'red' : ''
 									}
 								/>
 							</label>
@@ -99,7 +107,7 @@ const EditProfileModal = ({
 									type="text"
 									placeholder="no number"
 									name="phone"
-									className={phone == prevAccount.phone ? 'green' : ''}
+									className={phone != prevAccount.phone ? 'blue' : ''}
 								/>
 							</label>
 							<label className="span3">
@@ -109,13 +117,13 @@ const EditProfileModal = ({
 									onChange={e => setBio(e.target.value)}
 									// type="text"
 									placeholder="no bio"
-									className={bio == prevProfile.bio ? 'greenForTxtArea' : ''}
+									className={bio != prevProfile.bio ? 'blueForTxtArea' : ''}
 									maxLength="1000"
 								/>
 							</label>
 							<br />
 							<div className="buttons">
-								<CancelBtn cancelFn={cancelFn} />
+								<CancelBtn cancelFn={() => dispatch(closeModals())} />
 								{accounts.loading ? (
 									<LoadingBtn />
 								) : (

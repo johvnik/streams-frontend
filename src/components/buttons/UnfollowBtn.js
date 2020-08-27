@@ -11,7 +11,11 @@ const UnfollowBtn = ({ handle, authHandle, unfollowFn }) => {
 
 	const handleUnfollow = e => {
 		e.stopPropagation()
-		dispatch(openLoginModal())
+		if (authHandle) {
+			console.log('open unfollow modal??')
+		} else {
+			dispatch(openLoginModal())
+		}
 		// unfollowFn({ handle, authHandle })
 	}
 

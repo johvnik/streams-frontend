@@ -32,7 +32,9 @@ const LoginModal = ({ auth, login }) => {
 		dispatch(closeLoginModal())
 	}
 
-	const isLoading = () => !auth.authHandle
+	if (auth.authHandle) {
+		dispatch(closeLoginModal())
+	}
 
 	return (
 		<div className="modalWrapper" onClick={cancelFn}>
@@ -64,7 +66,8 @@ const LoginModal = ({ auth, login }) => {
 							<br />
 							<div className="buttons">
 								<CancelBtn cancelFn={cancelFn} />
-								{isLoading() ? (
+								{auth.isLoading ||
+								(auth.authHandle && !auth.didPerformInitialLoad) ? (
 									<LoadingBtn />
 								) : (
 									<input

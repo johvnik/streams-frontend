@@ -1,10 +1,6 @@
-import React from 'react'
-import InfiniteScroll from 'react-infinite-scroll-component'
+import React, { useState, useEffect } from 'react'
 import {
 	List,
-	// Grid,
-	Table,
-	Column,
 	CellMeasurer,
 	CellMeasurerCache,
 	InfiniteLoader,
@@ -13,135 +9,193 @@ import {
 } from 'react-virtualized'
 
 import Loading from './utils/Loading'
-import { ImagePreview } from './utils/ImagePreview'
+import ImagePreview from './utils/ImagePreview'
 
-const users = [
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-	{ name: 'foo' },
-]
+import useWindowDimensions from './utils/useWindowDimensions'
+import { useDispatch } from 'react-redux'
+import {
+	openEditProfileModal,
+	openLoginModal,
+	openPostModal,
+} from '../actions/actions'
 
-const PostGrid = ({ posts, handle, isLoading }) => {
-	if (isLoading) {
-		return <Loading />
+const cache = new CellMeasurerCache({ fixedWidth: true, defaultHeight: 600 })
+
+const PostGrid = ({
+	authHandle,
+	posts,
+	paginationObject,
+	emptyListMessage,
+	fetchMoreRowsFn,
+}) => {
+	const dispatch = useDispatch()
+	const { width, height } = useWindowDimensions()
+
+	const [scrollToIndex, setScrollToIndex] = useState(-1)
+	const [scrollToInput, setScrollToInput] = useState('')
+
+	const [hasScrolled, setHasScrolled] = useState(false)
+	const [scrollTop, setScrollTop] = useState(350)
+
+	useEffect(() => {
+		cache.clearAll()
+	}, [width])
+
+	const fetchMoreRows = ({ startIndex, stopIndex }) => {
+		const startPostIndex = startIndex * 3
+		const stopPostIndex = stopIndex * 3 + 2
+		const limit = stopPostIndex - startPostIndex
+		const offset = startPostIndex
+		const params = { limit, offset }
+
+		fetchMoreRowsFn({ params })
 	}
 
-	const fetchPosts = () => {
-		console.log('fetching posts...')
+	const isRowLoaded = ({ index }) => {
+		const firstPostIndex = index * 3
+		const secondPostIndex = firstPostIndex + 1
+		const thirdPostIndex = secondPostIndex + 1
+
+		// only need to check first photo index, because if this photo
+		// is loaded, it called for all photos for that row, so it is loaded
+		const isLoaded = !!(
+			paginationObject &&
+			paginationObject.results &&
+			posts.byId[Object.keys(paginationObject.results)[firstPostIndex]]
+		)
+			? true
+			: false
+
+		return isLoaded
 	}
 
-	const rowRenderer = ({ key, columnIndex, rowIndex, style }) => {
+	const PostGridCell = ({ index }) => {
+		const post = posts.byId[Object.keys(paginationObject.results)[index]]
+
+		const onPostGridCellClick = () => {
+			if (post) {
+				dispatch(openPostModal(post.id))
+			} else {
+				console.log('good thing you checked if the post exists in this cell')
+			}
+		}
+
 		return (
-			<div className="postGridCell" key={key} style={style}>
-				{/* {rowIndex} - {users[rowIndex].name} */}
-				{`row: ${rowIndex + 1} column: ${columnIndex + 1}`}
+			<div className="postGridCell" onClick={onPostGridCellClick}>
+				<div className="content">
+					{post ? <ImagePreview s3ObjectKey={post.image} /> : <></>}
+				</div>
 			</div>
 		)
 	}
 
-	const length = users.length
-	const rows = Math.round(users.length / 3)
+	const PostGridRow = ({ index, style, registerChild }) => {
+		const first = index * 3
+		const second = first + 1
+		const third = second + 1
+
+		return (
+			<div className="postGridRow" ref={registerChild} style={style}>
+				<PostGridCell index={first} />
+				<PostGridCell index={second} />
+				<PostGridCell index={third} />
+			</div>
+		)
+	}
+
+	const rowRenderer = ({ key, parent, index, style }) => {
+		return (
+			<CellMeasurer
+				key={key}
+				cache={cache}
+				parent={parent}
+				rowIndex={index}
+				columnIndex={0}
+			>
+				{({ measure, registerChild }) => (
+					<PostGridRow
+						index={index}
+						measure={measure}
+						registerChild={registerChild}
+						style={style}
+					/>
+				)}
+			</CellMeasurer>
+		)
+	}
+
+	if (!(paginationObject && 'count' in paginationObject)) {
+		if (!(paginationObject && paginationObject.isLoading)) {
+			fetchMoreRowsFn({ params: null })
+		}
+		return (
+			<div className="postGrid">
+				<Loading />
+			</div>
+		)
+	}
+
+	if (!(paginationObject && paginationObject.count)) {
+		return <div className="postGrid emptyMessageColor">{emptyListMessage}</div>
+	}
 
 	return (
-		<>
-			<div>{`user list count: ${length} rows: ${rows}`}</div>
-			<WindowScroller>
-				{({ height, scrollTop }) => (
-					<AutoSizer disableHeight>
-						{({ width }) => (
-							<Table
-								autoHeight
-								className="postGrid"
-								rowGetter={({ index }) => users[index]}
-								height={height}
-								width={width}
-								scrollTop={scrollTop}
-								// columnCount={1}
-								// columnWidth={width}
-								rowCount={users.length}
-								rowHeight={30}
-								// isScrolling={false}
-							>
-								<Column label="name" dataKey="name" width={100} />
-							</Table>
-						)}
-					</AutoSizer>
-				)}
-			</WindowScroller>
-		</>
+		<InfiniteLoader
+			isRowLoaded={isRowLoaded}
+			loadMoreRows={fetchMoreRows}
+			rowCount={
+				Math.floor(paginationObject.count / 3) +
+				(paginationObject.count % 3 ? 1 : 0)
+			}
+		>
+			{({ onRowsRendered, registerChild }) => (
+				<WindowScroller
+					// initialScrollTop={hasScrolled ? null : 350}
+					onScroll={() => setScrollToIndex(-1)}
+				>
+					{({ height, scrollTop, onChildScroll }) => (
+						<AutoSizer disableHeight>
+							{({ width }) => {
+								// console.log(scrollTop)
+								console.log('scroll to index', scrollToIndex)
+								return (
+									<List
+										// className="postGrid"
+										autoHeight
+										height={height}
+										width={width}
+										rowRenderer={rowRenderer}
+										scrollTop={scrollTop}
+										ref={registerChild}
+										onRowsRendered={onRowsRendered}
+										rowCount={
+											Math.floor(paginationObject.count / 3) +
+											(paginationObject.count % 3 ? 1 : 0)
+										}
+										deferredMeasurementCache={cache}
+										rowHeight={cache.rowHeight}
+										onScroll={onChildScroll}
+										// onScroll={({ scrollTop }) => {
+										// 	console.log('setting scroll top: ' + scrollTop)
+										// 	setScrollTop(scrollTop)
+										// }}
+										scrollToAlignment="start"
+										scrollToIndex={scrollToIndex}
+									></List>
+								)
+							}}
+						</AutoSizer>
+					)}
+				</WindowScroller>
+			)}
+		</InfiniteLoader>
 	)
 }
 
 export default PostGrid
 
-// return Object.keys(posts.byProfile[handle].postIds).length ? (
+// REFERENCE: this is the grid with 1px gap, but using infinite scroll
+// return Object.keys(posts.byProfile[handle].results).length ? (
 // 	<InfiniteScroll
 // 		className="postGrid"
 // 		dataLength={posts.byProfile[handle].count}
@@ -150,7 +204,7 @@ export default PostGrid
 // 		loader={<Loading />}
 // 		// endMessage={}
 // 	>
-// 		{Object.keys(posts.byProfile[handle].postIds).map(postId => {
+// 		{Object.keys(posts.byProfile[handle].results).map(postId => {
 // 			return (
 // 				<div className="tile" key={postId}>
 // 					<div className="content">
@@ -163,3 +217,39 @@ export default PostGrid
 // ) : (
 // 	<div className="emptyMessageColor">no posts</div>
 // )
+
+// CSS
+// .postGrid {
+// 	display: grid;
+// 	grid-template-columns: 1fr 1fr 1fr;
+// 	grid-auto-rows: auto;
+// 	gap: 1px;
+// 	background-color: red;
+
+// 	.tile {
+// 		position: relative;
+// 		width: 100%;
+
+// 		&::before {
+// 			content: '';
+// 			display: block;
+// 			padding-top: 100%;
+// 			// background-color: transparent;
+// 		}
+
+// 		.content {
+// 			position: absolute;
+// 			top: 0;
+// 			left: 0;
+// 			bottom: 0;
+// 			right: 0;
+// 			overflow: hidden;
+// 		}
+
+// 		img {
+// 			object-fit: cover;
+// 			height: 100%;
+// 			width: 100%;
+// 		}
+// 	}
+// }

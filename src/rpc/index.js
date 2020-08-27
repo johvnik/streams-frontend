@@ -8,11 +8,29 @@ const SIMULATED_DELAY = 200
 
 import s3 from '../clients/s3'
 
-const getSignedURL = async (args, ctx) => {
-	return { signedURL: s3.getSignedObjectURL(args.s3ObjectKey) }
+const sleep = ms => {
+	return new Promise(resolve => setTimeout(resolve, ms))
 }
 
-export default Object.keys(endpointToBackendLookups).reduce(
+const getSignedUrl = async (args, ctx) => {
+	// s3.getSignedObjectUrl(s3ObjectKey)
+	// 	.then(res => {
+	// 		return res
+	// 	})
+	// 	.catch(err => {
+	// 		const responseError = new ResponseError(err)
+	// 		responseError.code = err.response && err.response.status
+	// 		throw responseError
+	// 	})
+	await sleep(300)
+
+	return {
+		body: { signedUrl: s3.getSignedObjectUrl(args.s3ObjectKey) },
+		initialArgs: args,
+	}
+}
+
+const defaultHandlers = Object.keys(endpointToBackendLookups).reduce(
 	(acc, endpoint) => {
 		const backend = endpointToBackendLookups[endpoint]
 
@@ -41,5 +59,10 @@ export default Object.keys(endpointToBackendLookups).reduce(
 		acc[endpoint] = handler
 		return acc
 	},
-	{ getSignedURL },
+	{},
 )
+
+export default {
+	...defaultHandlers,
+	getSignedUrl,
+}

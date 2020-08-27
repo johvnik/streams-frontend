@@ -4,9 +4,12 @@ import CancelBtn from '../buttons/CancelBtn'
 // import DeleteBtn from '../buttons/DeleteBtn'
 // import LoadingBtn from '../buttons/LoadingBtn'
 
-const ConfirmDeleteModal = ({ cancelFn, deleteFn }) => {
+const ConfirmDeleteModal = ({ cancelFn, deleteFn, keepModalsOpen }) => {
 	return (
-		<div className="confirmDeleteModalWrapper" onClick={cancelFn}>
+		<div
+			className="confirmDeleteModalWrapper"
+			onClick={e => e.stopPropagation()}
+		>
 			<div className="confirmDeleteModal">
 				<div className="formWrapper">
 					<div className="form">

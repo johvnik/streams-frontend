@@ -9,12 +9,16 @@ function getWindowDimensions() {
 }
 
 export default function useWindowDimensions() {
+	const DEFAULT_WIDTH = 600
+	const DEFAULT_HEIGHT = 600
+
 	const [windowDimensions, setWindowDimensions] = useState(
-		getWindowDimensions(),
+		__BROWSER__ ? getWindowDimensions() : { DEFAULT_WIDTH, DEFAULT_HEIGHT },
 	)
 
 	useEffect(() => {
 		function handleResize() {
+			if (!__BROWSER__) return
 			setWindowDimensions(getWindowDimensions())
 		}
 

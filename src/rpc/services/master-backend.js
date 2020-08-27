@@ -18,6 +18,12 @@ const safeEndpoints = [
 	'getFollowingForStream',
 	'searchProfiles',
 	'getPostsForStream',
+	'getSignedUrl',
+	'getExplore',
+	'getPost',
+	'getCommentsForPost',
+	'getNewCommentsForPost',
+	'getNewCommentsForPostCount',
 ]
 
 const masterBackend = {
@@ -31,10 +37,8 @@ const masterBackend = {
 		...safeEndpoints,
 		// 'getStreams',
 		// 'getMyProfile',
-		'getPostLikesForProfile',
-		'getCommentLikesForProfile',
-		'likePost',
-		'unlikePost',
+		// 'getPostLikesForProfile',
+		// 'getCommentLikesForProfile',
 		// 'getFollowersForMe',
 		// 'getFollowingForMe',
 		'unfollowStream',
@@ -48,6 +52,10 @@ const masterBackend = {
 		'createStream',
 		'updateStream',
 		'deleteStream',
+		'createPostComment',
+		'likePost',
+		'unlikePost',
+		'getAllPostLikes',
 	],
 }
 

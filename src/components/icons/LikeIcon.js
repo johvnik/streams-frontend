@@ -1,3 +1,18 @@
+import React from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faHeart } from '@fortawesome/free-solid-svg-icons'
+import { faHeart as farHeart } from '@fortawesome/free-regular-svg-icons'
+
+const LikeIcon = ({ liked }) => {
+	return liked ? (
+		<FontAwesomeIcon icon={faHeart} className="icon likeIcon likedLikeIcon" />
+	) : (
+		<FontAwesomeIcon icon={farHeart} className="icon likeIcon" />
+	)
+}
+
+export default LikeIcon
+
 // import React, { useState } from 'react'
 // import { compose } from 'redux'
 // import { connect } from 'react-redux'

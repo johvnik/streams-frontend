@@ -8,6 +8,7 @@ import ACTION_IDS from '../constants/actions'
 const DEFAULT_STATE = {
 	byStream: {},
 	byProfile: {},
+	byExplore: {},
 	byId: {},
 }
 
@@ -20,9 +21,75 @@ const resetStore = (state, action) => {
 	}
 }
 
-const getPostsForStream = createRPCReducer(RPC_IDS.getPostsForStream, {
+const getPost = createRPCReducer(RPC_IDS.getPost, {
 	start: state => ({
 		...state,
+	}),
+	success: (state, { payload }) => {
+		return {
+			...state,
+			byId: {
+				...state.byId,
+				[payload.body.id]: payload.body,
+			},
+		}
+	},
+	failure: (state, { payload }) => ({
+		...state,
+	}),
+})
+
+const getExplore = createRPCReducer(RPC_IDS.getExplore, {
+	start: state => ({
+		...state,
+		byExplore: {
+			...state.byExplore,
+			isLoading: true,
+		},
+	}),
+	success: (state, { payload }) => {
+		return {
+			...state,
+			byId: { ...state.byId, ...mapKeys(payload.body.results, 'id') },
+			byExplore: {
+				...state.byExplore,
+				count: payload.body.count,
+				next: payload.body.next,
+				previous: payload.body.previous,
+				results: {
+					...(state.byExplore && state.byExplore.results
+						? state.byExplore.results
+						: {}),
+					...payload.body.results.reduce((acc, post) => {
+						acc[post.id] = true
+						return acc
+					}, {}),
+				},
+				isLoading: false,
+				error: null,
+			},
+		}
+	},
+	failure: (state, { payload }) => ({
+		...state,
+		byExplore: {
+			...state.byExplore,
+			isLoading: false,
+			error: payload.body,
+		},
+	}),
+})
+
+const getPostsForStream = createRPCReducer(RPC_IDS.getPostsForStream, {
+	start: (state, { payload }) => ({
+		...state,
+		byStream: {
+			...state.byStream,
+			[payload.streamId]: {
+				...state.byStream[payload.streamId],
+				isLoading: true,
+			},
+		},
 	}),
 	success: (state, { payload }) => {
 		// console.log(payload)
@@ -35,28 +102,45 @@ const getPostsForStream = createRPCReducer(RPC_IDS.getPostsForStream, {
 					count: payload.body.count,
 					next: payload.body.next,
 					previous: payload.body.previous,
-					postIds: {
+					results: {
 						...(state.byStream[payload.initialArgs.streamId] &&
-						state.byStream[payload.initialArgs.streamId].postIds
-							? state.byStream[payload.initialArgs.streamId].postIds
+						state.byStream[payload.initialArgs.streamId].results
+							? state.byStream[payload.initialArgs.streamId].results
 							: {}),
 						...payload.body.results.reduce((acc, post) => {
 							acc[post.id] = true
 							return acc
 						}, {}),
 					},
+					isLoading: false,
+					error: null,
 				},
 			},
 		}
 	},
 	failure: (state, { payload }) => ({
 		...state,
+		byStream: {
+			...state.byStream,
+			[payload.initialArgs.streamId]: {
+				...state.byStream[payload.initialArgs.streamId],
+				isLoading: false,
+				error: payload.body,
+			},
+		},
 	}),
 })
 
 const getPostsForProfile = createRPCReducer(RPC_IDS.getPostsForProfile, {
-	start: state => ({
+	start: (state, { payload }) => ({
 		...state,
+		byProfile: {
+			...state.byProfile,
+			[payload.handle]: {
+				...state.byProfile[payload.handle],
+				isLoading: true,
+			},
+		},
 	}),
 	success: (state, { payload }) => {
 		// console.log(payload)
@@ -69,22 +153,32 @@ const getPostsForProfile = createRPCReducer(RPC_IDS.getPostsForProfile, {
 					count: payload.body.count,
 					next: payload.body.next,
 					previous: payload.body.previous,
-					postIds: {
+					results: {
 						...(state.byProfile[payload.initialArgs.handle] &&
-						state.byProfile[payload.initialArgs.handle].postIds
-							? state.byProfile[payload.initialArgs.handle].postIds
+						state.byProfile[payload.initialArgs.handle].results
+							? state.byProfile[payload.initialArgs.handle].results
 							: {}),
 						...payload.body.results.reduce((acc, post) => {
 							acc[post.id] = true
 							return acc
 						}, {}),
 					},
+					isLoading: true,
+					error: payload.body,
 				},
 			},
 		}
 	},
 	failure: (state, { payload }) => ({
 		...state,
+		byProfile: {
+			...state.byProfile,
+			[payload.initialArgs.handle]: {
+				...state.byProfile[payload.initialArgs.handle],
+				isLoading: true,
+				error: payload.body,
+			},
+		},
 	}),
 })
 
@@ -112,9 +206,9 @@ const getStreamsForProfile = createRPCReducer(RPC_IDS.getStreamsForProfile, {
 				...Object.keys(payload.body.posts).reduce((acc, streamId) => {
 					acc[streamId] = {
 						...(state.byStream[streamId] ? state.byStream[streamId] : {}),
-						postIds: {
-							...(state.byStream[streamId] && state.byStream[streamId].postIds
-								? state.byStream[streamId].postIds
+						results: {
+							...(state.byStream[streamId] && state.byStream[streamId].results
+								? state.byStream[streamId].results
 								: {}),
 							...payload.body.posts[streamId].reduce((accu, post) => {
 								accu[post.id] = true
@@ -137,6 +231,8 @@ const getStreamsForProfile = createRPCReducer(RPC_IDS.getStreamsForProfile, {
 export default reduceReducers(
 	state => state || DEFAULT_STATE,
 	resetStore,
+	getPost,
+	getExplore,
 	getPostsForStream,
 	getPostsForProfile,
 	getStreamsForProfile,

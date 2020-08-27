@@ -6,10 +6,10 @@ import ACTION_IDS from '../constants/actions'
 
 const DEFAULT_STATE = {
 	isLoading: false,
-	isAuthenticated: false,
-	didAttempt: false,
 	authHandle: null,
+	didAttempt: false,
 	didPerformInitialLoad: false,
+	error401: null,
 	error: null,
 }
 
@@ -25,11 +25,21 @@ const resetStore = (state, action) => {
 	}
 }
 
+const clear401Error = (state, action) => {
+	switch (action.type) {
+		case ACTION_IDS.clear401Error:
+			return { ...state, error401: null }
+		default:
+			return state
+	}
+}
+
 const didPerformInitialLoad = (state, action) => {
 	switch (action.type) {
 		case ACTION_IDS.didPerformInitialLoad:
 			return {
 				...state,
+				isLoading: false,
 				didPerformInitialLoad: true,
 			}
 		default:
@@ -49,9 +59,9 @@ const specialReducers = specialEndpoints.reduce((acc, endpoint) => {
 				return {
 					...state,
 					isLoading: false,
-					isAuthenticated: true,
 					didAttempt: true,
 					authHandle: payload.body.handle,
+					error401: null,
 					error: null,
 				}
 			},
@@ -72,9 +82,9 @@ const reducers = Object.keys(endpoints).reduce(
 				failure: (state, { payload }) => {
 					if (payload.code === 401) {
 						return {
-							...DEFAULT_STATE,
-							didAttempt: true,
-							error: payload,
+							...state,
+							authHandle: null,
+							error401: payload,
 						}
 					} else {
 						return state
@@ -84,7 +94,7 @@ const reducers = Object.keys(endpoints).reduce(
 		)
 		return acc
 	},
-	[...specialReducers, didPerformInitialLoad, resetStore],
+	[...specialReducers, didPerformInitialLoad, resetStore, clear401Error],
 )
 
 export default reduceReducers(state => state || DEFAULT_STATE, ...reducers)

@@ -12,22 +12,18 @@ import {
 
 import paths from './constants/paths'
 
-import ProtectedRoute from './components/utils/ProtectedRoute'
 import LayoutRoute from './components/utils/LayoutRoute'
-
-import Navbar from './components/header/Navbar'
-import BackAndTitleBar from './components/header/BackAndTitleBar'
+// import Navbar from './components/header/Navbar'
 import LoginPage from './pages/login'
 import NotFoundPage from './pages/NotFoundPage'
 import HomePage from './pages/home'
-import StreamPage from './pages/stream'
-import StreamListPage from './pages/streamList'
+import StreamFollowsPage from './pages/streamFollows'
 import SearchPage from './pages/search'
+import ExplorePage from './pages/explore'
 // import MyProfilePage from './pages/myProfile'
 import ProfilePage from './pages/profile'
 import SignupPage from './pages/signup'
-import FollowingPage from './pages/following'
-import FollowersPage from './pages/followers'
+import ProfileFollowsPage from './pages/profileFollows'
 
 const root = (
 	<>
@@ -35,33 +31,39 @@ const root = (
 			<title>streams</title>
 			<link rel="stylesheet" href={assetUrl('./static/css/style.css')} />
 		</Helmet>
-		{/* <Route
-			path={[
-				`${paths.profile}/:profileIdParam`,
-				`${paths.stream}/:streamIdParam`,
-			]}
-			component={BackAndTitleBar}
-		/> */}
 		<Switch>
 			<Route exact path={paths.login} component={LoginPage} />
 			<Route exact path={paths.signup} component={SignupPage} />
-			<LayoutRoute exact path={paths.streamList} component={StreamListPage} />
 			<LayoutRoute exact path={paths.search} component={SearchPage} />
 			<LayoutRoute
-				path={`${paths.profile}/:handle/followers`}
-				component={FollowersPage}
+				exact
+				path={paths.explore}
+				component={ExplorePage}
+				protectedRoute
 			/>
 			<LayoutRoute
-				path={`${paths.profile}/:handle/following`}
-				component={FollowingPage}
+				exact
+				path={`${paths.profile}/:handle${paths.follows}`}
+				component={ProfileFollowsPage}
+				protectedRoute
 			/>
 			<LayoutRoute
 				exact
 				path={`${paths.profile}/:handle`}
 				component={ProfilePage}
 			/>
-			<LayoutRoute path={`${paths.stream}/:streamId`} component={StreamPage} />
-			<LayoutRoute path={paths.home} exact component={HomePage} />
+			<LayoutRoute
+				exact
+				path={`${paths.stream}/:streamId`}
+				component={StreamFollowsPage}
+				protectedRoute
+			/>
+			<LayoutRoute
+				exact
+				path={paths.home}
+				component={HomePage}
+				protectedRoute
+			/>
 			<Route component={NotFoundPage} />
 		</Switch>
 	</>

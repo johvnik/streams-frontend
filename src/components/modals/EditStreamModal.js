@@ -5,6 +5,7 @@ import { connect, useDispatch } from 'react-redux'
 import { withRPCRedux } from 'fusion-plugin-rpc-redux-react'
 import { useHistory } from 'fusion-plugin-react-router'
 
+import { closeModals } from '../../actions/actions'
 import paths from '../../constants/paths'
 import { RPC_IDS } from '../../constants/rpc'
 
@@ -15,23 +16,38 @@ import LoadingBtn from '../buttons/LoadingBtn'
 import ConfirmDeleteModal from '../modals/ConfirmDeleteModal'
 
 const EditStreamModal = ({
-	authProfileId,
+	authHandle,
 	streams,
 	updateStream,
 	deleteStream,
 	streamId,
-	cancelFn,
 }) => {
 	const history = useHistory()
-	const [name, setName] = useState(streams.byId[streamId].name)
-	const [showConfirmDeleteModal, setShowConfirmDeleteModal] = useState(false)
+	const dispatch = useDispatch()
 
-	const handleModalClick = e => {
-		e.stopPropagation()
+	if (!streams.byId[streamId]) {
+		console.log(streamId)
+		return (
+			<div className="modalWrapper" onClick={() => dispatch(closeModals())}>
+				<div
+					className="modal editProfileModal"
+					onClick={e => e.stopPropagation()}
+				>
+					<div className="modalHeading">edit stream</div>
+					<div className="modalBody">
+						<Loading />
+					</div>
+				</div>
+			</div>
+		)
 	}
 
+	const [name, setName] = useState(streams.byId[streamId].name)
+	const [confirmDeleteModal, setConfirmDeleteModal] = useState(false)
+
 	const handleDelete = () => {
-		deleteStream({ profileId: authProfileId, streamId })
+		deleteStream({ handle: authHandle, streamId })
+		dispatch(closeModals())
 		history.goBack()
 	}
 
@@ -42,12 +58,18 @@ const EditStreamModal = ({
 	const canSave = () => name != streams.byId[streamId].name
 
 	return (
-		<div className="modalWrapper" onClick={cancelFn}>
-			<div className="modal editProfileModal" onClick={handleModalClick}>
+		<div className="modalWrapper" onClick={() => dispatch(closeModals())}>
+			<div
+				className="modal editProfileModal"
+				onClick={e => e.stopPropagation()}
+			>
 				<div className="modalHeading">edit stream</div>
 				<div className="modalBody">
-					{showConfirmDeleteModal ? (
-						<ConfirmDeleteModal cancelFn={handleDelete} />
+					{confirmDeleteModal ? (
+						<ConfirmDeleteModal
+							cancelFn={() => setConfirmDeleteModal(false)}
+							deleteFn={handleDelete}
+						/>
 					) : (
 						<></>
 					)}
@@ -61,12 +83,12 @@ const EditStreamModal = ({
 									type="text"
 									placeholder="you must enter a name"
 									name="full_name"
-									className={name == streams.byId[streamId].name ? 'green' : ''}
+									className={name != streams.byId[streamId].name ? 'blue' : ''}
 								/>
 							</label>
 							<br />
 							<div className="buttons">
-								<CancelBtn cancelFn={cancelFn} />
+								<CancelBtn cancelFn={() => dispatch(closeModals())} />
 								{streams.isSaving ? (
 									<LoadingBtn />
 								) : (
@@ -83,7 +105,7 @@ const EditStreamModal = ({
 									/>
 								)}
 								<DeleteBtn
-									openConfirmModalFn={() => setShowConfirmDeleteModal(true)}
+									openConfirmModalFn={() => setConfirmDeleteModal(true)}
 								/>
 							</div>
 						</div>
@@ -100,8 +122,9 @@ const rpcs = [
 ]
 
 const mapStateToProps = state => ({
-	authProfileId: state.auth.authProfileId,
+	authHandle: state.auth.authHandle,
 	streams: state.streams,
+	streamId: state.ui.modals.editStreamModal,
 })
 
 const hoc = compose(

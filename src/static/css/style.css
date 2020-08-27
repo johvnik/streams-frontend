@@ -11,11 +11,6 @@
   outline: none;
 }
 
-body,
-html {
-  height: 100%;
-}
-
 :root {
   --color-mode: dark;
   --nav-color: rgb(18, 18, 18);
@@ -29,6 +24,7 @@ html {
   --accent-color: #1baafd;
   --nav-height: 42px;
   --max-width: 1000px;
+  --max-smaller-width: 600px;
   --edge-padding: 10px;
   --button-scale-factor: 0.96;
   background-color: var(--background-color);
@@ -205,6 +201,20 @@ html {
   cursor: pointer;
 }
 
+.likeBtn {
+  padding: 6px;
+  border-radius: 100vh;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  cursor: pointer;
+}
+
+.likeBtn .likedLikeIcon {
+  color: red;
+}
+
 .loginBtn {
   background-color: var(--accent-color);
   width: 70px;
@@ -317,6 +327,19 @@ html {
   background-color: var(--dark-red-color);
 }
 
+.closeBtn {
+  height: 36px;
+  width: 36px;
+  border-radius: 100vw;
+  background-color: rgba(12, 12, 12, 0.7);
+  margin: 10px;
+}
+
+.closeBtn .icon {
+  width: 30px;
+  height: 30px;
+}
+
 .imagePreview {
   display: -ms-grid;
   display: grid;
@@ -332,7 +355,6 @@ html {
   position: -webkit-sticky;
   position: sticky;
   top: 0;
-  width: 100%;
   background-color: var(--nav-color);
   border-bottom: 0.1px solid var(--dark-border-color);
   z-index: 1;
@@ -341,21 +363,25 @@ html {
 }
 
 .navbar .navbarContents {
+  margin: 0 auto;
   max-width: var(--max-width);
   height: 100%;
-  margin: 0 auto;
   padding-left: var(--edge-padding);
   padding-right: var(--edge-padding);
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: auto 100px;
-      grid-template-columns: auto 100px;
+  -ms-grid-columns: auto 120px;
+      grid-template-columns: auto 120px;
   -ms-flex-line-pack: center;
       align-content: center;
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
+}
+
+.navbar .navbarContents .active {
+  color: var(--accent-color);
 }
 
 .navbar .navbarContents a {
@@ -371,39 +397,15 @@ html {
   height: 26px;
 }
 
-.navbar .navbarContents ul li:hover {
-  -webkit-transform: scale(var(--button-scale-factor));
-          transform: scale(var(--button-scale-factor));
-}
-
-.navbar .navbarContents .active {
-  color: var(--accent-color);
-}
-
 .navbar .navbarContents .titleLink {
-  display: -ms-grid;
-  display: grid;
-  -ms-grid-columns: auto auto;
-      grid-template-columns: auto auto;
   -ms-grid-column-align: start;
       justify-self: start;
   letter-spacing: 1px;
   text-decoration: none;
 }
 
-.navbar .navbarContents .titleLink .icon {
-  width: 26px;
-  height: 26px;
-}
-
 .navbar .navbarContents .titleLink .navTitle {
-  padding-left: 8px;
   font-size: 20px;
-}
-
-.navbar .navbarContents .titleLink:hover {
-  -webkit-transform: scale(var(--button-scale-factor));
-          transform: scale(var(--button-scale-factor));
 }
 
 .navbar .navbarContents ul {
@@ -414,54 +416,73 @@ html {
       justify-content: space-around;
 }
 
-.backAndTitleBar {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0;
-  width: 100%;
-  background-color: var(--nav-color);
-  border-bottom: 1px solid var(--dark-border-color);
-  z-index: 1;
-}
-
-.backAndTitleBar .barContents {
+.navbar .unauthBarContents {
   max-width: var(--max-width);
-  height: var(--nav-height);
   margin: 0 auto;
-  padding-left: var(--edge-padding);
-  padding-right: var(--edge-padding);
+  height: 100%;
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: auto 160px;
-      grid-template-columns: auto 160px;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: end;
   -ms-flex-line-pack: center;
       align-content: center;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
+  padding-right: 8px;
 }
 
-.backAndTitleBar .barContents .backBtn {
-  -ms-grid-column-align: start;
-      justify-self: start;
+.navbar .unauthBarContents .active {
+  color: var(--accent-color);
 }
 
-.backAndTitleBar .barContents .buttons {
+.navbar .unauthBarContents a {
+  margin-left: 10px;
+  color: var(--light-text-color);
+}
+
+.navbar .unauthBarContents a .icon {
+  width: 26px;
+  height: 26px;
+}
+
+.navbar .unauthBarContents .buttons {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  gap: 8px;
+}
+
+.localNav {
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: 80px 80px;
-      grid-template-columns: 80px 80px;
-}
-
-.backAndTitleBar .barContents .buttons .loginBtn {
+  height: 40px;
+  width: 100%;
+  -ms-grid-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr;
   -ms-grid-column-align: center;
       justify-self: center;
+  margin-bottom: 16px;
 }
 
-.backAndTitleBar .barContents .buttons .signupBtn {
-  -ms-grid-column-align: center;
-      justify-self: center;
+.localNav .navItem {
+  display: -ms-grid;
+  display: grid;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -ms-flex-line-pack: center;
+      align-content: center;
+  text-align: center;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.localNav .active {
+  color: var(--accent-color);
+  border-bottom: 1px solid var(--dark-border-color);
 }
 
 .formWrapper {
@@ -554,14 +575,14 @@ html {
   cursor: default;
 }
 
-.form .green {
-  border: 1px solid var(--dark-green-color);
+.form .blue {
+  border: 1px solid var(--accent-color);
   padding-left: 13px;
   padding-right: 13px;
 }
 
-.form .greenForTxtArea {
-  border: 1px solid var(--dark-green-color);
+.form .blueForTxtArea {
+  border: 1px solid var(--accent-color);
   padding-left: 13px;
   padding-right: 13px;
   padding-top: 7px;
@@ -577,19 +598,17 @@ html {
 .loginPage {
   display: -ms-grid;
   display: grid;
-  height: 100%;
+  height: 100vh;
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  -ms-flex-line-pack: center;
+      align-content: center;
 }
 
 .login-form {
   width: 400px;
   max-width: 90vw;
-  margin: 0 auto;
 }
 
 .login-form .form {
@@ -660,13 +679,12 @@ html {
 .signupPage {
   display: -ms-grid;
   display: grid;
-  height: 100%;
+  height: 100vh;
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  -ms-flex-line-pack: center;
+      align-content: center;
 }
 
 .signupPage .signupForm {
@@ -718,26 +736,18 @@ html {
   padding-left: 6px;
 }
 
-.profilePageWrapper {
-  display: -ms-grid;
-  display: grid;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-}
-
 .profilePage {
   --top-bottom-margins: 16px;
-  width: 100vw;
+  margin: var(--top-bottom-margins) auto;
   max-width: var(--max-width);
-  color: var(--light-text-color);
+  padding-left: var(--edge-padding);
+  padding-right: var(--edge-padding);
 }
 
 .profilePage .profileTop {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  margin-top: var(--top-bottom-margins);
   margin-bottom: var(--top-bottom-margins);
   padding-left: var(--edge-padding);
   padding-right: var(--edge-padding);
@@ -889,6 +899,8 @@ html {
   -ms-flex-line-pack: center;
       align-content: center;
   gap: 8px;
+  margin-top: var(--top-bottom-margins);
+  margin-bottom: var(--top-bottom-margins);
 }
 
 .profilePage .profileButtons .edit {
@@ -972,6 +984,7 @@ html {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  margin-top: var(--top-bottom-margins);
 }
 
 .profilePage .profileBottom .addHeader .addButton {
@@ -1011,13 +1024,17 @@ html {
 }
 
 .profilePage .profileBottom .profileBody {
-  margin: 0 8px;
-  background-color: purple;
+  margin-top: var(--top-bottom-margins);
 }
 
 .searchPage {
-  max-width: var(--max-width);
   margin: 0 auto;
+  max-width: var(--max-width);
+}
+
+.searchPage .searchBar {
+  margin: 16px auto;
+  max-width: var(--max-smaller-width);
 }
 
 .searchPage .searchBar .searchField {
@@ -1045,21 +1062,41 @@ html {
   pointer-events: none;
 }
 
-.searchPage .loading {
-  -webkit-transform: scale(0.6);
-          transform: scale(0.6);
-  height: 40px;
-  background-color: blue;
+.postGridRow {
+  display: -ms-grid;
+  display: grid;
+  height: 100%;
+  -ms-grid-columns: (1fr)[3];
+      grid-template-columns: repeat(3, 1fr);
+  padding-left: 1px;
 }
 
-.windowScrollerWrapper {
-  -webkit-box-flex: 1;
-      -ms-flex: 1 1 auto;
-          flex: 1 1 auto;
+.postGridCell {
+  position: relative;
 }
 
-.postGrid .postGridCell:nth-child(odd) {
-  background-color: gray;
+.postGridCell::before {
+  content: '';
+  display: block;
+  padding-top: 100%;
+}
+
+.postGridCell .content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  overflow: hidden;
+  border-top: 1px solid var(--background-color);
+  border-right: 1px solid var(--background-color);
+}
+
+.postGridCell img {
+  -o-object-fit: cover;
+     object-fit: cover;
+  height: 100%;
+  width: 100%;
 }
 
 .streamList {
@@ -1173,20 +1210,9 @@ html {
   background-color: var(--background-color);
 }
 
-.profileList {
-  width: 400px;
-  max-width: 98vw;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  text-align: center;
-}
-
-.profileListRow {
-  display: -ms-grid;
-  display: grid;
-  -ms-flex-line-pack: center;
-      align-content: center;
-  border-bottom: 1px solid gray;
+.profileListWrapper {
+  margin: 0 auto;
+  max-width: var(--max-smaller-width);
 }
 
 .profileListItem {
@@ -1198,7 +1224,7 @@ html {
       -ms-flex-align: center;
           align-items: center;
   height: 50px;
-  padding-right: 10px;
+  padding-right: 8px;
   padding-left: 10px;
   border-radius: 100vw;
   overflow: hidden;
@@ -1287,7 +1313,7 @@ html {
 }
 
 .streamPage .header .name {
-  font-size: 24px;
+  font-size: 28px;
 }
 
 .streamPage .header .handle {
@@ -1341,150 +1367,81 @@ html {
   border-bottom: 1px solid var(--dark-border-color);
 }
 
-.modalWrapper {
-  position: fixed;
-  height: 100%;
-  width: 100%;
-  top: 0;
-  left: 0;
-  z-index: 10;
-  background-color: rgba(14, 14, 14, 0.9);
-  display: -ms-grid;
-  display: grid;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -ms-flex-line-pack: center;
-      align-content: center;
-}
-
-.modal {
-  padding-left: 20px;
-  padding-right: 20px;
-  max-height: 70vh;
-  max-width: 95vw;
-  min-height: 200px;
-  background-color: var(--background-color);
-  border-radius: 6px;
-  overflow-y: auto;
-}
-
-.modalHeading {
-  padding: 20px;
-  font-size: 18px;
-  border-bottom: 1px solid var(--dark-border-color);
-  display: -ms-grid;
-  display: grid;
-  -ms-flex-line-pack: center;
-      align-content: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+.followPage {
+  margin: 0 auto;
+  max-width: var(--max-width);
+  padding: 8px;
   text-align: center;
+  cursor: default;
 }
 
-.modalHeading .accent {
+.followPage .fullName {
+  font-size: 28px;
+  padding: 8px;
+}
+
+.followPage .handleWrapper {
   display: -ms-grid;
   display: grid;
+  width: 100%;
+}
+
+.followPage .handle {
+  -ms-grid-column-align: center;
+      justify-self: center;
+  cursor: pointer;
+  padding-bottom: 8px;
+}
+
+.followPage .handle:hover {
   color: var(--accent-color);
-  font-size: 16px;
-  padding-top: 1px;
-}
-
-.modalBody {
-  position: relative;
-  padding: 20px;
-}
-
-.followModal {
-  width: 1000px;
-}
-
-.followModal .modalBody {
-  padding-top: 30px;
-  padding-bottom: 40px;
-}
-
-.createPostModal .uploadPhotoContainer {
-  width: 95%;
-  height: 30%;
-  background-color: gray;
-}
-
-.confirmDeleteModalWrapper {
-  position: absolute;
-  display: -ms-grid;
-  display: grid;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -ms-flex-line-pack: center;
-      align-content: center;
-  z-index: 20;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  background-color: var(--background-color);
 }
 
 .homePage {
   height: calc(100vh - var(--nav-height));
+  cursor: default;
 }
 
-.homePage .postRow {
+.homePage .emptyMessageColor {
+  padding-top: 16px;
+}
+
+.postWrapper {
   display: -ms-grid;
   display: grid;
+  margin: 6vh auto;
+  max-width: 98%;
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  -ms-flex-line-pack: center;
-      align-content: center;
-}
-
-.post {
-  display: -ms-grid;
-  display: grid;
-  padding: 40px 0;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -ms-flex-line-pack: center;
-      align-content: center;
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
-  user-select: none;
 }
 
-.post .postImage {
-  z-index: 1;
-  padding-top: 10px;
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-bottom: 4px;
-  background-color: #fff;
+.post {
+  background-color: white;
+  padding: 6px;
 }
 
-.post .postImage img {
-  max-width: 90vw;
-  max-height: 70vh;
+.post img {
+  max-width: 100%;
+  max-height: 74vh;
   height: auto;
   width: auto;
 }
 
-.post .postImage .ghostImage {
+.post .ghostImage {
   width: 400px;
   height: 400px;
-  max-width: 90vw;
-  max-height: 70vh;
+  max-width: 90%;
+  max-height: 70%;
   background-color: #111;
 }
 
 .post .postFooter {
-  background-color: #fff;
-  z-index: 2;
+  margin-top: 3px;
   -ms-flex-line-pack: center;
       align-content: center;
   -webkit-box-pack: start;
@@ -1494,9 +1451,6 @@ html {
   display: grid;
   -ms-grid-columns: 35px 1fr 20px 20px;
       grid-template-columns: 35px 1fr 20px 20px;
-  height: 3rem;
-  padding-left: 4px;
-  padding-right: 4px;
 }
 
 .post .postFooter .profilePhoto {
@@ -1560,4 +1514,319 @@ html {
 .post .postFooter .commentIcon {
   height: 16px;
   width: 16px;
+}
+
+.loadingImage {
+  position: relative;
+  display: inline-block;
+  width: 60%;
+  height: 70%;
+  vertical-align: middle;
+  background-color: var(--background-color);
+}
+
+.explorePage {
+  margin: 0 auto;
+  max-width: var(--max-width);
+}
+
+.modalWrapper {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  z-index: 10;
+  background-color: rgba(27, 27, 27, 0.9);
+  cursor: default;
+  display: -ms-grid;
+  display: grid;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -ms-flex-line-pack: center;
+      align-content: center;
+}
+
+.modal {
+  padding-left: 20px;
+  padding-right: 20px;
+  max-height: 70vh;
+  max-width: 95vw;
+  min-height: 140px;
+  background-color: var(--background-color);
+  border-radius: 6px;
+  overflow-y: auto;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.modalHeading {
+  padding: 20px;
+  font-size: 18px;
+  border-bottom: 1px solid var(--dark-border-color);
+  display: -ms-grid;
+  display: grid;
+  -ms-flex-line-pack: center;
+      align-content: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  text-align: center;
+}
+
+.modalHeading .accent {
+  display: -ms-grid;
+  display: grid;
+  color: var(--accent-color);
+  font-size: 16px;
+  padding-top: 1px;
+}
+
+.modalBody {
+  position: relative;
+  padding: 20px;
+}
+
+.loginModal {
+  z-index: 12;
+}
+
+.followModal {
+  width: 1000px;
+}
+
+.followModal .modalBody {
+  padding-top: 30px;
+  padding-bottom: 40px;
+}
+
+.createPostModal .uploadPhotoContainer {
+  width: 95%;
+  height: 30%;
+  background-color: gray;
+}
+
+.confirmDeleteModalWrapper {
+  position: absolute;
+  display: -ms-grid;
+  display: grid;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -ms-flex-line-pack: center;
+      align-content: center;
+  z-index: 11;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: var(--background-color);
+}
+
+.postModal {
+  height: 100vh;
+  width: 100vw;
+  padding-bottom: 0;
+  background-color: var(--background-color);
+  overflow-y: scroll;
+}
+
+.postModal .postWrapper {
+  margin: 0 auto;
+}
+
+.postModal .modalHeading {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  margin: 0 auto;
+  padding: 0;
+  border: none;
+  z-index: 13;
+  max-width: var(--max-width);
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: start;
+}
+
+.postModal .modalBody {
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.postModal .modalBody .postDetails {
+  position: relative;
+  margin: 0 auto;
+  max-width: var(--max-smaller-width);
+  z-index: 12;
+}
+
+.postModal .modalBody .postDetails .postCaption {
+  white-space: pre-wrap;
+  padding-top: 20px;
+  padding-bottom: 16px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--dark-border-color);
+  padding-left: 8px;
+  font-size: 18px;
+}
+
+.postModal .modalBody .postDetails .loadNewComments {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 2px;
+  margin: 0 auto;
+  width: 200px;
+  z-index: 13;
+  border-radius: 100vh;
+  cursor: pointer;
+  text-align: center;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  padding: 10px;
+}
+
+.postModal .modalBody .postDetails .loadNewComments span {
+  color: var(--accent-color);
+}
+
+.postModal .modalBody .postDetails .commentListItem {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 44px auto 50px;
+      grid-template-columns: 44px auto 50px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  padding-left: 6px;
+  padding-right: 0px;
+}
+
+.postModal .modalBody .postDetails .commentListItem .profileImage {
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  overflow: hidden;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.postModal .modalBody .postDetails .commentListItem .profileImage img {
+  -o-object-fit: cover;
+     object-fit: cover;
+  height: 30px;
+  width: 30px;
+}
+
+.postModal .modalBody .postDetails .commentListItem .center .text {
+  word-break: break-word;
+}
+
+.postModal .modalBody .postDetails .commentListItem .center .commentInfo {
+  color: var(--grayed-text-color);
+  font-size: 12px;
+  margin-top: 8px;
+  font-size: 12px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  gap: 20px;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.postModal .modalBody .postDetails .commentListItem .icons {
+  display: -ms-grid;
+  display: grid;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  font-size: 14px;
+  -ms-flex-line-pack: start;
+      align-content: start;
+  justify-content: center;
+}
+
+.postModal .modalBody .postDetails .emptyMessageColor {
+  padding: 4px 0;
+}
+
+.postModal .modalBody .postDetails .createComment {
+  position: -webkit-sticky;
+  position: sticky;
+  bottom: 0;
+  padding: 10px 0;
+  background-color: var(--background-color);
+  text-align: center;
+  z-index: 15;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 44px auto;
+      grid-template-columns: 44px auto;
+}
+
+.postModal .modalBody .postDetails .createComment .profileImage {
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  overflow: hidden;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  margin-top: auto;
+}
+
+.postModal .modalBody .postDetails .createComment .profileImage img {
+  -o-object-fit: cover;
+     object-fit: cover;
+  height: 30px;
+  width: 30px;
+}
+
+.postModal .modalBody .postDetails .createComment textarea {
+  position: relative;
+  border-radius: 14px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 14px;
+  padding-right: 47px;
+  border: 0;
+  background-color: #222;
+  color: var(--light-text-color);
+  resize: none;
+  height: 30px;
+  width: 100%;
+}
+
+.postModal .modalBody .postDetails .createComment .commentPostBtn {
+  position: absolute;
+  right: -1px;
+  bottom: 10px;
+  height: 30px;
+  width: 54px;
+  text-align: center;
+  font-size: 15px;
+  color: var(--accent-color);
+  border-top-right-radius: 16px;
+  border-bottom-right-radius: 16px;
+  cursor: pointer;
+  padding-top: 5px;
+  padding-right: 8px;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
 }

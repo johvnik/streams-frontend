@@ -12,7 +12,10 @@
 @import 'postGrid';
 @import 'streamList';
 @import 'profileList';
-@import 'streamDetails';
-@import 'modals';
+@import 'streamFollows';
+@import 'profileFollows';
 @import 'home';
 @import 'post';
+@import 'explore';
+// modals needs to be at the bottom (below home)
+@import 'modals';

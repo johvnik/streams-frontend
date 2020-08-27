@@ -1,4 +1,6 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
+import { openLoginModal } from '../../actions/actions'
 
 const SubUnsubBtn = ({
 	streams,
@@ -22,7 +24,7 @@ const SubUnsubBtn = ({
 			)
 		}
 
-		if (authHandle != streamOwner) {
+		if (!authHandle || authHandle != streamOwner) {
 			return (
 				<div className="headerButton">
 					<SubscribeBtn
@@ -40,9 +42,15 @@ const SubUnsubBtn = ({
 }
 
 const SubscribeBtn = ({ followStream, streamId, authHandle, streamOwner }) => {
+	const dispatch = useDispatch()
+
 	const handleSubscribe = e => {
 		e.stopPropagation()
-		followStream({ streamId, handle: authHandle, streamOwner })
+		if (authHandle) {
+			followStream({ streamId, handle: authHandle, streamOwner })
+		} else {
+			dispatch(openLoginModal())
+		}
 	}
 
 	return (
