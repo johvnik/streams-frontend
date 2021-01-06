@@ -9,7 +9,7 @@
 		"@fortawesome/react-fontawesome": "^0.1.10",
 		"awesome-debounce-promise": "^2.1.0",
 		"aws-sdk": "^2.731.0",
-		"axios": "^0.19.2",
+		"axios": "^0.21.1",
 		"fusion-cli": "^2.6.0",
 		"fusion-core": "^2.0.9",
 		"fusion-plugin-i18n": "^2.4.2",
